@@ -1,0 +1,230 @@
+@use '../../design/fonts' as fonts
+@use 'sass:color'
+
+$primaryColor: #0075BB
+$secondaryColor: #57687F
+$accentColor: #00887C
+$infoColor: #0082A4
+$successColor: #009435
+$warningColor: #E5B400
+$errorColor: #E8595C
+
+$bulmaPrimary: rgb(0, 235, 199)
+$bulmaPrimaryText: rgb(0, 31, 26)
+$bulmaLink: rgb(92, 111, 255)
+$bulmaLinkText: rgb(245, 246, 255)
+$bulmaInfo: rgb(128, 217, 255)
+$bulmaInfoText: rgb(0, 36, 51)
+$bulmaSuccess: rgb(91, 205, 154)
+$bulmaSuccessText: rgb(10, 31, 21)
+$bulmaWarning: rgb(255, 191, 41)
+$bulmaWarningText: rgb(41, 29, 0)
+$bulmaDanger: rgb(255, 128, 153)
+$bulmaDangerText: rgb(26, 0, 5)
+$bulmaLight: rgb(255, 255, 255)
+$bulmaLightText: rgb(46, 51, 61)
+$bulmaDark: rgb(57, 63, 76)
+$bulmaDarkText: rgb(243, 244, 246)
+$bulmaText: rgb(31, 34, 41)
+$bulmaTextText: rgb(235, 236, 240)
+$bulmaGhost: rgba(0,0,0,0)
+$bulmaGhostText: rgb(66, 88, 255)
+
+$bootstrapTextLight: rgb(255, 255, 253)
+$bootstrapTextDark: rgb(0, 0, 2)
+$bootstrapTextLink: rgb(139, 185, 254)
+$bootstrapPrimary: rgb(13, 110, 253)
+$bootstrapSecondary: rgb(92, 99, 106)
+$bootstrapSuccess: rgb(21, 115, 71)
+$bootstrapDanger: rgb(187, 45, 59)
+$bootstrapWarning: rgb(255, 202, 44)
+$bootstrapInfo: rgb(49, 210, 242)
+$bootstrapLight: rgb(211, 212, 213)
+$bootstrapDark: rgb(33, 37, 41)
+
+.button
+  background-color: $primaryColor
+  border: none
+  color: white
+  padding: 0.5rem 1.25rem
+  text-align: center
+  text-decoration: none
+  display: inline-block
+  font-size: 1rem
+  font-weight: 500
+  cursor: pointer
+  transition: all 0.2s ease-out
+
+  &:hover
+    background-color: color.adjust($primaryColor, $blackness: 20%)
+
+  &:active
+    transform: scale(0.95)
+
+.bu-primary
+  @extend .button
+  font-family: fonts.$Inter
+  background-color: $bulmaPrimary
+  color: $bulmaPrimaryText
+  border: none
+  font-size: 1rem
+  border-radius: 0.375rem
+  font-weight: 500
+  padding: 0.5rem 1.25rem
+  height: 2.5rem
+
+  &:hover
+    background-color: color.adjust($bulmaPrimary, $lightness: 10%)
+
+.bu-link
+  @extend .bu-primary
+  background-color: $bulmaLink
+  color: $bulmaLinkText
+
+  &:hover
+    background-color: color.adjust($bulmaLink, $lightness: 5%)
+
+.bu-info
+  @extend .bu-primary
+  background-color: $bulmaInfo
+  color: $bulmaInfoText
+
+  &:hover
+    background-color: color.adjust($bulmaInfo, $lightness: 5%)
+
+.bu-success
+  @extend .bu-primary
+  background-color: $bulmaSuccess
+  color: $bulmaSuccessText
+
+  &:hover
+    background-color: color.adjust($bulmaSuccess, $lightness: 5%)
+
+.bu-warning
+  @extend .bu-primary
+  background-color: $bulmaWarning
+  color: $bulmaWarningText
+
+  &:hover
+    background-color: color.adjust($bulmaWarning, $lightness: 5%)
+
+.bu-danger
+  @extend .bu-primary
+  background-color: $bulmaDanger
+  color: $bulmaDangerText
+
+  &:hover
+    background-color: color.adjust($bulmaDanger, $lightness: 5%)
+
+.bu-light
+  @extend .bu-primary
+  background-color: $bulmaLight
+  color: $bulmaLightText
+
+  &:hover
+    background-color: color.adjust($bulmaLight, $lightness: 5%)
+
+.bu-dark
+  @extend .bu-primary
+  background-color: $bulmaDark
+  color: $bulmaDarkText
+
+  &:hover
+    background-color: color.adjust($bulmaDark, $lightness: 5%)
+
+.bu-text
+  @extend .bu-primary
+  background-color: rgba(0,0,0,0)
+  color: $bulmaTextText
+  text-decoration: underline
+
+  &:hover
+    background-color: hsl(221,14%,14%)
+
+.bu-ghost
+  @extend .bu-primary
+  background-color: $bulmaGhost
+  color: $bulmaGhostText
+
+  &:hover
+    background-color: transparent
+    text-decoration: underline
+
+.bo-primary
+  @extend .button
+  font-family: 'Segoe UI', fonts.$Roboto
+  background-color: $bootstrapPrimary
+  color: $bootstrapTextLight
+  border: none
+  font-size: 1rem
+  border-radius: 0.375rem
+  font-weight: 400
+  padding: 0.5rem 1.25rem
+  height: 2.5rem
+  margin: 0.25rem 0.125rem
+
+  &:hover
+    background-color: color.adjust($bootstrapPrimary, $blackness: 10%)
+
+.bo-secondary
+  @extend .bo-primary
+  background-color: $bootstrapSecondary
+
+  &:hover
+    background-color: color.adjust($bootstrapSecondary, $blackness: 10%)
+
+.bo-success
+  @extend .bo-primary
+  background-color: $bootstrapSuccess
+
+  &:hover
+    background-color: color.adjust($bootstrapSuccess, $blackness: 10%)
+
+.bo-danger
+  @extend .bo-primary
+  background-color: $bootstrapDanger
+
+  &:hover
+    background-color: color.adjust($bootstrapDanger, $blackness: 10%)
+
+.bo-warning
+  @extend .bo-primary
+  background-color: $bootstrapWarning
+  color: $bootstrapTextDark
+
+  &:hover
+    background-color: color.adjust($bootstrapWarning, $lightness: 5%)
+
+.bo-info
+  @extend .bo-primary
+  background-color: $bootstrapInfo
+  color: $bootstrapTextDark
+
+  &:hover
+    background-color: color.adjust($bootstrapInfo, $lightness: 5%)
+
+.bo-light
+  @extend .bo-primary
+  background-color: $bootstrapLight
+  color: $bootstrapTextDark
+
+  &:hover
+    background-color: color.adjust($bootstrapLight, $blackness: 10%)
+
+.bo-dark
+  @extend .bo-primary
+  background-color: $bootstrapDark
+  // color: $bootstrapTextDark
+
+  &:hover
+    background-color: color.adjust($bootstrapDark, $lightness: 10%)
+
+.bo-link
+  @extend .bo-primary
+  background-color: transparent
+  color: $bootstrapTextLink
+  text-decoration: underline
+
+  &:hover
+    color: color.adjust($bootstrapTextLink, $lightness: 5%)
+    background-color: transparent

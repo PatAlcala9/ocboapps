@@ -1,0 +1,51 @@
+@use 'sass:color'
+@use '../../design/site' as design
+@use '../../design/functions' as func
+
+.counter
+  font-family: inherit
+  font-size: inherit
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 1rem
+  margin: 2rem
+  color: white
+  border: 1px solid rgba(22, 34, 60, 0.5)
+  padding: 1rem 2rem
+  border-radius: 16px
+  background-color: light-dark(rgba(func.darken-color(design.$light-background, 10%), 0.8), rgba(func.lighten-color(design.$dark-background, 10%), 0.8))
+  transition: background-color 0.6s ease-out
+  width: 3rem
+
+  &__display
+    font-size: 1.75rem
+    font-weight: 300
+
+  &__buttons
+    display: flex
+    justify-content: center
+    gap: 0.25rem
+
+  &__decrement
+    width: 2rem
+    height: 2.25rem
+    padding: auto
+    font-size: 1rem
+    font-weight: bold
+    cursor: pointer
+    text-decoration: none
+    background-color: rgba(86, 14, 14, 0.915)
+    border-radius: 8px
+    color: white
+    border: 1px solid rgba(255,255,255,0.2)
+
+    &:active
+      transform: scale(0.95)
+
+  &__increment
+    @extend .counter__decrement
+    background-color: rgb(14, 42, 86, 0.915)
+
+    &:active
+      transform: scale(0.95)

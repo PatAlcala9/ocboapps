@@ -1,0 +1,9 @@
+const deployment = {
+  container: {
+    name: "ocboapps",
+    port: 9000,
+    node_version: "24.20-alpine"
+  }
+}
+
+export {deployment as default}

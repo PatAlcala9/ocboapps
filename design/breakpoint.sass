@@ -1,0 +1,49 @@
+@use '../design/sizes.sass' as sizes
+
+.on-desktop-only
+  @media only screen and (min-width: 0px) and (max-width: sizes.$desktop)
+    display: none
+
+  @media only screen and (min-width: sizes.$desktop)
+    display: block
+
+.on-tablet-only
+  @media only screen and (min-width: 0px) and (max-width: sizes.$tablet)
+    display: none
+
+  @media only screen and (min-width: sizes.$tablet) and (max-width: sizes.$desktop)
+    display: block
+
+  @media only screen and (min-width: sizes.$desktop)
+    display: none
+
+.on-mobile-only
+  @media only screen and (max-width: sizes.$mobile)
+    display: block
+
+  @media only screen and (min-width: sizes.$tablet)
+    display: none
+
+.on-desktop-tablet-only
+  @media only screen and (min-width: 0px) and (max-width: sizes.$tablet)
+    display: none
+
+  @media only screen and (min-width: sizes.$tablet)
+    display: block
+
+.on-desktop-mobile-only
+  @media only screen and (min-width: 0px) and (max-width: sizes.$mobile)
+    display: block
+
+  @media only screen and (min-width: sizes.$mobile) and (max-width: sizes.$desktop)
+    display: none
+
+  @media only screen and (min-width: sizes.$desktop)
+    display: block
+
+.on-tablet-mobile-only
+  @media only screen and (min-width: 0px) and (max-width: sizes.$desktop)
+    display: block
+
+  @media only screen and (min-width: sizes.$desktop)
+    display: none

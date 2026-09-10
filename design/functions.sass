@@ -1,0 +1,7 @@
+@use 'sass:color'
+
+@function lighten-color($hex, $amount)
+  @return color.mix(white, $hex, $amount)
+
+@function darken-color($hex, $amount)
+  @return color.mix(black, $hex, $amount)

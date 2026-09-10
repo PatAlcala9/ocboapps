@@ -1,0 +1,43 @@
+@use '../../design/sizes.sass' as sizes
+@use 'sass:color'
+
+$background: rgba(10, 24, 37, 0.2)
+
+.com-card
+  backdrop-filter: blur(6px) saturate(100%)
+  background-color: $background
+  border: 1px solid color.adjust($background, $lightness: 15%)
+  border-radius: 0.5rem
+  padding: 2.25rem
+  cursor: pointer
+  width: 14rem
+  height: 12rem
+  transition: all 0.2s ease-out
+
+  &:hover
+    background-color: rgba(10, 24, 37, 0.6)
+    box-shadow: 0 0 15px color.adjust($background, $lightness: 75%),0 0 30px color.adjust($background, $lightness: 75%), 0 0 60px color.adjust($background, $lightness: 75%),inset 0 0 5px rgba(0,0,0,0.5)
+
+  &:active
+    transform: scale(0.95)
+    box-shadow: none
+
+  &__name
+    padding: 1rem 0 0 0
+    font-size: 1rem
+    font-weight: 500
+
+  &__description
+    padding: 0.5rem 0 0 0
+    font-size: 0.75rem
+
+  @media only screen and (min-width: 0px) and (max-width: sizes.$tablet)
+    background-color: color.adjust($background, $blackness: 9%)
+    border: 1px solid color.adjust($background, $lightness: 25%)
+    padding: 1.25rem
+
+    &:hover
+      background-color: color.adjust($background, $blackness: 35%)
+      border: 1px solid color.adjust($background, $blackness: 25%)
+      transform: scale(1.05)
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)

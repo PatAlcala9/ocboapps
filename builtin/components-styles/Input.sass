@@ -1,0 +1,45 @@
+.text-field
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+  &__label
+    color: hsl(240 6% 10%)
+    font-size: 14px
+    font-weight: 500
+    user-select: none
+
+  &__input
+    display: inline-flex
+    border-radius: 6px
+    padding: 6px 12px
+    font-size: 16px
+    outline: none
+    background-color: white
+    border: 1px solid hsl(240 6% 90%)
+    color: hsl(240 4% 16%)
+    transition: border-color 250ms, color 250ms
+
+  &__input:hover
+    border-color: hsl(240 5% 65%)
+
+  &__input:focus-visible
+    outline: 2px solid #39536f
+    outline-offset: 2px
+
+  &__input[data-invalid]
+    border-color: hsl(0 72% 51%)
+    color: hsl(0 72% 51%)
+
+  &__input::placeholder
+    color: hsl(240 4% 46%)
+
+  &__description
+    color: hsl(240 5% 26%)
+    font-size: 12px
+    user-select: none
+
+  &__error-message
+    color: hsl(0 72% 51%)
+    font-size: 12px
+    user-select: none

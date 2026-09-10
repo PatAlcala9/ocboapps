@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    // General
+    "jsx": "preserve",
+    "jsxImportSource": "@solidjs/web",
+    "target": "ESNext",
+
+    // Modules
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+
+    // Type Checking & Safety
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["vite/client", "@testing-library/jest-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@dasig": ["builtin/index.ts"],
+      "@dasig/api": ["builtin/api/index.ts"],
+      "configs/*": ["configs/*"],
+      "components/*": ["src/components/*"],
+      "images/*": ["images/*"]
+    }
+  },
+  "include": ["src", "builtin", "configs", "images"]
+}

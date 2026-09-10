@@ -1,0 +1,114 @@
+// @use '../../design/variables.sass' as vars
+@use 'sass:color'
+
+.filefield
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  height: 250px
+  width: 100%
+  row-gap: 5px
+  border: 1px solid #ffffff6c
+  border-radius: 8px
+
+  &__label
+    color: white
+    font-size: 14px
+    font-weight: 500
+    user-select: none
+
+  &__dropzone
+    display: flex
+    flex-direction: column
+    row-gap: 10px
+    align-items: center
+    justify-content: center
+    width: 100%
+    height: 100%
+    color: #5f8ebebf
+    cursor: pointer
+    font-size: 1rem
+
+  // &__trigger
+  //   background-color: vars.$primaryColor
+  //   border: none
+  //   border-radius: 8px
+  //   color: white
+  //   padding: 0.5rem 1.25rem
+  //   text-align: center
+  //   text-decoration: none
+  //   display: inline-block
+  //   font-size: 1rem
+  //   font-weight: 500
+  //   cursor: pointer
+  //   transition: all 0.2s ease-out
+
+  //   &:hover
+  //     background-color: color.adjust(vars.$primaryColor, $blackness: 20%)
+
+  //   &:active
+  //     transform: scale(0.95)
+
+  &__itemList
+    display: flex
+    flex-direction: column
+    gap: 3px
+    width: 100%
+
+  &__item
+    width: 82%
+    display: grid
+    // padding: 1rem
+    column-gap: 10px
+    border-radius: 8px
+    grid-template-columns: auto 1fr auto
+    grid-template-areas: "preview name delete" "preview size delete"
+    column-gap: 5px
+    // border: 1px solid rgba(187, 187, 187, 0.706)
+    padding: 10px
+    background-color: #2b405542
+    margin: 0 1rem
+
+  &__itemPreview
+    grid-area: preview
+
+  &__itemPreviewImage
+    width: 6rem
+    object-fit: scale-down
+    height: auto
+    aspect-ratio: 1
+
+  &__itemName
+    font-weight: 500
+    grid-area: name
+    font-size: 1rem
+    color: #fff
+
+  &__itemSize
+    grid-area: size
+    font-size: 14px
+    color: rgb(181, 179, 173)
+
+  &__itemDeleteTrigger
+    grid-area: delete
+    background-color: #a23434
+    border: none
+    border-radius: 8px
+    color: white
+    padding: 0.5rem 1.25rem
+    text-align: center
+    text-decoration: none
+    display: inline-block
+    font-size: 1rem
+    font-weight: 500
+    cursor: pointer
+    transition: all 0.2s ease-out
+    height: max-content
+    align-self: center
+
+    &:hover
+      background-color: color.adjust(#a23434, $blackness: 20%)
+
+    &:active
+      transform: scale(0.95)
