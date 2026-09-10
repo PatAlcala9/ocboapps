@@ -10,7 +10,7 @@ interface Props {
 export default (props: Props) => {
   return (
     <>
-      <a
+      <a class="dasig-link"
         href={props.to}
         aria-label={`Go to ${props.to}`}
         target={props.newtab ? "_blank" : ""}

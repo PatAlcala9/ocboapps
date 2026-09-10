@@ -12,13 +12,7 @@ export default (props: Props) => {
       <picture>
         <source srcset={avifPath} type="image/avif" />
         <source srcset={webpPath} type="image/webp" />
-        <img
-          width={props.size}
-          height="auto"
-          decoding="async"
-          loading="lazy"
-          alt="logo"
-        />
+        <img width={props.size} height="auto" decoding="async" loading="lazy" alt="logo" />
       </picture>
     </>
   );
