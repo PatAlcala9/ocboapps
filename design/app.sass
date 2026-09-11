@@ -1,6 +1,5 @@
-// @use '/src/styles/global.sass'
-@use '../design/site.sass' as design
-@use '../design/sizes.sass' as view
+@use '/design/site.sass' as design
+@use '/design/sizes.sass' as view
 @use 'sass:color'
 
 :root
@@ -14,61 +13,3 @@ body
     margin: 0
     font-family: system-ui, -apple-system, sans-serif
     text-align: center
-
-nav
-  padding: 1rem
-  background-color: #282c34
-
-nav > a
-  display: inline-block
-  margin: 0 0.125rem
-  padding: 0.4rem 0.75rem
-  border-radius: 0.5rem
-  color: #93c5fd
-  font-weight: 600
-  text-decoration: none
-  transition: background-color 150ms ease, color 150ms ease
-
-nav > a:hover
-  background-color: rgb(255 255 255 / 10%)
-  color: #dbeafe
-
-a
-  margin-right: 1rem
-
-
-
-.logo
-  animation: logo-spin infinite 20s linear
-  height: 24vmin
-  pointer-events: none
-
-.increment
-  font-size: 1rem
-  padding: 0.5rem 1.5rem
-  cursor: pointer
-
-// h1
-//   @extend body
-//   text-transform: uppercase
-//   font-size: 4rem
-//   font-weight: 100
-//   line-height: 1.1
-//   margin: 4rem auto
-//   max-width: 14rem
-
-// @media (min-width: view.$mobile)
-//   max-width: none
-
-p
-  max-width: 14rem
-  margin: 2rem auto
-  line-height: 1.35
-
-  @media (min-width: view.$mobile)
-    max-width: none
-
-a:focus-visible
-  outline: 3px solid #0284c7
-  outline-offset: 3px
-  border-radius: 0.2rem
