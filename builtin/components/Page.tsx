@@ -12,7 +12,7 @@ export default (props: Props) => {
   return (
     <>
       <Show when={props.alignment}>
-        <main class={`dasig-page-${props.alignment}`}>
+        <main class={`dasig-page-${props.alignment}`} >
           <Title>{props.title}</Title>
           {props.children}
         </main>
