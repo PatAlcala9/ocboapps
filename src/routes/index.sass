@@ -1,27 +1,37 @@
+@use '/design/fonts.sass' as fonts
+@use 'sass:color'
+
 $text-color: rbga(255, 255, 255, 0.8)
+$background: rgba(10, 24, 37, 0.5)
+
+.welcome
+  font-family: fonts.$Inter
+  font-size: 1.5rem
+  color: color.adjust($background, $lightness: 80%)
 
 .portal-texts-group
   background-color: rgba(0,0,0,0.2)
-  border-radius: 2rem
+  border-radius: 1.75rem
   margin: 0 0 2rem 0
   padding: 1rem 0 0 0
 
 .portal-title
+  font-family: fonts.$Inter
   color: $text-color
   margin: 1rem 0 2.75rem 0
-  font-size: 3rem
+  font-size: 2.25rem
   opacity: 0.8
 
-h3
-  color: $text-color
-  margin: 0.5rem 0 2rem 0
-
 .logo-text
+  font-family: fonts.$Inter
   color: $text-color
-  font-size: 2rem
+  font-size: 1.75rem
   font-weight: 700
-  margin: -1.5rem 0 0 0
   opacity: 0.9
 
-.developer
-  padding: 0 1rem 0 0
+.footer
+  backdrop-filter: blur(6px) saturate(100%)
+  background-color: $background
+  border: 1px solid color.adjust($background, $lightness: 20%)
+  border-radius: 1rem
+  padding: 2rem 1rem

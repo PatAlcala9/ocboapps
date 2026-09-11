@@ -1,25 +1,30 @@
-import { Column, Display, Image, Padding, Page, Row, Background } from "@dasig";
+import { Column, Display, Image, Padding, Page, Row, Background, Footer, Copyright } from "@dasig";
 import Card from "components/Card";
 import "./index.sass";
 
 export default () => {
   return (
       <Page title="OCBO Apps">
-        <Background image="new-background" />
+        
+      <Display desktop tablet>
+        <Background image="background2026" />
+        
+        <Row gap={0.5} content="left">
+          <Image name="ocbo-portal" size={65} />
+          <span class="logo-text">OCBO Apps Portal</span>
+        </Row>
 
-        <Display desktop tablet>
-          <div class="portal-texts-group">
-            <Row gap={0.5} content="center">
-              <Image name="ocbo-portal" size={90} />
-              <span class="logo-text">OCBO Apps Portal</span>
-            </Row>
+        <Row content="center">
+          <span class="welcome">Welcome</span>
+        </Row>
 
-            <Row content="center">
-              <Column>
-                <h1 class="portal-title">A Portal to OCBO Applications</h1>
-              </Column>
-            </Row>
-          </div>
+        <Row content="center">
+          <Column>
+            <h1 class="portal-title">Office of the City Building Official Application Portal</h1>
+          </Column>
+        </Row>
+
+      
 
           <Row gap={2.5}>
             <Card
@@ -31,7 +36,8 @@ export default () => {
           </Row>
         </Display>
 
-        <Display mobile>
+      <Display mobile>
+        <Background image="background2026-mobile" />
           <Column gap={0.5} content="center">
             <Image name="ocbo-portal" size={120} />
             <span class="logo-text">OCBO Apps Portal</span>
@@ -47,7 +53,35 @@ export default () => {
               />
             </Column>
           </Padding>
-        </Display>
-      </Page>
+      </Display>
+
+      <Footer margin={1}>
+        <section class="footer">
+        <Row content="split">
+          <Row gap={0.5}>
+            <Image name="ocbologo" size={20} />
+            <Row gap={0.25}>
+              <Copyright />
+              <span>Davao City, Philippines</span>
+            </Row>
+          </Row>
+
+          <Row gap={1}>
+            <Row gap={0.25}>
+              <span>Developed by:</span>
+              <Image name="pat-alcala" size={70} />
+              <span>Pat Alcala</span>
+            </Row>
+
+            <Row gap={0.25}>
+              <span>Made with:</span>
+              <Image name="dasig-logo" size={10} />
+              <span>Dasig</span>
+            </Row>
+          </Row>
+          </Row>
+        </section>
+      </Footer>
+    </Page>
   );
 };
