@@ -7,13 +7,15 @@ import deployment from 'configs/deployment.config.mts'
 const dockerfileContent = `FROM node:${deployment.container.node_version} AS build
 WORKDIR /app
 COPY package*.json ./
-RUN corepack enable
-RUN pnpm install
+# RUN corepack enable
+RUN nub install
 COPY . .
-RUN pnpm build
+RUN nub run build
 
-FROM keymetrics/pm2:24-alpine AS runtime
-CMD [ "pm2-runtime", "start", "npx vite preview", "-n solid" ]
+FROM node:${deployment.container.node_version}
+WORKDIR /app2
+COPY --from=build /app/dist ./
+CMD [ "nub", "run", "serve"]
 EXPOSE 8080
 `;
 
