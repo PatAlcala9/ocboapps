@@ -13,7 +13,7 @@ const site = {
   },
 
   copyright: {
-    name: "Pat Alcala",
+    name: "Office of the City Building Official",
     year: 2026,
     color: "#ffffffff"
   },
