@@ -1,10 +1,12 @@
 import { fileRoutes } from 'filesystem-routing/vite';
 import { defineConfig } from 'vitest/config';
 import solid from '@solidjs/vite-plugin';
-import tsconfigPaths from "vite-tsconfig-paths";
 // import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true
+  },
   // Turnkey client mode: no index.html and no mount file — the plugin
   // generates the entries around src/App.tsx, wrapped in src/Document.tsx
   // (or a built-in shell). `vite build` prerenders the shell into
@@ -13,7 +15,7 @@ export default defineConfig({
     // `extensions` makes @solidjs/vite-plugin also compile the `?pick=` route
     // modules the fileRoutes plugin emits (their ids end in a query string).
     solid({ start: true, ssr: true, extensions: ['.jsx', '.tsx'], diagnostics: true }),
-    fileRoutes({ types: true }), tsconfigPaths()
+    fileRoutes({ types: true })
   ],
   server: {
     port: 3000,
