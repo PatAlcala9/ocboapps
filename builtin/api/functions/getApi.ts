@@ -1,11 +1,9 @@
-import * as fs from "node:fs";
 import { ofetch } from "ofetch";
-import * as toml from "toml";
+import api from "configs/api.config.mts"
 
-const config = toml.parse(fs.readFileSync("configs/api.config.toml", "utf-8"));
-const URL = config.backend.backend_url;
-const RETRY = config.request.request_retries;
-const CODES = config.request.request_retry_codes;
+const URL = api.backend.url;
+const RETRY = api.request.retries;
+const CODES = api.request.retry_codes;
 
 export default async (
 	api: string,
@@ -13,7 +11,7 @@ export default async (
 	value2?: string | number,
 ) => {
 	try {
-		let fetch: { [key: string]: unknown };
+		let fetch;
 		if (!value2) {
 			if (!value) {
 				fetch = await ofetch(URL + api, {

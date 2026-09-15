@@ -1,27 +1,20 @@
 import dayjs from "dayjs";
-import * as fs from "node:fs";
 import { ofetch } from "ofetch";
-import * as toml from "toml";
-import { encryptRsa } from "../../scripts/index";
+import  encryptRsa from "../../scripts/functions/encryptRsa";
+import api from "configs/api.config.mts"
+import security from "configs/security.config.mts"
 
-const apiConfig = toml.parse(
-	fs.readFileSync("configs/api.config.toml", "utf-8"),
-);
-const securityConfig = toml.parse(
-	fs.readFileSync("configs/security.config.toml", "utf-8"),
-);
-
-const TOKEN_NAME = securityConfig.token.name;
-const TOKEN_EXPIRATION = securityConfig.token.expiration;
-const URL = apiConfig.backend.url;
-const RETRY = apiConfig.request.retries;
-const CODES = apiConfig.request.retry_codes;
+const TOKEN_NAME = security.token.name;
+const TOKEN_EXPIRATION = security.token.expiration;
+const URL = api.backend.url;
+const RETRY = api.request.retries;
+const CODES = api.request.retry_codes;
 
 export default async (api: string, body: { [key: string]: unknown }) => {
 	const today = new Date();
 	const todayUnix = dayjs(today).unix();
 	const expiration = todayUnix + TOKEN_EXPIRATION;
-	const aes = await encryptRsa(
+	const aes = encryptRsa(
 		`${api.toString()}-${todayUnix.toString()}-${expiration.toString()}`,
 	);
 
