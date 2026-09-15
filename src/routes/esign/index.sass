@@ -1,0 +1,79 @@
+@use '/design/sizes.sass' as views
+
+$textColor: #f0f8ff
+
+h1
+  color: $textColor
+
+  @media only screen and (max-width: views.$mobile)
+    font-size: 2.25rem
+
+.div
+  width: 8rem
+
+.title
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: flex-start
+  align-items: flex-start
+  align-content: flex-start
+  gap: 0.5rem
+
+  @media only screen and (max-width: views.$tablet)
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: center
+    align-items: center
+    align-content: flex-start
+    text-align: center
+    gap: 0.5rem
+
+  &__main
+    font-size: 2.75rem
+    margin: 0 1rem 0 0
+
+    @media only screen and (max-width: views.$tablet)
+      padding: 2rem 0 0 0
+      font-size: 1.25rem
+      margin: 0 1rem 0 0
+
+  &__sub
+    font-weight: 700
+    font-size: 2rem
+
+    @media only screen and (max-width: views.$tablet)
+      font-weight: 700
+      font-size: 1.5rem
+
+  &__paragraph
+    padding: 4rem 0 0 0
+    font-size: 1rem
+
+    @media only screen and (max-width: views.$tablet)
+      padding: 3.25rem 0 0 0
+      font-size: 0.75rem
+
+.mobile-buttons
+  padding: 2rem 0 0 0
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: center
+  align-items: stretch
+  align-content: stretch
+  text-align: center
+  gap: 0.5rem
+  width: 55vw
+
+.offline-message
+  opacity: 0.5
+  font-size: 0.7rem
+  color: #f8a397
+  margin: 0.5rem 0 0 0
+
+.offline-text
+  color: #e5585dba
+  font-weight: 500
+    
