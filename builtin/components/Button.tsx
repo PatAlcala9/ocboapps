@@ -3,12 +3,14 @@ import type { Element } from 'solid-js'
 import { Row } from '../index'
 import { Show, Switch, Match } from 'solid-js'
 
+// dasig-${props.design}
+
 interface Props {
   label?: string
   to?: string
   onClick?: () => void
   edges?: 'curved' | 'rounded' | 'flat'
-  design?: 'bu-primary' | 'bu-link' | 'bu-info' | 'bu-success' | 'bu-warning' | 'bu-danger' | 'bu-dark' | 'bu-light' | 'bu-text' | 'bu-ghost' | 'bo-primary' | 'bo-secondary' | 'bo-success' | 'bo-danger' | 'bo-warning' | 'bo-info' | 'bo-light' | 'bo-dark' | 'bo-link' | 'bo-outline-primary'
+  design?: 'bulma-primary' | 'bulma-link' | 'bulma-info' | 'bulma-success' | 'bulma-warning' | 'bulma-danger' | 'bulma-dark' | 'bulma-light' | 'bulma-text' | 'bulma-ghost' | 'bootstrap-primary' | 'bootstrap-secondary' | 'bootstrap-success' | 'bootstrap-danger' | 'bootstrap-warning' | 'bootstrap-info' | 'bootstrap-light' | 'bootstrap-dark' | 'bootstrap-link' | 'bootstrap-outline-primary'
   submit?: boolean
   newtab?: boolean
   width?: number
@@ -43,7 +45,7 @@ export default (props: Props) => {
         <Switch>
           <Match when={props.design}>
             <a href={props.to!} aria-label={props.label} target={props.newtab ? '_blank' : ''}>
-              <button class={props.design} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+              <button class={`dasig-${props.design}`} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
@@ -68,7 +70,7 @@ export default (props: Props) => {
         <Switch>
           <Match when={props.design}>
             <Show when={props.submit}>
-              <button class={props.design} type="submit" style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+              <button class={`dasig-${props.design}`} type="submit" style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
@@ -78,7 +80,7 @@ export default (props: Props) => {
 
             <Show when={!props.submit}>
               <Show when={!props.prefetch}>
-                <button class={props.design} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+                <button class={`dasig-${props.design}`} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
                   <Row gap={0.5}>
                     <Show when={props.icon}>
                       <span>{Icon && <Icon size={24} />}</span>
@@ -88,7 +90,7 @@ export default (props: Props) => {
                 </button>
               </Show>
               <Show when={props.prefetch}>
-                <button class={props.design} onMouseEnter={props.onMouseOver} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+                <button class={`dasig-${props.design}`} onMouseEnter={props.onMouseOver} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
                   <Row gap={0.5}>
                     <Show when={props.icon}>
                       <span>{Icon && <Icon size={24} />}</span>

@@ -12,25 +12,25 @@ interface Props {
   label: string;
   edges?: "curved" | "rounded" | "flat";
   design?:
-    | "bu-primary"
-    | "bu-link"
-    | "bu-info"
-    | "bu-success"
-    | "bu-warning"
-    | "bu-danger"
-    | "bu-dark"
-    | "bu-light"
-    | "bu-text"
-    | "bu-ghost"
-    | "bo-primary"
-    | "bo-secondary"
-    | "bo-success"
-    | "bo-danger"
-    | "bo-warning"
-    | "bo-info"
-    | "bo-light"
-    | "bo-dark"
-    | "bo-link";
+    | "bulma-primary"
+    | "bulma-link"
+    | "bulma-info"
+    | "bulma-success"
+    | "bulma-warning"
+    | "bulma-danger"
+    | "bulma-dark"
+    | "bulma-light"
+    | "bulma-text"
+    | "bulma-ghost"
+    | "bootstrap-primary"
+    | "bootstrap-secondary"
+    | "bootstrap-success"
+    | "bootstrap-danger"
+    | "bootstrap-warning"
+    | "bootstrap-info"
+    | "bootstrap-light"
+    | "bootstrap-dark"
+    | "bootstrap-link";
   width?: number;
   wide?: boolean;
   class?: string;

@@ -15,10 +15,6 @@ export default (props: Props) => {
       import: 'default',
     }
   );
-
-
-
-
   
   const getSources = () => {
     if (typeof props.image === "string") {
@@ -69,7 +65,7 @@ export default (props: Props) => {
       </Show>
 
       <Show when={!props.image && props.color}>
-        <div style={{ background: props.color }} class="dasig-background" />
+        <div style={`background-color: ${props.color}`} class="dasig-background" />
       </Show>
     </>
   );
