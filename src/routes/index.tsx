@@ -28,7 +28,7 @@ export default () => {
 
           <Row gap={2.5}>
             <Card
-              image="logo"
+              image="esign"
               name="OCBO e-Sign"
               description="A secure way of signing permits"
               site="/esign"
@@ -75,7 +75,7 @@ export default () => {
 
             <Row gap={0.25}>
               <span>Made with:</span>
-              <Image name="dasig-logo" size={10} />
+              <Image name="logo" size={10} />
               <span>Dasig</span>
             </Row>
           </Row>
