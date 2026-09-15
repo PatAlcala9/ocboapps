@@ -36,6 +36,9 @@ image name size:
 background:
   nub ./builtin/scripts/node/optimizeBackground.ts
 
+license:
+  nub ./builtin/scripts/node/generateLicense.ts
+
 add package:
   nub add {{ package }}
 
