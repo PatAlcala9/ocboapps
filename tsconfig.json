@@ -24,7 +24,8 @@
       "@dasig/api": ["builtin/api/index.ts"],
       "configs/*": ["configs/*"],
       "components/*": ["src/components/*"],
-      "images/*": ["images/*"]
+      "images/*": ["images/*"],
+      "stores/*": ["src/stores/*"]
     }
   },
   "include": ["src", "builtin", "configs", "images"]
