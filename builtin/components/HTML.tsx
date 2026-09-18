@@ -15,8 +15,6 @@ interface Props {
   | "public-sans"
   | string;
   preloadBackground?: boolean;
-  // assets: Element;
-  // scripts?: Element;
 }
 
 export default (props: Props) => {
@@ -56,15 +54,13 @@ export default (props: Props) => {
             type="image/svg+xml"
           />
         </Show>
-        {/*{props.assets}*/}
         <HydrationScript />
       </head>
 
       <body>
-        <div class={props.font} id="app">
+        <div id="app">
           {props.children}
         </div>
-        {/*{props.scripts}*/}
       </body>
     </html>
   );

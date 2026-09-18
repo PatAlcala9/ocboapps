@@ -10,7 +10,7 @@ interface Props {
   border?: string;
   opacity?: number;
   label: string;
-  edges?: "curved" | "rounded" | "flat";
+  corner?: "curved" | "rounded" | "flat";
   design?:
     | "bulma-primary"
     | "bulma-link"
@@ -56,7 +56,7 @@ export default (props: Props) => {
       <Show when={!isOpen()}>
         <Button
           label={props.label}
-          edges={props.edges}
+          corner={props.corner}
           design={props.design}
           onClick={openHandler}
         />

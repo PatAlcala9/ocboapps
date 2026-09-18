@@ -6,19 +6,26 @@ interface Props {
   children?: Element;
   alignment?: "row" | "column";
   title: string;
+  font:
+  | "roboto"
+  | "inter"
+  | "montserrat"
+  | "open-sans"
+  | "public-sans"
+  | string;
 }
 
 export default (props: Props) => {
   return (
     <>
       <Show when={props.alignment}>
-        <main class={`dasig-page-${props.alignment}`}>
+        <main class={`dasig-page-${props.alignment} ${props.font}`}>
           <Title>{props.title}</Title>
           {props.children}
         </main>
       </Show>
       <Show when={!props.alignment}>
-        <main class="dasig-page">
+        <main class={`dasig-page ${props.font}`}>
           <Title>{props.title}</Title>
           {props.children}
         </main>

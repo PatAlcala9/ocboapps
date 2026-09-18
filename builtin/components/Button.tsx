@@ -9,7 +9,7 @@ interface Props {
   label?: string
   to?: string
   onClick?: () => void
-  edges?: 'curved' | 'rounded' | 'flat'
+  corner?: 'curved' | 'rounded' | 'flat'
   design?: 'bulma-primary' | 'bulma-link' | 'bulma-info' | 'bulma-success' | 'bulma-warning' | 'bulma-danger' | 'bulma-dark' | 'bulma-light' | 'bulma-text' | 'bulma-ghost' | 'bootstrap-primary' | 'bootstrap-secondary' | 'bootstrap-success' | 'bootstrap-danger' | 'bootstrap-warning' | 'bootstrap-info' | 'bootstrap-light' | 'bootstrap-dark' | 'bootstrap-link' | 'bootstrap-outline-primary'
   submit?: boolean
   newtab?: boolean
@@ -23,7 +23,7 @@ interface Props {
   onMouseOver?: () => void
 }
 
-const getBorderRadius = (edge: Props['edges']) => {
+const getBorderRadius = (edge: Props['corner']) => {
   switch (edge) {
     case 'curved':
       return 'border-radius: 6px'
@@ -37,7 +37,7 @@ const getBorderRadius = (edge: Props['edges']) => {
 }
 
 export default (props: Props) => {
-  const borderRadius = getBorderRadius(props.edges)
+  const borderRadius = getBorderRadius(props.corner)
   const Icon = props.icon
   return (
     <>

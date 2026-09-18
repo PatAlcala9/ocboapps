@@ -10,6 +10,7 @@ interface Props {
   background?: string;
   width?: string;
   class?: string;
+  pointer?: boolean;
 }
 
 export default (props: Props) => {
@@ -17,8 +18,8 @@ export default (props: Props) => {
 
   return (
     <section
-      class={`dasig-${boxClass()}`}
-      style={`border: ${props.thickness}px solid ${props.color || "white"}; padding: ${props.padding || 0}; background-color: ${props.background || "none"}; width: ${props.width || "inherit"}`}
+      class={props.class ? `dasig-${boxClass()} ${props.class}` : `dasig-${boxClass()}`}
+      style={`border: ${props.thickness}px solid ${props.color || "white"}; padding: ${props.padding || 0}; background-color: ${props.background || "none"}; width: ${props.width || "inherit"}; cursor: ${props.pointer ? 'pointer' : 'inherit'}`}
     >
       {props.children}
     </section>

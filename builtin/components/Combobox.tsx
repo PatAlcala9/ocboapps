@@ -1,14 +1,14 @@
-import "../components-styles/Combobox.sass";
-import { Combobox } from "@kobalte/core/combobox";
-import { FaSolidAngleDown } from "solid-icons/fa";
-import { AiOutlineCheck } from "solid-icons/ai";
+import { Combobox } from '@kobalte/core/combobox'
+import { FaSolidAngleDown } from 'solid-icons/fa'
+import { AiOutlineCheck } from 'solid-icons/ai'
+import '../components-styles/Combobox.sass'
 
 interface Props {
-  options: any[];
-  placeholder: string;
-  value: string;
-  onChange: (value: string | null) => void;
-  width?: string;
+  options: any[]
+  placeholder: string
+  value: string
+  onChange: (value: string | null) => void
+  width?: string
 }
 
 export default (props: Props) => {
@@ -29,11 +29,7 @@ export default (props: Props) => {
           </Combobox.Item>
         )}
       >
-        <Combobox.Control
-          class="combobox__control"
-          aria-label="Assessors"
-          style={`width: ${props.width || "500px"}`}
-        >
+        <Combobox.Control class="combobox__control" aria-label="Combobox" style={`width: ${props.width || '500px'}`}>
           <Combobox.Input class="combobox__input" />
           <Combobox.Trigger class="combobox__trigger">
             <Combobox.Icon class="combobox__icon">
@@ -48,5 +44,5 @@ export default (props: Props) => {
         </Combobox.Portal>
       </Combobox>
     </>
-  );
-};
+  )
+}
