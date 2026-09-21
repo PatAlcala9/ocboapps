@@ -1,11 +1,10 @@
 import { onSettled, createSignal } from 'solid-js'
 import { Show } from 'solid-js'
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Padding } from '@dasig'
 import { checkConnection } from '../../utils'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import './index.sass'
 import { getApi } from '@dasig/api'
-import { _headName } from '../../stores/head'
 
 let assessorsNameList: string[]
 let registeredNameList: string[]
@@ -17,34 +16,33 @@ const [connected, setConnected] = createSignal(true)
 export default () => {
   const getAssessors = async () => {
     const [assessors, asserrorsError] = await getApi('e60dbde84b2a5307d399')
-    if (asserrorsError === null) return
+    if (asserrorsError !== null) return
     
-    assessorsNameList = [...assessors]
+    assessorsNameList = [...assessors.result]
     sessionStorage.setItem('assessors', JSON.stringify([...assessorsNameList]))
   }
 
   const getRegistered = async () => {
     const [registered, registeredError] = await getApi('289da0205ab91ea94824')
-    if (registeredError === null) return
+    if (registeredError !== null) return
     
-    registeredNameList = [...registered]
+    registeredNameList = [...registered.result]
     sessionStorage.setItem('registered', JSON.stringify([...registeredNameList]))
   }
 
   const getHead = async () => {
     const [response, responseError] = await getApi('5a211530266757b41510')
-    if (responseError === null) return
-    
-    headName = response
-    _headName.set(headName)
-    // sessionStorage.setItem('head', headName)
+    if (responseError !== null) return
+ 
+    headName = response.result
+    sessionStorage.setItem('head', headName)
   }
 
   const getHeadId = async () => {
     const [response, responseError] = await getApi('81af1f8ce65c9194a0f0')
-    if (responseError === null) return
+    if (responseError !== null) return
     
-    headId = response
+    headId = response.result
     sessionStorage.setItem('headid', headId)
   }
 
@@ -56,21 +54,24 @@ export default () => {
   }
 
   const init = async () => {
-    setConnected(await checkConnection())
     await clearCache()
-    await getAssessors()
-    await getRegistered()
-    await getHead()
-    await getHeadId()
+    setConnected(await checkConnection())
+
+    if (connected()) {
+      getAssessors()
+      getRegistered()
+      getHead()
+      getHeadId()
+    }
   }
 
   onSettled(() => {
     init()
   })
-
+  
   return (
     <>
-      <Page title='e-Sign'>
+      <Page title='e-Sign' font='roboto'>
         <Background image="background-esign" />
         
         <Display desktop>
@@ -80,22 +81,24 @@ export default () => {
               <h1>OCBO e-Sign</h1>
             </Row>
 
+           
             <Show when={connected()}>
               <Box curved thickness={0} padding="0.75rem 1.25rem" background="#0f131d56">
                 <Row content="left" gap={1}>
-                  <Button label="Login" edges="curved" design="bootstrap-link" to="/esign/login" />
-                  <Button label="Register" edges="curved" design="bootstrap-primary" to="/esign/register" />
+                  <Button label="Login" corner="curved" design="bootstrap-link" to="/esign/login" />
+                  <Button label="Register" corner="curved" design="bootstrap-primary" to="/esign/register" />
                 </Row>
                 </Box>
-            </Show>
+              </Show>
+        
             <Show when={!connected()}>
               <Box curved thickness={0} padding="0.75rem 1.25rem" background="#b21f2d56">
                 <Column alignment='center'>
                   <Row content="left" gap={1}>
                     <RiBusinessGlobalOffLine size={24} color="#e5585dba" />
                     <span class={"offline-text"}>OFFLINE</span>
-                    <Button label="Login" edges="curved" design="bootstrap-dark" />
-                    <Button label="Register" edges="curved" design="bootstrap-danger" />
+                    <Button label="Login" corner="curved" design="bootstrap-dark" />
+                    <Button label="Register" corner="curved" design="bootstrap-danger" />
                   </Row>
                   <Row content='left'><a class='offline-message'>Please check your server connection and reload the page</a></Row>
                 </Column>
@@ -148,8 +151,8 @@ export default () => {
               <Show when={connected()}>
                 <Box curved thickness={0} padding="0.75rem 1.25rem" background="#0f131d56">
                   <Row content="left" gap={1}>
-                    <Button label="Login" edges="curved" design="bootstrap-link" to="/login" />
-                    <Button label="Register" edges="curved" design="bootstrap-primary" to="/register" />
+                    <Button label="Login" corner="curved" design="bootstrap-link" to="esign/login" />
+                    <Button label="Register" corner="curved" design="bootstrap-primary" to="esign/register" />
                   </Row>
                 </Box>
               </Show>
@@ -159,8 +162,8 @@ export default () => {
                     <Row content="left" gap={1}>
                       <RiBusinessGlobalOffLine size={24} color="#e5585dba" />
                       <span class={"offline-text"}>OFFLINE</span>
-                      <Button label="Login" edges="curved" design="bootstrap-dark" />
-                      <Button label="Register" edges="curved" design="bootstrap-danger" />
+                      <Button label="Login" corner="curved" design="bootstrap-dark" />
+                      <Button label="Register" corner="curved" design="bootstrap-danger" />
                     </Row>
                     <Row content='left'><a class='offline-message'>Please check your server connection and reload the page</a></Row>
                   </Column>
@@ -168,7 +171,8 @@ export default () => {
               </Show>
             </Row>
 
-            <Row content="split">
+          <Row content="split">
+            <Padding top={3} bottom={0} left={0} right={0}>
               <Box curved thickness={0} padding="2.75rem 2rem" background="#0f131d56">
                 <section class="title">
                   <h1 class="title__main">Secure e-Signature</h1>
@@ -176,11 +180,12 @@ export default () => {
                   <p class="title__paragraph">A paperless and effortless solution on signing permits</p>
                 </section>
               </Box>
+            </Padding>
 
-              <Column padding="3rem 0 0 0">
-                <Image name='esignbody' size={140} />
-              </Column>
-            </Row>
+            <Column padding="2rem 0 0 0">
+              <Image name='esignbody' size={140} />
+            </Column>
+          </Row>
 
           <Footer>
             <Row content="split">
