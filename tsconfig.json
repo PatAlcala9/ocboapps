@@ -25,7 +25,8 @@
       "configs/*": ["configs/*"],
       "components/*": ["src/components/*"],
       "images/*": ["images/*"],
-      "stores/*": ["src/stores/*"]
+      "stores/*": ["src/stores/*"],
+      "@dasig/store": ["builtin/scripts/functions/store.ts"]
     }
   },
   "include": ["src", "builtin", "configs", "images"]

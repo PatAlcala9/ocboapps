@@ -1,10 +1,10 @@
-import { atom } from 'nanostores'
+import { store } from "@dasig/store";
 
-export const _listElectricalApplications = atom([])
-export const _listElectricalNames = atom([])
+export const _listElectricalApplications = store('array')
+export const _listElectricalNames = store('array')
 
-export const _listOccupancyApplications = atom([])
-export const _listOccupancyNames = atom([])
+export const _listOccupancyApplications = store('array')
+export const _listOccupancyNames = store('array')
 
-export const _listMechanicalApplications = atom([])
-export const _listMechanicalNames = atom([])
+export const _listMechanicalApplications = store('array')
+export const _listMechanicalNames = store('array')

@@ -1,4 +1,4 @@
-import { atom } from 'nanostores'
+import { store } from "@dasig/store";
 
-export const _employeeId = atom(0)
-export const _employeeName = atom('')
+export const _employeeId = store('number')
+export const _employeeName = store('string')
