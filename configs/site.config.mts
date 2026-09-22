@@ -9,7 +9,7 @@ const site = {
 
   font: {
     name: "inter",  // roboto, inter, montserrat, opensans, publicsans
-    source: "cdn"   //cdn or local
+    local: false
   },
 
   copyright: {
@@ -20,6 +20,10 @@ const site = {
 
   license: {
     type: 'mit',    // mit, gpl, apache
+  },
+
+  cache: {
+    enabled: true
   }
 }
 
