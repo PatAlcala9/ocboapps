@@ -1,19 +1,11 @@
 import { type Element, Show } from "solid-js";
 import background1 from "../../images/background.avif";
 import background2 from "../../images/background.webp";
-import "../components-styles/HTML.sass";
 import site from 'configs/site.config.mts'
 import { HydrationScript } from '@solidjs/web';
 
 interface Props {
   children: Element;
-  font?:
-  | "roboto"
-  | "inter"
-  | "montserrat"
-  | "open-sans"
-  | "public-sans"
-  | string;
   preloadBackground?: boolean;
 }
 
@@ -37,7 +29,7 @@ export default (props: Props) => {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <Show when={site.font.source === "cdn"}>
+        <Show when={site.font.local === false}>
           <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         </Show>
         <Show when={props.preloadBackground}>
