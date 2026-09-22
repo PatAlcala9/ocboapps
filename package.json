@@ -1,5 +1,5 @@
 {
-  "name": "dasig-front",
+  "name": "ocboapps",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -13,11 +13,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@solidjs/diagnostics": "^2.0.0-rc.8",
+    "@solidjs/diagnostics": "^2.0.0-rc.9",
     "@solidjs/testing-library": "^1.0.0-beta.3",
-    "@solidjs/vite-plugin": "^3.0.0-next.43",
+    "@solidjs/vite-plugin": "^3.0.0-next.44",
     "@testing-library/jest-dom": "^7.0.1",
-    "@types/node": "^26.5.1",
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^26.6.2",
     "@types/yargs": "^17.0.35",
     "eslint-plugin-solid": "~0.17.1",
     "filesystem-routing": "0.2.1",
@@ -31,18 +32,21 @@
   },
   "dependencies": {
     "@kobalte/core": "^0.13.14",
+    "@noble/ciphers": "^2.4.0",
+    "@rabbit-company/xchacha20": "^2.3.0",
     "@solidjs/meta": "^1.0.0-next.2",
-    "@solidjs/router": "^2.0.0-next.24",
-    "@solidjs/web": "^2.0.0-rc.8",
+    "@solidjs/router": "^2.0.0-next.26",
+    "@solidjs/web": "^2.0.0-rc.9",
     "consola": "^3.4.2",
+    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.23",
     "jsencrypt": "^3.5.4",
     "nanostores": "^1.5.3",
     "ofetch": "^1.5.1",
     "sharp": "^0.35.4",
     "solid-icons": "^1.2.0",
-    "solid-js": "^2.0.0-rc.8",
-    "yargs": "^18.1.0"
+    "solid-js": "^2.0.0-rc.9",
+    "yargs": "^18.2.0"
   },
   "packageManager": "nub@0.2.9",
   "devEngines": {
