@@ -13,8 +13,8 @@ interface Props {
   design?: 'bulma-primary' | 'bulma-link' | 'bulma-info' | 'bulma-success' | 'bulma-warning' | 'bulma-danger' | 'bulma-dark' | 'bulma-light' | 'bulma-text' | 'bulma-ghost' | 'bootstrap-primary' | 'bootstrap-secondary' | 'bootstrap-success' | 'bootstrap-danger' | 'bootstrap-warning' | 'bootstrap-info' | 'bootstrap-light' | 'bootstrap-dark' | 'bootstrap-link' | 'bootstrap-outline-primary'
   submit?: boolean
   newtab?: boolean
-  width?: number
-  wide?: boolean
+  width?: string
+  // wide?: boolean
   icon?: (props: { size?: number }) => Element
   children?: Element
   background?: string
@@ -45,7 +45,7 @@ export default (props: Props) => {
         <Switch>
           <Match when={props.design}>
             <a href={props.to!} aria-label={props.label} target={props.newtab ? '_blank' : ''}>
-              <button class={`dasig-${props.design}`} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+              <button class={`dasig-${props.design}`} style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
@@ -55,7 +55,7 @@ export default (props: Props) => {
           </Match>
           <Match when={!props.design}>
             <a href={props.to!} aria-label={props.label} target={props.newtab ? '_blank' : ''}>
-              <button class="dasig-button" style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+              <button class="dasig-button" style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
@@ -70,7 +70,7 @@ export default (props: Props) => {
         <Switch>
           <Match when={props.design}>
             <Show when={props.submit}>
-              <button class={`dasig-${props.design}`} type="submit" style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+              <button class={`dasig-${props.design}`} type="submit" style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
@@ -80,7 +80,7 @@ export default (props: Props) => {
 
             <Show when={!props.submit}>
               <Show when={!props.prefetch}>
-                <button class={`dasig-${props.design}`} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+                <button class={`dasig-${props.design}`} onClick={props.onClick} style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                   <Row gap={0.5}>
                     <Show when={props.icon}>
                       <span>{Icon && <Icon size={24} />}</span>
@@ -90,7 +90,7 @@ export default (props: Props) => {
                 </button>
               </Show>
               <Show when={props.prefetch}>
-                <button class={`dasig-${props.design}`} onMouseEnter={props.onMouseOver} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+                <button class={`dasig-${props.design}`} onMouseEnter={props.onMouseOver} onClick={props.onClick} style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                   <Row gap={0.5}>
                     <Show when={props.icon}>
                       <span>{Icon && <Icon size={24} />}</span>
@@ -103,7 +103,7 @@ export default (props: Props) => {
           </Match>
           <Match when={!props.design}>
             <Show when={props.submit}>
-              <button class="dasig-button" type="submit" style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+              <button class="dasig-button" type="submit" style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
@@ -113,7 +113,7 @@ export default (props: Props) => {
 
             <Show when={!props.submit}>
               <Show when={!props.prefetch}>
-                <button class="dasig-button" onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+                <button class="dasig-button" onClick={props.onClick} style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                   <Show when={props.icon}>
                     <span>{Icon && <Icon size={24} />}</span>
                   </Show>
@@ -121,7 +121,7 @@ export default (props: Props) => {
                 </button>
               </Show>
               <Show when={props.prefetch}>
-                <button class="dasig-button" onMouseEnter={props.onMouseOver} onClick={props.onClick} style={`${borderRadius}; width: ${props.wide ? '100%' : props.width}`}>
+                <button class="dasig-button" onMouseEnter={props.onMouseOver} onClick={props.onClick} style={`${borderRadius}; width: ${props.width ? props.width : 'auto'}`}>
                   <Show when={props.icon}>
                     <span>{Icon && <Icon size={24} />}</span>
                   </Show>
