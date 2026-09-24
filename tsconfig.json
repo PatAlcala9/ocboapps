@@ -22,11 +22,13 @@
     "paths": {
       "@dasig": ["builtin/index.ts"],
       "@dasig/api": ["builtin/api/index.ts"],
+      "@dasig/store": ["builtin/scripts/functions/store.ts"],
+      "@dasig/cache": ["builtin/scripts/functions/cache.ts"],
       "configs/*": ["configs/*"],
       "components/*": ["src/components/*"],
       "images/*": ["images/*"],
       "stores/*": ["src/stores/*"],
-      "@dasig/store": ["builtin/scripts/functions/store.ts"]
+      "cache/*": ["src/cache/*"]
     }
   },
   "include": ["src", "builtin", "configs", "images"]
