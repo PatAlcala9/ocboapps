@@ -64,7 +64,7 @@ class CacheInstance {
       const cipherValue = encryptXCP(value)
       const cipherValueHex = bytesToHex(cipherValue)
       const cipherName = encryptXCP(this._name)
-      const cipherNameHex = bytesToHex(cipherName).toString().substring(0, 9)
+      const cipherNameHex = bytesToHex(cipherName).toString()
       const newName = `_${cipherNameHex}`
 
       sessionStorage.setItem(newName, cipherValueHex)
@@ -76,7 +76,7 @@ class CacheInstance {
     if (site.cache.enabled) {
       let item
       const cipherName = encryptXCP(this._name)
-      const cipherNameHex = bytesToHex(cipherName).toString().substring(0, 9)
+      const cipherNameHex = bytesToHex(cipherName).toString()
       const newName = `_${cipherNameHex}`
 
       try {
@@ -90,6 +90,14 @@ class CacheInstance {
       }
     }
     return null
+  }
+
+  delete() {
+    const cipherName = encryptXCP(this._name)
+    const cipherNameHex = bytesToHex(cipherName).toString()
+    const newName = `_${cipherNameHex}`
+
+    sessionStorage.removeItem(newName)
   }
 }
 
