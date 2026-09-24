@@ -1,3 +1,5 @@
+@use 'sass:color'
+
 .box-title
   font-size: 1.75rem
   font-weight: 700
@@ -7,5 +9,97 @@
   font-weight: 500
   margin: 0 2rem
 
+  &__selected
+    @extend .box-selection
+    opacity: 0.5
+
   &__small
     opacity: 0.5
+    
+    &__selected
+      @extend .box-selection__small
+      opacity: 0.2
+
+.approver-name
+  font-size: 1.25rem
+  // border: 1px solid white
+  // border-radius: 0.5rem
+  padding: 0.5rem 2rem
+  margin: 0 0 2rem 0
+  // width: 10rem
+
+.required-login
+  padding: 1rem
+  border-radius: 8px
+  background-color: color.adjust(#0D64E4, $blackness: 20%)
+  opacity: 0.6
+  width: 63%
+  text-align: center
+
+.modal-tooltip
+  display: flex
+  flex-direction: column
+
+  &__group
+    display: flex
+    flex-direction: column
+    padding: 0 0 1rem 0
+
+  &__title
+    font-weight: bold
+    font-size: 1.25rem
+    padding: 0 0 0.5rem 0
+
+  &__info
+    padding: 0 0 0.15rem 0
+
+  &__subinfo
+    padding: 0 0 0.15rem 4.45rem
+    font-size: 0.75rem
+
+    &__last
+      @extend .modal-tooltip__subinfo
+      padding: 0 0 .55rem 4.45rem
+      
+  &__nextline
+    padding: 0 0 0 4.95rem
+    
+  &__bold
+    font-weight: 700
+
+  &__category
+    padding: 0.15rem 0.55rem
+    border-radius: 0.5rem
+    background-color: #000000
+    font-size: 0.65rem
+    width: 3.25rem
+    text-align: center
+
+    &__red
+      @extend .modal-tooltip__category
+      background-color: #731313
+
+    &__green
+      @extend .modal-tooltip__category
+      background-color: #13731b
+
+    &__yellow
+      @extend .modal-tooltip__category
+      background-color: #6b7313
+
+  &__note
+    font-weight: bold
+    font-size: 0.75rem
+    padding: 1rem 0 0.75rem 0
+
+  &__note-info
+    padding: 0 0 0.25rem 0
+    font-size: 0.75rem
+
+.modal-h3
+  margin: 0
+
+.modal-h5
+  @extend .modal-h3
+  padding: 0.25rem 0 0.5rem 0
+  opacity: 0.8
