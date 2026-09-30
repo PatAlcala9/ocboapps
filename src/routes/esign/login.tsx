@@ -3,7 +3,7 @@ import { MD5, SHA1, SHA384 } from "crypto-js"
 import dayjs from "dayjs"
 import { IoChevronBack } from "solid-icons/io"
 import { createEffect, createSignal, onSettled, Show } from "solid-js"
-import { Box, Button, Column, Display, Link, Logo, Padding, Page, Row, Image, Dropdown, Clickable, Input, Combobox } from "@dasig"
+import { Box, Button, Column, Display, Link, Logo, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox } from "@dasig"
 import { checkConnection, securePassword } from "../../utils"
 import { getApi } from "@dasig/api"
 import { _headName } from "src/stores/head"
@@ -277,7 +277,7 @@ export default () => {
                     type="password"
                     placeholder="Password"
                     width="63%"
-                    size={1.25}
+                    size={1}
                   />
 
                   <Padding top={2} left={0} right={0} bottom={0}>
@@ -310,8 +310,8 @@ export default () => {
                       placeholder="Name"
                       value={name()}
                       onChange={setName}
-                      width="22rem"
-                      size={1.25}
+                      width="20.75rem"
+                      size={1}
                       center
                     />
                   </Padding>
@@ -323,7 +323,7 @@ export default () => {
                     type="password"
                     placeholder="Password"
                     width="63%"
-                    size={1.25}
+                    size={1}
                   />
 
                   <Padding top={2} left={0} right={0} bottom={0}>
@@ -333,6 +333,7 @@ export default () => {
                           corner="curved"
                           design="bootstrap-primary"
                           label="Login"
+                          width="68%"
                           onClick={login}
                         ></Button>
                       </Row>
@@ -364,6 +365,28 @@ export default () => {
           </Box>
         </Row>
       </Page>
+
+      <div onClick={() => setLoggedin(0)}>
+        <Modal trigger={loggedin() === 1} background="rgba(86, 32, 32, 0.8)" color="#ffebebe6" opacity={0.8} width="25rem" animation="bounce">
+          <Padding top={1} bottom={1} left={0} right={0}>
+            <Column content="center">
+              <Row>
+                <Box curved thickness={3} color="#ffebebe6" padding="1rem 2rem">
+                  <h2>Login Failed</h2>
+                </Box>
+              </Row>
+
+              <Row>
+                <h3>{errorMessage()}</h3>
+              </Row>
+
+              <Row>
+                <span class="close-text">Click anywhere to close</span>
+              </Row>
+            </Column>
+          </Padding>
+        </Modal>
+      </div>
 
       {/*<div onClick={() => setConnected(true)}>
         <Modal trigger={connected() === false} background="#562020ff" color="#ffebebe6" opacity={0.8}>

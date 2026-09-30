@@ -19,6 +19,8 @@ declare module "virtual:file-routes" {
   export interface FileRouteEntry {
     path: string;
     page?: boolean;
+    /** The page component is a server function; its `$component` is delivered eagerly. */
+    server?: boolean;
     $component?: FileRouteLazyRef<any> | FileRouteEagerRef<any>;
     $$route?: FileRouteEagerRef<any>;
     [key: string]: unknown;
@@ -45,12 +47,6 @@ declare module "virtual:file-routes" {
       $$route?: undefined;
     },
     {
-      path: "/esign/login";
-      page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/esign/login")>;
-      $$route?: undefined;
-    },
-    {
       path: "/esign/register";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/esign/register")>;
@@ -60,6 +56,18 @@ declare module "virtual:file-routes" {
       path: "/";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/index")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/esign/login";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/login")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/esign/main";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/main")>;
       $$route?: undefined;
     }
   ];
@@ -88,6 +96,14 @@ declare module "virtual:file-routes" {
       id: "/esign/";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/esign/index")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/esign/main";
+      id: "/esign/main";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/main")>;
       $$route?: undefined;
       children?: undefined;
     },
