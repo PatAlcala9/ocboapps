@@ -21,7 +21,7 @@ export default async (
 					retryStatusCodes: CODES,
 				});
 			} else {
-				fetch = await ofetch(`${URL}${api}/${value}/fetch-data`, {
+				fetch = await ofetch(`${URL}${api}/${value}/${api}`, {
 					parseResponse: JSON.parse,
 					retry: RETRY,
 					retryDelay: 500,
@@ -29,7 +29,7 @@ export default async (
 				});
 			}
 		} else {
-			fetch = await ofetch(`${URL}${api}/${value}/${value2}/fetch-data`, {
+			fetch = await ofetch(`${URL}${api}/${value}/${value2}/${api}`, {
 				parseResponse: JSON.parse,
 				retry: RETRY,
 				retryDelay: 500,
