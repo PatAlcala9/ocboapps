@@ -1,9 +1,9 @@
-import { SHA1, SHA384 } from 'crypto-js'
+import { sha1, sha384 } from '@dasig/hash'
 
 export default async (password: string) => {
-  const firstHashing = SHA1(password)
-  const secondHashing = SHA384(firstHashing.toString())
-  const thirdHashing = SHA1(secondHashing.toString())
+  const firstHashing = await sha1(password)
+  const secondHashing = await sha384(firstHashing.toString())
+  const thirdHashing = await sha1(secondHashing.toString())
 
   return thirdHashing.toString()
 }
