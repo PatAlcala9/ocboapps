@@ -1,18 +1,12 @@
-import { Title } from "@solidjs/meta";
-import { type Element, Show } from "solid-js";
-import "../components-styles/Page.sass";
+import { Title } from '@solidjs/meta'
+import { type Element, Show } from 'solid-js'
+import '../components-styles/Page.sass'
 
 interface Props {
-  children?: Element;
-  alignment?: "row" | "column";
-  title: string;
-  font:
-  | "roboto"
-  | "inter"
-  | "montserrat"
-  | "open-sans"
-  | "public-sans"
-  | string;
+  children?: Element
+  alignment?: 'row' | 'column'
+  title: string
+  font: 'roboto' | 'inter' | 'montserrat' | 'open-sans' | 'public-sans' | string
 }
 
 export default (props: Props) => {
@@ -31,5 +25,5 @@ export default (props: Props) => {
         </main>
       </Show>
     </>
-  );
-};
+  )
+}

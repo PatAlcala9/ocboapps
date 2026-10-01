@@ -12,7 +12,7 @@ export default (props: Props) => {
   return (
     <>
       <section>
-        <img src={qrcode()} alt="QR Code" style={`width: ${props.width || 'auto'}rem`} />
+        <img src={qrcode()} alt='QR Code' style={`width: ${props.width || 'auto'}rem`} />
       </section>
     </>
   )

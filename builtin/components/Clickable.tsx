@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default (props: Props) => {
-  const cursor = "cursor: pointer"
+  const cursor = 'cursor: pointer'
 
   return (
     <>
