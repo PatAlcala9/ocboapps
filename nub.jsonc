@@ -1,0 +1,11 @@
+{
+  "$schema": "https://nubjs.com/schema/latest.json",
+
+  "preload": [], // loaded before the entry file
+  "envFile": [".env.local"], // these instead of the defaults
+  "tsconfig": "./tsconfig.json", // the runtime's TypeScript config
+
+  "install": {
+    "minimumReleaseAge": "0d", // refuse deps newer than 3 days
+  },
+}
