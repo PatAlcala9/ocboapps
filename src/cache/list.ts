@@ -1,4 +1,4 @@
 import { cache } from "@dasig/cache"
 
-export const $assessorList = cache('assessorList')
-export const $registeredList = cache('registeredList')
+export const $assessor_list = cache('assessorList')
+export const $registered_list = cache('registeredList')
