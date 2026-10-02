@@ -15,10 +15,9 @@
   "devDependencies": {
     "@solidjs/diagnostics": "^2.0.0-rc.13",
     "@solidjs/testing-library": "^1.0.0-beta.3",
-    "@solidjs/vite-plugin": "^3.0.0-next.46",
+    "@solidjs/vite-plugin": "^3.0.0-next.47",
     "@testing-library/jest-dom": "^7.0.1",
-    "@types/crypto-js": "^4.2.2",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.4",
     "@types/yargs": "^17.0.35",
     "eslint-plugin-solid": "~0.18.0",
     "filesystem-routing": "0.4.0",
@@ -26,18 +25,18 @@
     "oxlint": "~1.86.0",
     "sass-embedded": "^1.105.1",
     "typescript": "^7.0.2",
-    "vite": "^8.3.1",
-    "vitest": "^5.0.2"
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
   },
   "dependencies": {
-    "@kobalte/core": "^0.13.14",
+    "@kobalte/core": "^2.0.0-alpha.2",
     "@noble/ciphers": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
     "@rabbit-company/xchacha20": "^2.3.0",
     "@solidjs/meta": "^1.0.0-next.2",
     "@solidjs/router": "2.0.0-next.28",
     "@solidjs/web": "^2.0.0-rc.13",
     "consola": "^3.4.2",
-    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.23",
     "nanostores": "^1.5.4",
     "ofetch": "^1.5.1",
@@ -46,16 +45,5 @@
     "solid-js": "^2.0.0-rc.13",
     "uuid": "^14.0.2",
     "yargs": "^18.2.0"
-  },
-  "packageManager": "nub@0.9.5",
-  "devEngines": {
-    "packageManager": {
-      "name": "nub",
-      "version": "^0.9.5",
-      "onFail": "warn"
-    }
-  },
-  "allowScripts": {
-    "@parcel/watcher": true
   }
 }
