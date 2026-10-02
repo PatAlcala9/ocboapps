@@ -1,12 +1,12 @@
-import { onSettled, createSignal } from "solid-js"
-import { Show } from "solid-js"
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Padding } from "@dasig"
-import { checkConnection } from "../../utils"
-import { RiBusinessGlobalOffLine } from "solid-icons/ri"
-import "./index.sass"
-import { getApi } from "@dasig/api"
-import { $head, $headId } from "cache/head"
-import { $assessorList, $registeredList } from "cache/list"
+import { onSettled, createSignal } from 'solid-js'
+import { Show } from 'solid-js'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
+import { checkConnection } from '../../utils'
+import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
+import './index.sass'
+import { getApi } from '@dasig/api'
+import { $head, $head_id } from 'cache/head'
+import { $assessor_list, $registered_list } from 'cache/list'
 
 let assessorsNameList: string[]
 let registeredNameList: string[]
@@ -17,25 +17,23 @@ const [connected, setConnected] = createSignal(true)
 
 export default () => {
   const getAssessors = async () => {
-    const [assessors, asserrorsError] = await getApi("e60dbde84b2a5307d399")
+    const [assessors, asserrorsError] = await getApi('e60dbde84b2a5307d399')
     if (asserrorsError !== null) return
 
     assessorsNameList = [...assessors.result]
-    $assessorList.set(JSON.stringify([...assessorsNameList]))
-    // sessionStorage.setItem("assessors", JSON.stringify([...assessorsNameList]))
+    $assessor_list.set(JSON.stringify([...assessorsNameList]))
   }
 
   const getRegistered = async () => {
-    const [registered, registeredError] = await getApi("289da0205ab91ea94824")
+    const [registered, registeredError] = await getApi('289da0205ab91ea94824')
     if (registeredError !== null) return
 
     registeredNameList = [...registered.result]
-    $registeredList.set(JSON.stringify([...registeredNameList]))
-    // sessionStorage.setItem("registered",JSON.stringify([...registeredNameList]))
+    $registered_list.set(JSON.stringify([...registeredNameList]))
   }
 
   const getHead = async () => {
-    const [response, responseError] = await getApi("5a211530266757b41510")
+    const [response, responseError] = await getApi('5a211530266757b41510')
     if (responseError !== null) return
 
     headName = response.result
@@ -43,22 +41,14 @@ export default () => {
   }
 
   const getHeadId = async () => {
-    const [response, responseError] = await getApi("81af1f8ce65c9194a0f0")
+    const [response, responseError] = await getApi('81af1f8ce65c9194a0f0')
     if (responseError !== null) return
 
     headId = response.result
-    $headId.set(headId)
+    $head_id.set(headId)
   }
 
-  // const clearCache = async () => {
-  //   const cacheNames = await caches.keys()
-  //   for (let i = 0 i < cacheNames.length i++) {
-  //     await caches.delete(cacheNames[i])
-  //   }
-  // }
-
   const init = async () => {
-    // await clearCache()
     setConnected(await checkConnection())
 
     if (connected()) {
@@ -75,101 +65,62 @@ export default () => {
 
   return (
     <>
-      <Page title="e-Sign" font="roboto">
-        <Background image="background-esign" />
+      <Page title='e-Sign' font='roboto'>
+        <Background image='background-esign' />
 
         <Display desktop>
-          <Row content="split">
-            <Row content="left" gap={2}>
-              <Image name="esign" size={200} />
+          <Row content='split'>
+            <Row content='left' gap={2}>
+              <Image name='esign' size={200} />
               <h1>OCBO e-Sign</h1>
             </Row>
 
             <Show when={connected()}>
-              <Box
-                curved
-                thickness={0}
-                padding="0.75rem 1.25rem"
-                background="#0f131d56"
-              >
-                <Row content="left" gap={1}>
-                  <Button
-                    label="Login"
-                    corner="curved"
-                    design="bootstrap-link"
-                    to="/esign/login"
-                  />
-                  <Button
-                    label="Register"
-                    corner="curved"
-                    design="bootstrap-primary"
-                    to="/esign/register"
-                  />
+              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56' margin='0 1rem'>
+                <Row content='left' gap={1}>
+                  <Button label='Login' corner='curved' design='bootstrap-link' to='/esign/login' />
+                  <Button label='Register' corner='curved' design='bootstrap-primary' to='/esign/register' />
                 </Row>
               </Box>
             </Show>
 
             <Show when={!connected()}>
-              <Box
-                curved
-                thickness={0}
-                padding="0.75rem 1.25rem"
-                background="#b21f2d56"
-              >
-                <Column alignment="center">
-                  <Row content="left" gap={1}>
-                    <RiBusinessGlobalOffLine size={24} color="#e5585dba" />
-                    <span class={"offline-text"}>OFFLINE</span>
-                    <Button
-                      label="Login"
-                      corner="curved"
-                      design="bootstrap-dark"
-                    />
-                    <Button
-                      label="Register"
-                      corner="curved"
-                      design="bootstrap-danger"
-                    />
+              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
+                <Column alignment='center'>
+                  <Row content='left' gap={1}>
+                    <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
+                    <span class={'offline-text'}>OFFLINE</span>
+                    <Button label='Login' corner='curved' design='bootstrap-dark' />
+                    <Button label='Register' corner='curved' design='bootstrap-danger' />
                   </Row>
-                  <Row content="left">
-                    <a class="offline-message">
-                      Please check your server connection and reload the page
-                    </a>
+                  <Row content='left'>
+                    <a class='offline-message'>Please check your server connection and reload the page</a>
                   </Row>
                 </Column>
               </Box>
             </Show>
           </Row>
 
-          <Row content="split">
-            <Box
-              curved
-              thickness={0}
-              padding="2.75rem 2rem"
-              background="#0f131d56"
-            >
-              <section class="title">
-                <h1 class="title__main">Secure e-Signature</h1>
-                <span class="title__sub">
-                  for Office of the City Building Official
-                </span>
-                <p class="title__paragraph">
-                  A paperless and effortless solution on signing permits
-                </p>
+          <Row content='split'>
+            <Box curved thickness={0} padding='2.75rem 2rem' background='#0f131d56'>
+              <section class='title'>
+                <h1 class='title__main'>Secure e-Signature</h1>
+                <span class='title__sub'>for Office of the City Building Official</span>
+                <p class='title__paragraph'>A paperless and effortless solution on signing permits</p>
               </section>
             </Box>
 
             <Display desktop>
-              <Column padding="3rem 0 0 0">
-                <Image name="esignbody" size={410} />
+              <Column padding='3rem 0 0 0'>
+                <Image name='esignbody' size={410} />
               </Column>
             </Display>
           </Row>
 
           <Footer margin={1}>
-            <Row content="split">
+            <Row content='split'>
               <Row gap={0.5}>
-                <Image name="ocbologo" size={20} />
+                <Image name='ocbologo' size={20} />
                 <Row gap={0.25}>
                   <Copyright />
                   <span>Davao City, Philippines</span>
@@ -178,7 +129,7 @@ export default () => {
 
               <Row gap={0.25}>
                 <span>Developed by:</span>
-                <Image name="pat-alcala" size={70} />
+                <Image name='pat-alcala' size={70} />
                 <span>Pat Alcala</span>
               </Row>
             </Row>
@@ -186,96 +137,53 @@ export default () => {
         </Display>
 
         <Display tablet>
-          <Row content="split">
-            <Row content="left" gap={2}>
-              <Image name="esign" size={150} />
+          <Row content='split'>
+            <Row content='left' gap={2}>
+              <Image name='esign' size={150} />
               <h1>OCBO e-Sign</h1>
             </Row>
 
             <Show when={connected()}>
-              <Box
-                curved
-                thickness={0}
-                padding="0.75rem 1.25rem"
-                background="#0f131d56"
-              >
-                <Row content="left" gap={1}>
-                  <Button
-                    label="Login"
-                    corner="curved"
-                    design="bootstrap-link"
-                    to="esign/login"
-                  />
-                  <Button
-                    label="Register"
-                    corner="curved"
-                    design="bootstrap-primary"
-                    to="esign/register"
-                  />
+              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56'>
+                <Row content='left' gap={1}>
+                  <Button label='Login' corner='curved' design='bootstrap-link' to='esign/login' />
+                  <Button label='Register' corner='curved' design='bootstrap-primary' to='esign/register' />
                 </Row>
               </Box>
             </Show>
             <Show when={!connected()}>
-              <Box
-                curved
-                thickness={0}
-                padding="0.75rem 1.25rem"
-                background="#b21f2d56"
-              >
-                <Column alignment="center">
-                  <Row content="left" gap={1}>
-                    <RiBusinessGlobalOffLine size={24} color="#e5585dba" />
-                    <span class={"offline-text"}>OFFLINE</span>
-                    <Button
-                      label="Login"
-                      corner="curved"
-                      design="bootstrap-dark"
-                    />
-                    <Button
-                      label="Register"
-                      corner="curved"
-                      design="bootstrap-danger"
-                    />
+              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
+                <Column alignment='center'>
+                  <Row content='left' gap={1}>
+                    <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
+                    <span class={'offline-text'}>OFFLINE</span>
+                    <Button label='Login' corner='curved' design='bootstrap-dark' />
+                    <Button label='Register' corner='curved' design='bootstrap-danger' />
                   </Row>
-                  <Row content="left">
-                    <a class="offline-message">
-                      Please check your server connection and reload the page
-                    </a>
+                  <Row content='left'>
+                    <a class='offline-message'>Please check your server connection and reload the page</a>
                   </Row>
                 </Column>
               </Box>
             </Show>
           </Row>
 
-          <Row content="split">
-            <Padding top={3} bottom={0} left={0} right={0}>
-              <Box
-                curved
-                thickness={0}
-                padding="2.75rem 2rem"
-                background="#0f131d56"
-              >
-                <section class="title">
-                  <h1 class="title__main">Secure e-Signature</h1>
-                  <span class="title__sub">
-                    for Office of the City Building Official
-                  </span>
-                  <p class="title__paragraph">
-                    A paperless and effortless solution on signing permits
-                  </p>
-                </section>
-              </Box>
-            </Padding>
+          <Row content='split'>
+            <Box class='title' curved thickness={0} padding='2.75rem 2rem' background='#0f131d56' margin='4rem 0 0 0'>
+              <h1 class='title__main'>Secure e-Signature</h1>
+              <span class='title__sub'>for Office of the City Building Official</span>
+              <p class='title__paragraph'>A paperless and effortless solution on signing permits</p>
+            </Box>
 
-            <Column padding="2rem 0 0 0">
-              <Image name="esignbody" size={140} />
+            <Column padding='2rem 0 0 0'>
+              <Image name='esignbody' size={140} />
             </Column>
           </Row>
 
           <Footer>
-            <Row content="split">
+            <Row content='split'>
               <Row gap={0.5}>
-                <Image name="ocbologo" size={20} />
+                <Image name='ocbologo' size={20} />
                 <Row gap={0.25}>
                   <Copyright />
                   <span>Davao City, Philippines</span>
@@ -284,7 +192,7 @@ export default () => {
 
               <Row gap={0.25}>
                 <span>Developed by:</span>
-                <Image name="patalcala" size={70} />
+                <Image name='patalcala' size={70} />
                 <span>Pat Alcala</span>
               </Row>
             </Row>
@@ -293,7 +201,7 @@ export default () => {
 
         <Display mobile>
           <Column>
-            <Image name="esign" size={120} />
+            <Image name='esign' size={120} />
             <h1>OCBO e-Sign</h1>
             <span>Please use OCBO e-Sign Mobile Version</span>
           </Column>
