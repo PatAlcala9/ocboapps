@@ -7,5 +7,6 @@
 
   "install": {
     "minimumReleaseAge": "0d", // refuse deps newer than 3 days
+    "minimumReleaseAgeExclude": ["@types/node", "vite"],
   },
 }

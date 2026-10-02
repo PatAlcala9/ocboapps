@@ -1,25 +1,25 @@
 set quiet
 
 install:
-  nub install
+  pnpm install
 
 run:
-  nub run dev
+  pnpm dev
 
 build:
-  nub run build && nub run serve
+  pnpm build && pnpm serve
 
 lint:
-  nub run lint
+  pnpm lint
 
 test:
-  nub run test
+  pnpm test
 
 update:
-  nub update
+  pnpm update -i
 
-update-latest:
-  nub update --latest
+# update-latest:
+#   nub update --latest
 
 dock:
   nub ./builtin/scripts/node/generateDocker.ts && docker compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
@@ -43,19 +43,19 @@ license:
   nub ./builtin/scripts/node/generateLicense.ts
 
 add package:
-  nub add {{ package }}
+  pnpm add {{ package }}
 
 addd package:
-  nub add -D {{ package }}
+  pnpm add -D {{ package }}
 
 remove package:
-  nub remove {{ package }}
+  pnpm remove {{ package }}
 
 alias i := install
 alias r := run
 alias b := build
 alias l := lint
 alias u := update
-alias ul := update-latest
+# alias ul := update-latest
 alias a := add
 alias ad := addd
