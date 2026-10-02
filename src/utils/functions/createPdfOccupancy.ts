@@ -1,11 +1,35 @@
 import jsPDF from 'jspdf'
 // @ts-ignore
 import jspdfBarcode from 'jspdf-barcode'
-import { _optn, _applicationNo, _date, _name, _type, _location, _assessor, _feeList, _codeList, _amountList, _signatureAssessor, _signatureApprover, _assessorid, _approvedDate, _assessedDate, _units, _totalUnits, _floorArea, _additional, _additionalAmountList, _additionalCodeList, _additionalFeeList, _additionalUnitList } from '../../stores/pdfinfo'
+import {
+  _optn,
+  _applicationNo,
+  _date,
+  _name,
+  _type,
+  _location,
+  _assessor,
+  _feeList,
+  _codeList,
+  _amountList,
+  _signatureAssessor,
+  _signatureApprover,
+  _assessorid,
+  _approvedDate,
+  _assessedDate,
+  _units,
+  _totalUnits,
+  _floorArea,
+  _additional,
+  _additionalAmountList,
+  _additionalCodeList,
+  _additionalFeeList,
+  _additionalUnitList,
+} from '../../stores/pdfinfo'
 import dayjs from 'dayjs'
 // @ts-ignore
 import QRCode from 'qrcode'
-import { SHA384, MD5 } from 'crypto-js'
+import { sha3, md5 } from '@dasig/hash'
 
 export default async () => {
   const PESO = import.meta.env.VITE_PESO
@@ -77,13 +101,13 @@ export default async () => {
     return await QRCode.toDataURL(text)
   }
 
-  const assessorFirstHash = SHA384(ASSESSORID.toString())
-  const assessorSecondHash = MD5(assessorFirstHash.toString().substring(9))
+  const assessorFirstHash = sha3(ASSESSORID.toString())
+  const assessorSecondHash = md5(assessorFirstHash.toString().substring(9))
   const assessorQrText = `Use OCBO e-Sign Validator - scanid=${assessorSecondHash.toString().substring(24)}`
   const assessorQr = await generateQR(assessorQrText)
 
-  const approverHash = SHA384(APPROVERID.toString())
-  const approverSecondHash = MD5(approverHash.toString().substring(9))
+  const approverHash = sha3(APPROVERID.toString())
+  const approverSecondHash = md5(approverHash.toString().substring(9))
   const approverQrText = `Use OCBO e-Sign Validator - scanid=${approverSecondHash.toString().substring(24)}`
   const approverQr = await generateQR(approverQrText)
 

@@ -5,8 +5,8 @@ import { _optn, _applicationNo, _date, _name, _type, _location, _assessor, _feeL
 import dayjs from 'dayjs'
 // @ts-ignore
 import QRCode from 'qrcode'
-import { SHA3, MD5 } from 'crypto-js'
-
+// import { SHA3, MD5 } from 'crypto-js'
+import { sha3, md5 } from '@dasig/hash'
 export default async () => {
   const PESO = import.meta.env.VITE_PESO
 
@@ -69,13 +69,13 @@ export default async () => {
     }
   }
 
-  const assessorFirstHash = SHA3(ASSESSORID.toString())
-  const assessorSecondHash = MD5(assessorFirstHash.toString().substring(9))
+  const assessorFirstHash = sha3(ASSESSORID.toString())
+  const assessorSecondHash = md5(assessorFirstHash.toString().substring(9))
   const assessorQrText = `Use OCBO e-Sign Validator - scanid=${assessorSecondHash.toString().substring(24)}`
   const assessorQr = await generateQR(assessorQrText)
 
-  const approverHash = SHA3(APPROVERID.toString())
-  const approverSecondHash = MD5(approverHash.toString().substring(9))
+  const approverHash = sha3(APPROVERID.toString())
+  const approverSecondHash = md5(approverHash.toString().substring(9))
   const approverQrText = `Use OCBO e-Sign Validator - scanid=${approverSecondHash.toString().substring(24)}`
   const approverQr = await generateQR(approverQrText)
 
