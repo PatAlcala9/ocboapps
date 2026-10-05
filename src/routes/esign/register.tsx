@@ -1,26 +1,24 @@
-import { useNavigate } from '@solidjs/router'
-import { MD5, SHA1, SHA384 } from 'crypto-js'
 import dayjs from 'dayjs'
+import { createEffect, createSignal, onSettled, Show } from 'solid-js'
+import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
-import { createEffect, createSignal, onSettled } from 'solid-js'
-import { Show } from 'solid-js'
-// import { Box, Button, Column, Display, Link, Logo, Padding, Page, Row, QR, Combobox, Input, Modal } from '@dasig'
-import { Box, Button, Column, Display, Link, Logo, Padding, Page, Row, Image, Dropdown, Clickable } from '@dasig'
-import { checkConnection } from '../../utils'
-import { getApi } from '@dasig/api'
-import { _headName } from 'src/stores/head'
+import { Box, Button, Column, Link, Padding, Page, Row, Image, Clickable, Combobox, Input, File, Background } from '@dasig'
+import { getApi, postApi } from '@dasig/api'
+import { md5, sha1, sha384 } from '@dasig/hash'
+import { checkConnection, getDateTime } from '../../utils'
+import { _headName } from 'stores/head'
+import { $assessor_list } from 'cache/list'
 import './register.sass'
+import { $head } from 'cache/head'
 
 export default () => {
-  const APPROVERNAME = sessionStorage.getItem('head')!
-  const assessors = JSON.parse(sessionStorage.getItem('assessors')!)
-  const roles = ['ASSESSOR', 'APPROVER']
-
   const navigate = useNavigate()
+  // const APPROVERNAME = sessionStorage.getItem('head')!
 
   const [role, setRole] = createSignal('')
   const [name, setName] = createSignal('')
   const [password, setPassword] = createSignal('')
+  const [cpassword, setCPassword] = createSignal('')
   const [signature, setSignature] = createSignal('')
   const [saved, setSaved] = createSignal(false)
   const [file, setFile] = createSignal<File[]>()
@@ -28,15 +26,16 @@ export default () => {
   const [allow, setAllow] = createSignal(0)
   const [connected, setConnected] = createSignal(true)
   const [errorMessage, setErrorMessage] = createSignal('')
+  const [assessors, setAssessors] = createSignal([])
+  const [approver, setApprover] = createSignal('')
 
   let globalId = 0
   let globalHashPassword = ''
 
   const getEmployeeId = async (val: string) => {
     setName(val)
-    const [id, idError] = await getApi('bd85b3fd3f45316eda64', val)
-    if (idError !== null) return
-    
+    const [id] = await getApi('bd85b3fd3f45316eda64', val)
+
     globalId = parseInt(id)
     await checkRegistered(val)
   }
@@ -44,10 +43,10 @@ export default () => {
   const generateSignature = () => {
     if (role() === 'APPROVER') {
       globalId = 276
-      setName(APPROVERNAME)
+      setName(approver())
     }
-    const hash = SHA384(globalId.toString())
-    const secondHash = MD5(hash.toString().substring(9))
+    const hash = sha384(globalId.toString())
+    const secondHash = md5(hash.toString().substring(9))
     setSignature(`Use OCBO e-Sign Validator - scanid=${secondHash.toString().substring(24)}`)
 
     try {
@@ -74,16 +73,16 @@ export default () => {
     await postApi('4cd315b87a-31cb2f5dcb', { data: globalId, data2: globalHashPassword, data3: signature(), data4: base64 })
   }
 
-  const getDate = () => {
-    const today = new Date()
+  const getDate = async () => {
+    const today = await getDateTime()
     const formattedDate = dayjs(today).format('YYYY-MM-DD HH:mm:ss Z')
     return formattedDate
   }
 
   const securePassword = async () => {
-    const firstHashing = SHA1(password())
-    const secondHashing = SHA384(firstHashing.toString())
-    const thirdHashing = SHA1(secondHashing.toString())
+    const firstHashing = sha1(password())
+    const secondHashing = sha384(firstHashing.toString())
+    const thirdHashing = sha1(secondHashing.toString())
     globalHashPassword = thirdHashing.toString()
   }
 
@@ -99,7 +98,7 @@ export default () => {
     try {
       const [registered, registeredError] = await getApi('b510fedf6baafb232a3a', name)
       if (registeredError !== null) return
-      
+
       if (registered > 0) {
         setAllow(1)
       } else {
@@ -111,13 +110,16 @@ export default () => {
   }
 
   const getAssessors = async (): Promise<string[]> => {
-    let assessorsNameList: string[] = []
+    const assessorsList = $assessor_list.get()!
+    const assessorListJSON = JSON.parse(assessorsList)
+    setAssessors(assessorListJSON)
 
-    const [assessors, assessorsError] = await getApi('e60dbde84b2a5307d399')
-    if (assessorsError !== null) return []
-    
-    assessorsNameList = [...assessors]
-    return [...assessorsNameList]
+    return [...assessorListJSON]
+  }
+
+  const getApprover = async () => {
+    const head = $head.get()!
+    setApprover(head)
   }
 
   const updateRegistered = async () => {
@@ -126,57 +128,67 @@ export default () => {
   }
 
   const gotoIndex = () => {
-    navigate('/')
+    navigate('/esign')
   }
 
-  onSettled(() => {
-    const hh = _headName.get()
-    console.log(hh)
-  })
+  const init = async () => {
+    getAssessors()
+    getApprover()
+  }
 
-  // createEffect(async () => {
-  //   if (role() === 'APPROVER') {
-  //     try {
-  //       const registered = await getApi('b510fedf6baafb232a3a', APPROVERNAME)
-  //       if (registered > 0) {
-  //         setAllow(1)
-  //       } else {
-  //         setAllow(2)
-  //       }
-  //     } catch {
-  //       setAllow(2)
-  //     }
-  //   }
+  // createEffect(() => {
+  //   // if (role() === 'APPROVER') {
+  //   //   try {
+  //   //     const registered = await getApi('b510fedf6baafb232a3a', APPROVERNAME)
+  //   //     if (registered > 0) {
+  //   //       setAllow(1)
+  //   //     } else {
+  //   //       setAllow(2)
+  //   //     }
+  //   //   } catch {
+  //   //     setAllow(2)
+  //   //   }
+  //   // }
   // })
+
+  onSettled(() => {
+    init()
+  })
 
   return (
     <>
-      <Page title='e-Sign - Register' alignment="column" font='roboto'>
-        <Row content="split">
-          <Link to="/esign">
-            <Row content="left" gap={2}>
-              <Image name="esign" size={160} />
+      <Page title='e-Sign - Register' alignment='column' font='roboto'>
+        <Background image='background-esign' />
+
+        <Row content='split'>
+          <Link to='/esign'>
+            <Row content='left' gap={2}>
+              <Image name='esign' size={160} />
               <h1>OCBO e-Sign</h1>
             </Row>
           </Link>
 
-          <Link to="/esign">
-            <Row content="right">
+          <Link to='/esign'>
+            <Row content='right' margin='0 2rem'>
               <IoChevronBack size={45} />
-              <span class="back-button-text">Back</span>
+              <span class='back-button-text'>Back</span>
             </Row>
           </Link>
         </Row>
 
         <Row>
-          <Box curved thickness={2} padding="2.25rem" color="#253849be" background="#04040660">
+          <Box curved thickness={2} padding='2.25rem' color='#253849be' background='#04040660'>
             <Row gap={4}>
               <Show when={role() !== 'ASSESSOR'}>
-                <Clickable onClick={() => { setRole('ASSESSOR') }}>
-                  <Box curved thickness={2} padding="2.25rem 0" color="#253849be" background="#57575c39" pointer width='12rem'>
+                <Clickable
+                  onClick={() => {
+                    setRole('ASSESSOR')
+                  }}
+                >
+                  <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>
                     <Column gap={0.5}>
-                      <span class="box-selection">Assessor</span>
-                      <small class="box-selection__small">Click to Switch</small>
+                      <span class='box-selection'>Assessor</span>
+                      <small class='box-selection__small'>Click to Switch</small>
                     </Column>
                   </Box>
                 </Clickable>
@@ -184,168 +196,140 @@ export default () => {
 
               <Show when={role() === 'ASSESSOR'}>
                 <Column gap={0.5}>
-                  <span class="box-selection">Assessor</span>
-                  <small class="box-selection__small">Mode</small>
+                  <span class='box-selection'>Assessor</span>
+                  <small class='box-selection__small'>Mode</small>
                 </Column>
               </Show>
-              
-              <span class="box-title">Registration</span>
+
+              <span class='box-title'>Registration</span>
 
               <Show when={role() !== 'APPROVER'}>
-                <Clickable onClick={() => { setRole('APPROVER') }}>
-                  <Box curved thickness={2} padding="2.25rem 0" color="#253849be" background="#57575c39" pointer width='12rem'>
+                <Clickable
+                  onClick={() => {
+                    setRole('APPROVER')
+                  }}
+                >
+                  <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>
                     <Column gap={0.5}>
-                      <span class="box-selection">Approver</span>
-                      <small class="box-selection__small">Click to Switch</small>
+                      <span class='box-selection'>Approver</span>
+                      <small class='box-selection__small'>Click to Switch</small>
                     </Column>
-                    </Box>
-                  </Clickable>
+                  </Box>
+                </Clickable>
               </Show>
 
               <Show when={role() === 'APPROVER'}>
                 <Column gap={0.5}>
-                  <span class="box-selection">Approver</span>
-                  <small class="box-selection__small">Mode</small>
+                  <span class='box-selection'>Approver</span>
+                  <small class='box-selection__small'>Mode</small>
                 </Column>
               </Show>
             </Row>
 
             <Show when={role() === 'ASSESSOR'}>
-              <Row alignment='left'>
+              <Row content='center' padding='3rem 0 0 0'>
                 <h4>List of Assessors</h4>
               </Row>
-                <Dropdown options={assessors} />
-              
-                    {/*<Combobox options={assessors} placeholder="Select your name" value={name()} onChange={(val) => getEmployeeId(val!)} />*/}
+              <Combobox options={assessors()} placeholder='Select your name' value={name()} onChange={(val) => getEmployeeId(val!)} width='22.25rem' />
 
-                    <Show when={allow() === 2}>
-                      <h4>Password</h4>
-                      {/*<Input isPassword value={password()} onChange={setPassword}></Input>*/}
-                      <h4>Upload Signature</h4>
-                      {/*<FileField class="filefield" maxFiles={1} onFileAccept={(data) => setFile(data)} accept=".jpg, .jpeg, .png, .webp, .avif">
-                        <FileField.Dropzone class="filefield__dropzone">Drag and drop or click to upload file</FileField.Dropzone>
-                        <FileField.HiddenInput />
-                        <FileField.ItemList class="filefield__itemList">
-                          {() => (
-                            <FileField.Item class="filefield__item">
-                              <FileField.ItemPreviewImage class="filefield__itemPreviewImage" />
-                              <FileField.ItemName class="filefield__itemName" />
-                              <FileField.ItemSize class="filefield__itemSize" />
-                              <FileField.ItemDeleteTrigger class="filefield__itemDeleteTrigger" onClick={() => setFile()}>
-                                Delete
-                              </FileField.ItemDeleteTrigger>
-                            </FileField.Item>
-                          )}
-                        </FileField.ItemList>
-                      </FileField>*/}
+              <Show when={allow() === 2}>
+                <h4>Password</h4>
+                <Input type='password' value={password()} onChange={setPassword} width='20.5rem' center />
+                <h4>Confirm Password</h4>
+                <Input type='password' value={cpassword()} onChange={setCPassword} width='20.5rem' center />
+                <h4>Upload Signature</h4>
+                <File maxFiles={1} onFileAccept={(data) => setFile(data)} accept='.jpg, .jpeg, .png, .webp, .avif' onClick={() => setFile()} label='Drag and drop or click to upload file' buttonText='Delete' />
 
-                      <Padding top={2} bottom={0} left={0} right={0}>
-                        <Show when={file() && password()}>
-                          <Show when={file() && password() && password().length >= 4}>
-                            <Row>
-                              <Button edges="curved" design="bootstrap-primary" label="Register" onClick={generateSignature} wide />
-                            </Row>
-                          </Show>
-
-                          <Show when={file() && password() && password().length < 4}>
-                            <Row>
-                              <span class="already-registered">Password too short</span>
-                            </Row>
-                          </Show>
-                        </Show>
-
-                        <Show when={!file() && !password()}>
-                          <Row>
-                            <span class="already-registered">Required password and signature</span>
-                          </Row>
-                        </Show>
-
-                        <Show when={file() && !password()}>
-                          <Row>
-                            <span class="already-registered">Required password</span>
-                          </Row>
-                        </Show>
-
-                        <Show when={!file() && password()}>
-                          <Row>
-                            <span class="already-registered">Required signature</span>
-                          </Row>
-                        </Show>
-                      </Padding>
+                <Padding top={2}>
+                  <Show when={file() && password() && cpassword()}>
+                    <Show when={password().length < 4}>
+                      <Row>
+                        <span class='already-registered'>Password too short</span>
+                      </Row>
                     </Show>
 
-                    <Show when={allow() === 1}>
-                      <Padding top={2} bottom={0} left={0} right={0}>
-                        <Row>
-                          <span class="already-registered">Already Registered</span>
-                        </Row>
-                      </Padding>
+                    <Show when={password().length >= 4 && password() !== cpassword()}>
+                      <Row>
+                        <span class='already-registered'>Passwords do not match</span>
+                      </Row>
+                    </Show>
+
+                    <Show when={password().length >= 4 && password() === cpassword()}>
+                      <Row>
+                        <Button corner='curved' design='bootstrap-primary' label='Register' onClick={generateSignature} width='100%' />
+                      </Row>
                     </Show>
                   </Show>
 
-                  {/*<Show when={role() === 'APPROVER'}>
-                    <h4>Name of Approver</h4>
-                    <span class="approver-name">{APPROVERNAME}</span>
+                  <Show when={!password() || !cpassword() || !file()}>
+                    <Row>
+                      <span class='already-registered'>{!password() && !cpassword() && !file() ? 'Required password, confirmation password, and signature' : !password() ? 'Required password' : !cpassword() ? 'Required password confirmation' : !file() ? 'Required signature' : ''}</span>
+                    </Row>
+                  </Show>
+                </Padding>
+              </Show>
 
-                    <h4>Password</h4>
-                    <Input isPassword value={password()} onChange={setPassword}></Input>
+              <Show when={allow() === 1}>
+                <Padding top={2}>
+                  <Row>
+                    <span class='already-registered'>Already Registered</span>
+                  </Row>
+                </Padding>
+              </Show>
+            </Show>
 
-                    <Show when={allow() === 2}>
-                      <h4>Upload Signature</h4>
-                      <FileField class="filefield" maxFiles={1} onFileAccept={(data) => setFile(data)} accept=".png">
-                        <FileField.Dropzone class="filefield__dropzone">Drag and drop or click to upload file</FileField.Dropzone>
-                        <FileField.HiddenInput />
-                        <FileField.ItemList class="filefield__itemList">
-                          {() => (
-                            <FileField.Item class="filefield__item">
-                              <FileField.ItemPreviewImage class="filefield__itemPreviewImage" />
-                              <FileField.ItemName class="filefield__itemName" />
-                              <FileField.ItemSize class="filefield__itemSize" />
-                              <FileField.ItemDeleteTrigger class="filefield__itemDeleteTrigger" onClick={() => setFile()}>
-                                Delete
-                              </FileField.ItemDeleteTrigger>
-                            </FileField.Item>
-                          )}
-                        </FileField.ItemList>
-                      </FileField>
+            <Show when={role() === 'APPROVER'}>
+              <Padding top={3}>
+                <h4>Name of Approver</h4>
+                <span class='approver-name'>{approver()}</span>
 
-                      <Padding top={2} bottom={0} left={0} right={0}>
-                        <Show when={file() && password()}>
-                          <Row>
-                            <Button edges="curved" design="bootstrap-primary" label="Register" onClick={generateSignature} wide />
-                          </Row>
-                        </Show>
+                <h4>Password</h4>
+                <Input type='password' value={password()} onChange={setPassword} width='20.5rem' center />
+                <h4>Confirm Password</h4>
+                <Input type='password' value={cpassword()} onChange={setCPassword} width='20.5rem' center />
 
-                        <Show when={file() && !password()}>
-                          <Row>
-                            <span class="already-registered">Required password</span>
-                          </Row>
-                        </Show>
+                <Show when={allow() === 2}>
+                  <h4>Upload Signature</h4>
+                  <File maxFiles={1} onFileAccept={(data) => setFile(data)} accept='.jpg, .jpeg, .png, .webp, .avif' onClick={() => setFile()} label='Drag and drop or click to upload file' buttonText='Delete' />
 
-                        <Show when={!file() && password()}>
-                          <Row>
-                            <span class="already-registered">Required signature</span>
-                          </Row>
-                        </Show>
-
-                        <Show when={!file() && !password()}>
-                          <Row>
-                            <span class="already-registered">Required password and signature</span>
-                          </Row>
-                        </Show>
-                      </Padding>
+                  <Padding top={2}>
+                    <Show when={file() && password()}>
+                      <Row>
+                        <Button corner='curved' design='bootstrap-primary' label='Register' onClick={generateSignature} width='100%' />
+                      </Row>
                     </Show>
 
-                    <Show when={allow() === 1}>
-                      <Padding top={2} bottom={0} left={0} right={0}>
-                        <Row>
-                          <span class="already-registered">Already Registered</span>
-                        </Row>
-                      </Padding>
+                    <Show when={file() && !password()}>
+                      <Row>
+                        <span class='already-registered'>Required password</span>
+                      </Row>
                     </Show>
-                </Show>*/}
-            </Box>
-          </Row>
+
+                    <Show when={!file() && password()}>
+                      <Row>
+                        <span class='already-registered'>Required signature</span>
+                      </Row>
+                    </Show>
+
+                    <Show when={!file() && !password()}>
+                      <Row>
+                        <span class='already-registered'>Required password and signature</span>
+                      </Row>
+                    </Show>
+                  </Padding>
+                </Show>
+
+                <Show when={allow() === 1}>
+                  <Padding top={2}>
+                    <Row>
+                      <span class='already-registered'>Already Registered</span>
+                    </Row>
+                  </Padding>
+                </Show>
+              </Padding>
+            </Show>
+          </Box>
+        </Row>
       </Page>
 
       {/*<div onClick={gotoIndex}>

@@ -11,12 +11,20 @@
   font-weight: 700
 
 .box-selection
-  font-size: 1.5rem
-  font-weight: 500
+  font-size: 1rem
+  font-weight: 600
   margin: 0 2rem
+
+  &__selected
+    @extend .box-selection
+    opacity: 0.5
 
   &__small
     opacity: 0.5
+    
+    &__selected
+      @extend .box-selection__small
+      opacity: 0.2
 
 .digital-sign-details
   display: flex

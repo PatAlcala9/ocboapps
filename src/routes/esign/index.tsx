@@ -1,10 +1,10 @@
-import { onSettled, createSignal } from 'solid-js'
-import { Show } from 'solid-js'
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
-import { checkConnection } from '../../utils'
+import { onSettled, createSignal, Show } from 'solid-js'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
-import './index.sass'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
 import { getApi } from '@dasig/api'
+import { checkConnection } from '../../utils'
+import './index.sass'
+
 import { $head, $head_id } from 'cache/head'
 import { $assessor_list, $registered_list } from 'cache/list'
 
@@ -127,10 +127,18 @@ export default () => {
                 </Row>
               </Row>
 
-              <Row gap={0.25}>
-                <span>Developed by:</span>
-                <Image name='pat-alcala' size={70} />
-                <span>Pat Alcala</span>
+              <Row gap={1}>
+                <Row gap={0.25}>
+                  <span>Developed by:</span>
+                  <Image name='pat-alcala' size={70} />
+                  <span>Pat Alcala</span>
+                </Row>
+
+                <Row gap={0.25}>
+                  <span>Made with:</span>
+                  <Image name='logo' size={10} />
+                  <span>Dasig</span>
+                </Row>
               </Row>
             </Row>
           </Footer>
@@ -194,6 +202,12 @@ export default () => {
                 <span>Developed by:</span>
                 <Image name='patalcala' size={70} />
                 <span>Pat Alcala</span>
+              </Row>
+
+              <Row gap={0.25}>
+                <span>Made with:</span>
+                <Image name='logo' size={10} />
+                <span>Dasig</span>
               </Row>
             </Row>
           </Footer>

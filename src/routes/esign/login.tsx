@@ -1,299 +1,206 @@
-import { useNavigate } from "@solidjs/router"
-import { MD5, SHA1, SHA384 } from "crypto-js"
-import dayjs from "dayjs"
-import { IoChevronBack } from "solid-icons/io"
-import { createEffect, createSignal, onSettled, Show } from "solid-js"
-import { Box, Button, Column, Display, Link, Logo, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox } from "@dasig"
-import { checkConnection, securePassword } from "../../utils"
-import { getApi } from "@dasig/api"
-import { _headName } from "src/stores/head"
-import "./login.sass"
-import { $head, $headId } from "cache/head"
-import { $assessorList, $registeredList } from "cache/list"
+import { createSignal, onSettled, Show } from 'solid-js'
+import { useNavigate } from '@solidjs/router'
+import { IoChevronBack } from 'solid-icons/io'
+import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox, Background } from '@dasig'
+import { getApi } from '@dasig/api'
+import { checkConnection, securePassword } from '../../utils'
+import { _headName, _headPassword } from 'stores/head'
+import { $head, $head_id } from 'cache/head'
+import { $registered_list } from 'cache/list'
+import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
+import './login.sass'
 
 export default () => {
   const navigate = useNavigate()
-  // const assessors = JSON.parse(sessionStorage.getItem("registered")!)
 
-  const [role, setRole] = createSignal("Assessor")
-  const [name, setName] = createSignal("")
-  const [password, setPassword] = createSignal("")
+  const [role, setRole] = createSignal('')
+  const [name, setName] = createSignal('')
+  const [password, setPassword] = createSignal('')
   const [loggedin, setLoggedin] = createSignal(0)
-  const [errorMessage, setErrorMessage] = createSignal("")
+  const [errorMessage, setErrorMessage] = createSignal('')
   const [connected, setConnected] = createSignal(true)
-  const [openChanges, setOpenChanges] = createSignal(false)
-  const [head, setHead] = createSignal("")
-  const [headId, setHeadId] = createSignal("")
-
-  let assessorsList
-  let registeredList
-  // let globalId = 0
-  // let globalHashPassword = ''
-
-  // const getEmployeeId = async (val: string) => {
-  //   setName(val)
-  //   const [id, idError] = await getApi('bd85b3fd3f45316eda64', val)
-  //   if (idError !== null) return
-
-  //   globalId = parseInt(id)
-  //   await checkRegistered(val)
-  // }
+  const [head, setHead] = createSignal('')
+  const [headId, setHeadId] = createSignal('')
+  const [registeredList, setRegisteredList] = createSignal([])
 
   const login = async () => {
     let dbpassword
-    
+    let employeeid
+
     setConnected(await checkConnection())
     if (connected() === false) {
-      setErrorMessage("No Connection on Server")
+      setErrorMessage('No Connection on Server')
       return
     }
-    
-    if (role() === "APPROVER") {
-      const [dbpass] = await getApi("49dd42b9454f27280be0", headId())
-      dbpassword = dbpass.result
+
+    if (role() === 'APPROVER') {
+      const storepass = _headPassword.get()
+
+      if (storepass.length > 0) {
+        dbpassword = storepass
+      } else {
+        const [dbpass] = await getApi('49dd42b9454f27280be0', headId())
+        dbpassword = dbpass.result
+      }
     } else {
-      const [employeeid] = await getApi("bd85b3fd3f45316eda64", name())
-      const [dbpass] = await getApi("49dd42b9454f27280be0", employeeid)
+      const [dbemployeeid] = await getApi('bd85b3fd3f45316eda64', name())
+      employeeid = dbemployeeid.result
+
+      const [dbpass] = await getApi('49dd42b9454f27280be0', dbemployeeid.result)
       dbpassword = dbpass.result
     }
     const hashPassword = await securePassword(password())
-       
-    if (dbpassword === "0") {
-      setErrorMessage("Not yet registered. Please proceed to Registration.")
+
+    if (dbpassword === '0') {
+      setErrorMessage('Not yet registered. Please proceed to Registration.')
     } else {
-      setErrorMessage("Invalid Password, Try again.")
+      setErrorMessage('Invalid Password, Try again.')
     }
 
     if (dbpassword === hashPassword) {
-      // _employeeId.set(employeeid)
-      // _employeeName.set(name())
-      // saveEmployee()
+      if (role() === 'APPROVER') saveEmployee(headId(), head(), role())
+      else saveEmployee(employeeid, name(), role())
+
       setLoggedin(2)
-      
+
       $head.delete()
-      $headId.delete()
+      $head_id.delete()
+
+      navigateToRolePage()
     } else {
       setLoggedin(1)
     }
   }
 
-  // const register = async () => {
-  //   setConnected(await checkConnection())
-  //   if (connected() === false) {
-  //     setErrorMessage('No Connection on Server')
-  //     return
-  //   }
-
-  //   await securePassword()
-  //   const blob = new Blob(file())
-  //   const base64 = await convertBase64(blob)
-  //   setBase64image(base64 as string)
-
-  //   await postApi('4cd315b87a-31cb2f5dcb', { data: globalId, data2: globalHashPassword, data3: signature(), data4: base64 })
-  // }
-
-  const getDate = () => {
-    const today = new Date()
-    const formattedDate = dayjs(today).format("YYYY-MM-DD HH:mm:ss Z")
-    return formattedDate
+  const saveEmployee = (id: string, name: string, role: string) => {
+    $logged_in.set('true')
+    $login_role.set(role)
+    $login_name.set(name)
+    $login_id.set(id)
   }
 
-  // const securePassword = async () => {
-  //   const firstHashing = SHA1(password())
-  //   const secondHashing = SHA384(firstHashing.toString())
-  //   const thirdHashing = SHA1(secondHashing.toString())
-  //   globalHashPassword = thirdHashing.toString()
-  // }
-
-  const convertBase64 = (blob: Blob) => {
-    return new Promise((resolve, _) => {
-      const reader = new FileReader()
-      reader.onloadend = () => resolve(reader.result)
-      reader.readAsDataURL(blob)
-    })
+  const gotoApproval = () => {
+    navigate('/esign/approval', { replace: true })
   }
 
-  // const checkRegistered = async (name: string) => {
-  //   try {
-  //     const [registered, registeredError] = await getApi('b510fedf6baafb232a3a', name)
-  //     if (registeredError !== null) return
+  const gotoPrinting = () => {
+    navigate('/esign/printing')
+  }
 
-  //     if (registered > 0) {
-  //       setAllow(1)
-  //     } else {
-  //       setAllow(2)
-  //     }
-  //   } catch {
-  //     setAllow(2)
-  //   }
-  // }
+  const navigateToRolePage = () => {
+    if (role() === 'ASSESSOR') gotoPrinting()
+    else gotoApproval()
+  }
 
-  const getAssessors = async (): Promise<string[]> => {
-    let assessorsNameList: string[] = []
-
-    const [assessors, assessorsError] = await getApi("e60dbde84b2a5307d399")
-    if (assessorsError !== null) return []
-
-    assessorsNameList = [...assessors]
-    return [...assessorsNameList]
+  const setApprover = async () => {
+    const [dbpass] = await getApi('49dd42b9454f27280be0', headId())
+    _headPassword.set(dbpass.result)
+    setRole('APPROVER')
   }
 
   const getHead = () => {
     setHead($head.get()!)
-    setHeadId($headId.get()!)
+    setHeadId($head_id.get()!)
   }
 
   const getList = () => {
-    assessorsList = $assessorList.get()!
-    registeredList = $registeredList.get()!
+    const list = JSON.parse($registered_list.get()!)
+    setRegisteredList(list)
   }
-
-  // const gotoIndex = () => {
-  //   navigate("/")
-  // }
 
   onSettled(() => {
     getHead()
     getList()
   })
 
-  // createEffect(() => {
-  //   if (role() === 'Approver') setName(APPROVERNAME)
-  //   else if (role() !== 'Approver' && name() === APPROVERNAME) setName('')
-  // })
-
-  // onSettled(() => {
-  //   const auto = sessionStorage.getItem('auto_open_changes')
-  //   if (!auto) setOpenChanges(true)
-  //   // preFetch()
-  // })
-
   return (
     <>
-      <Page title="e-Sign - Login" alignment="column" font="roboto">
-        <Row content="split">
-          <Link to="/esign">
-            <Row content="left" gap={2}>
-              <Image name="esign" size={160} />
+      <Page title='e-Sign - Login' alignment='column' font='roboto'>
+        <Background image='background-esign' />
+
+        <Row content='split'>
+          <Link to='/esign'>
+            <Row content='left' gap={2}>
+              <Image name='esign' size={160} />
               <h1>OCBO e-Sign</h1>
             </Row>
           </Link>
 
-          <Link to="/esign">
-            <Row content="right">
+          <Link to='/esign'>
+            <Row content='right' margin='0 2rem'>
               <IoChevronBack size={45} />
-              <span class="back-button-text">Back</span>
+              <span class='back-button-text'>Back</span>
             </Row>
           </Link>
         </Row>
 
         <Row>
-          <Box
-            curved
-            thickness={2}
-            padding="2.25rem"
-            color="#253849be"
-            background="#04040660"
-          >
+          <Box curved thickness={2} padding='2.25rem' color='#253849be' background='#04040660'>
             <Row gap={4}>
-              <Show when={role() !== "ASSESSOR"}>
+              <Show when={role() !== 'ASSESSOR'}>
                 <Clickable
                   onClick={() => {
-                    setRole("ASSESSOR")
+                    setRole('ASSESSOR')
                   }}
                 >
-                  <Box
-                    curved
-                    thickness={2}
-                    padding="1.25rem 0"
-                    color="#253849be"
-                    background="#57575c39"
-                    pointer
-                    width="12rem"
-                  >
+                  <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>
                     <Column gap={0.5}>
-                      <span class="box-selection">Assessor</span>
-                      <small class="box-selection__small">
-                        Click to Switch
-                      </small>
+                      <span class='box-selection'>Assessor</span>
+                      <small class='box-selection__small'>Click to Switch</small>
                     </Column>
                   </Box>
                 </Clickable>
               </Show>
 
-              <Show when={role() === "ASSESSOR"}>
+              <Show when={role() === 'ASSESSOR'}>
                 <Column gap={0.5}>
-                  <span class="box-selection__selected">Assessor</span>
-                  <small class="box-selection__small__selected">Mode</small>
+                  <span class='box-selection__selected'>Assessor</span>
+                  <small class='box-selection__small__selected'>Mode</small>
                 </Column>
               </Show>
 
-              <span class="box-title">Login</span>
+              <span class='box-title'>Login</span>
 
-              <Show when={role() !== "APPROVER"}>
+              <Show when={role() !== 'APPROVER'}>
                 <Clickable
                   onClick={() => {
-                    setRole("APPROVER")
+                    setApprover()
                   }}
                 >
-                  <Box
-                    curved
-                    thickness={2}
-                    padding="1.25rem 0"
-                    color="#253849be"
-                    background="#57575c39"
-                    pointer
-                    width="12rem"
-                  >
+                  <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>
                     <Column gap={0.5}>
-                      <span class="box-selection">Approver</span>
-                      <small class="box-selection__small">
-                        Click to Switch
-                      </small>
+                      <span class='box-selection'>Approver</span>
+                      <small class='box-selection__small'>Click to Switch</small>
                     </Column>
                   </Box>
                 </Clickable>
               </Show>
 
-              <Show when={role() === "APPROVER"}>
+              <Show when={role() === 'APPROVER'}>
                 <Column gap={0.5}>
-                  <span class="box-selection__selected">Approver</span>
-                  <small class="box-selection__small__selected">Mode</small>
+                  <span class='box-selection__selected'>Approver</span>
+                  <small class='box-selection__small__selected'>Mode</small>
                 </Column>
               </Show>
             </Row>
 
-            <Show when={role() === "APPROVER"}>
-              <Column width="100%" content="center">
-                <Padding top={6} bottom={0} left={0} right={0}>
-                  <Padding top={0} bottom={1} left={0} right={0}>
-                    <span class="approver-name">{head()}</span>
+            <Show when={role() === 'APPROVER'}>
+              <Column width='100%' content='center'>
+                <Padding top={4.5}>
+                  <Padding bottom={1}>
+                    <span class='approver-name'>{head()}</span>
                   </Padding>
 
-                  <Input
-                    center
-                    value={password()}
-                    onChange={setPassword}
-                    type="password"
-                    placeholder="Password"
-                    width="63%"
-                    size={1}
-                  />
+                  <Input center value={password()} onChange={setPassword} type='password' placeholder='Password' width='63%' size={1} />
 
-                  <Padding top={2} left={0} right={0} bottom={0}>
+                  <Padding top={2}>
                     <Show when={password()}>
-                      <Button
-                        corner="curved"
-                        design="bootstrap-primary"
-                        label="Login"
-                        width="68%"
-                        onClick={login}
-                      />
+                      <Button corner='curved' design='bootstrap-primary' label='Login' width='68%' onClick={login} />
                     </Show>
 
                     <Show when={!password()}>
                       <Row>
-                        <span class="required-login">Required password</span>
+                        <span class='required-login'>Required password</span>
                       </Row>
                     </Show>
                   </Padding>
@@ -301,61 +208,37 @@ export default () => {
               </Column>
             </Show>
 
-            <Show when={role() === "ASSESSOR"}>
-              <Column width="100%" content="center">
-                <Padding top={6} bottom={0} left={0} right={0}>
-                  <Padding top={0} bottom={1} left={0} right={0}>
-                    <Combobox
-                      options={registeredList!}
-                      placeholder="Name"
-                      value={name()}
-                      onChange={setName}
-                      width="20.75rem"
-                      size={1}
-                      center
-                    />
+            <Show when={role() === 'ASSESSOR'}>
+              <Column width='100%' content='center'>
+                <Padding top={4.5}>
+                  <Padding bottom={1}>
+                    <Combobox options={registeredList()} placeholder="Assessor's Name" value={name()} onChange={setName} width='22.25rem' />
                   </Padding>
 
-                  <Input
-                    center
-                    value={password()}
-                    onChange={setPassword}
-                    type="password"
-                    placeholder="Password"
-                    width="63%"
-                    size={1}
-                  />
+                  <Input center value={password()} onChange={setPassword} type='password' placeholder='Password' width='63%' size={1} />
 
-                  <Padding top={2} left={0} right={0} bottom={0}>
+                  <Padding top={2}>
                     <Show when={password() && name()}>
                       <Row>
-                        <Button
-                          corner="curved"
-                          design="bootstrap-primary"
-                          label="Login"
-                          width="68%"
-                          onClick={login}
-                        ></Button>
+                        <Button corner='curved' design='bootstrap-primary' label='Login' width='68%' onClick={login}></Button>
                       </Row>
                     </Show>
 
                     <Show when={!password() && name()}>
                       <Row>
-                        <span class="required-login">Required password</span>
+                        <span class='required-login'>Required password</span>
                       </Row>
                     </Show>
 
                     <Show when={!password() && !name()}>
                       <Row>
-                        <span class="required-login">
-                          Required name and password
-                        </span>
+                        <span class='required-login'>Required name and password</span>
                       </Row>
                     </Show>
 
                     <Show when={password() && !name()}>
                       <Row>
-                        <span class="required-login">Required name</span>
+                        <span class='required-login'>Required name</span>
                       </Row>
                     </Show>
                   </Padding>
@@ -367,11 +250,11 @@ export default () => {
       </Page>
 
       <div onClick={() => setLoggedin(0)}>
-        <Modal trigger={loggedin() === 1} background="rgba(86, 32, 32, 0.8)" color="#ffebebe6" opacity={0.8} width="25rem" animation="bounce">
-          <Padding top={1} bottom={1} left={0} right={0}>
-            <Column content="center">
+        <Modal trigger={loggedin() === 1} background='rgba(86, 32, 32, 0.8)' color='#ffebebe6' opacity={0.8} width='25rem' animation='bounce'>
+          <Padding top={1} bottom={1}>
+            <Column content='center'>
               <Row>
-                <Box curved thickness={3} color="#ffebebe6" padding="1rem 2rem">
+                <Box curved thickness={3} color='#ffebebe6' padding='1rem 2rem'>
                   <h2>Login Failed</h2>
                 </Box>
               </Row>
@@ -381,19 +264,19 @@ export default () => {
               </Row>
 
               <Row>
-                <span class="close-text">Click anywhere to close</span>
+                <span class='close-text'>Click anywhere to close</span>
               </Row>
             </Column>
           </Padding>
         </Modal>
       </div>
 
-      {/*<div onClick={() => setConnected(true)}>
-        <Modal trigger={connected() === false} background="#562020ff" color="#ffebebe6" opacity={0.8}>
-          <Padding top={1} bottom={1} left={4} right={4}>
+      <div onClick={() => setConnected(true)}>
+        <Modal trigger={connected() === false} background='rgba(86, 32, 32, 0.8)' color='#ffebebe6' opacity={0.8} width='25rem' animation='bounce'>
+          <Padding top={1} bottom={1}>
             <Column>
               <Row>
-                <Box curved thickness={3} color="#ffebebe6" padding="1rem">
+                <Box curved thickness={3} color='#ffebebe6' padding='1rem'>
                   <h2>Connection Error</h2>
                 </Box>
               </Row>
@@ -403,12 +286,12 @@ export default () => {
               </Row>
 
               <Row>
-                <span class="close-text">Click anywhere to close</span>
+                <span class='close-text'>Click anywhere to close</span>
               </Row>
             </Column>
           </Padding>
         </Modal>
-      </div>*/}
+      </div>
     </>
   )
 }
