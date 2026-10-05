@@ -5,15 +5,15 @@
 // (with serverFunctions enabled) serves the `/_server` endpoint too. The
 // node <-> web plumbing below is the only glue; on a web-native platform
 // (workers, Deno, Bun.serve) `handleRequest` is used directly.
-import { createServer } from 'node:http';
-import { readFileSync } from 'node:fs';
-import { Readable } from 'node:stream';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
-import { handleRequest } from './dist/server/server.js';
+import { createServer } from 'node:http'
+import { readFileSync } from 'node:fs'
+import { Readable } from 'node:stream'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+import { handleRequest } from './dist/server/server.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const port = process.env.PORT || 3000;
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const port = process.env.PORT || 3000
 
 const MIME = {
   '.js': 'application/javascript',
@@ -24,54 +24,54 @@ const MIME = {
   '.svg': 'image/svg+xml',
   '.avif': 'image/avif',
   '.webp': 'image/webp',
-};
+}
 
 function webRequest(req) {
-  const url = new URL(req.url || '/', `http://${req.headers.host || `localhost:${port}`}`);
-  const method = req.method || 'GET';
-  const body = method === 'GET' || method === 'HEAD' ? undefined : Readable.toWeb(req);
+  const url = new URL(req.url || '/', `http://${req.headers.host || `localhost:${port}`}`)
+  const method = req.method || 'GET'
+  const body = method === 'GET' || method === 'HEAD' ? undefined : Readable.toWeb(req)
   return new Request(url, {
     method,
     headers: req.headers,
     body,
     ...(body ? { duplex: 'half' } : {}),
-  });
+  })
 }
 
 const server = createServer(async (req, res) => {
-  const url = req.url || '/';
+  const url = req.url || '/'
 
   // Static client assets first.
   if (url !== '/' && !url.includes('..')) {
     try {
-      const content = readFileSync(path.resolve(__dirname, 'dist/client' + url.split('?')[0]));
-      res.setHeader('Content-Type', MIME[path.extname(url)] || 'application/octet-stream');
-      res.end(content);
-      return;
+      const content = readFileSync(path.resolve(__dirname, 'dist/client' + url.split('?')[0]))
+      res.setHeader('Content-Type', MIME[path.extname(url)] || 'application/octet-stream')
+      res.end(content)
+      return
     } catch {
       // Fall through to the handler (SSR routes, /_server, ...).
     }
   }
 
   try {
-    const response = await handleRequest(webRequest(req));
-    res.statusCode = response.status;
-    const cookies = response.headers.getSetCookie?.();
+    const response = await handleRequest(webRequest(req))
+    res.statusCode = response.status
+    const cookies = response.headers.getSetCookie?.()
     response.headers.forEach((value, key) => {
-      if (key !== 'set-cookie') res.setHeader(key, value);
-    });
-    if (cookies?.length) res.setHeader('set-cookie', cookies);
+      if (key !== 'set-cookie') res.setHeader(key, value)
+    })
+    if (cookies?.length) res.setHeader('set-cookie', cookies)
     if (response.body) {
-      for await (const chunk of response.body) res.write(chunk);
+      for await (const chunk of response.body) res.write(chunk)
     }
-    res.end();
+    res.end()
   } catch (e) {
-    console.error(e);
-    res.statusCode = 500;
-    res.end(e.message);
+    console.error(e)
+    res.statusCode = 500
+    res.end(e.message)
   }
-});
+})
 
 server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+  console.log(`Server running at http://localhost:${port}`)
+})
