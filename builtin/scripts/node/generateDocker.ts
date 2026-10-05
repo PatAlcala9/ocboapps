@@ -4,19 +4,18 @@ import * as path from "node:path";
 import { fileURLToPath } from "url";
 import deployment from 'configs/deployment.config.mts'
 
-const dockerfileContent = `FROM node:${deployment.container.node_version} AS build
+const dockerfileContent = `FROM node:${deployment.container.node_version}
 WORKDIR /app
 COPY package*.json ./
-# RUN corepack enable
-RUN nub install
+RUN corepack enable
+RUN pnpm install --dangerously-allow-all-builds
 COPY . .
-RUN nub run build
+RUN pnpm build
 
-FROM node:${deployment.container.node_version}
-WORKDIR /app2
-COPY --from=build /app/dist ./
-CMD [ "nub", "run", "serve"]
+ENV HOST=0.0.0.0
+ENV PORT=8080
 EXPOSE 8080
+CMD ["node", "--env-file-if-exists=.env.local","./dist/server/node.js"]
 `;
 
 const dockerComposeContent = `services:
