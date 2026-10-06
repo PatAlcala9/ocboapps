@@ -1,10 +1,10 @@
-import { Column, Image, Padding, Page, Background, Button } from '@dasig'
-import { checkConnection } from '../utils'
+import dayjs from 'dayjs'
 import { onSettled, createSignal, Switch, Match } from 'solid-js'
 import type { RouteDefinition } from '@solidjs/router'
-import dayjs from 'dayjs'
-import { getApi } from '@dasig/api'
 import { httpStatus } from '@solidjs/web'
+import { Column, Image, Padding, Page, Background, Button } from '@dasig'
+import { getApi } from '@dasig/api'
+import { checkConnection } from '../utils'
 import './index.sass'
 
 export const route = {
