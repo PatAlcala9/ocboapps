@@ -10,7 +10,7 @@ interface Props {
   opacity?: number
   trigger: boolean
   width?: string
-  animation?: 'bounce'
+  animation?: 'bounce' | 'slide-from-top'
 }
 
 export default (props: Props) => {
