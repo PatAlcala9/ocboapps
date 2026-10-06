@@ -3,8 +3,6 @@ import type { Element } from 'solid-js'
 import { Row } from '../index'
 import { Show, Switch, Match } from 'solid-js'
 
-// dasig-${props.design}
-
 interface Props {
   label?: string
   to?: string
@@ -34,13 +32,13 @@ interface Props {
   submit?: boolean
   newtab?: boolean
   width?: string
-  // wide?: boolean
   icon?: (props: { size?: number }) => Element
   children?: Element
   background?: string
   color?: string
   prefetch?: boolean
   onMouseOver?: () => void
+  noLabel?: boolean
 }
 
 const getBorderRadius = (edge: Props['corner']) => {
@@ -69,7 +67,7 @@ export default (props: Props) => {
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
-                {props.label || 'Click Me!'}
+                {props.noLabel ? '' : props.label || 'Click Me!'}
               </button>
             </a>
           </Match>
@@ -79,7 +77,7 @@ export default (props: Props) => {
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
-                {props.label || 'Click Me!'}
+                {props.noLabel ? '' : props.label || 'Click Me!'}
               </button>
             </a>
           </Match>
@@ -94,7 +92,7 @@ export default (props: Props) => {
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
-                {props.label || 'Click Me!'}
+                {props.noLabel ? '' : props.label || 'Click Me!'}
               </button>
             </Show>
 
@@ -105,7 +103,7 @@ export default (props: Props) => {
                     <Show when={props.icon}>
                       <span>{Icon && <Icon size={24} />}</span>
                     </Show>
-                    {props.label || 'Click Me!'}
+                    {props.noLabel ? '' : props.label || 'Click Me!'}
                   </Row>
                 </button>
               </Show>
@@ -115,7 +113,7 @@ export default (props: Props) => {
                     <Show when={props.icon}>
                       <span>{Icon && <Icon size={24} />}</span>
                     </Show>
-                    {props.label || 'Click Me!'}
+                    {props.noLabel ? '' : props.label || 'Click Me!'}
                   </Row>
                 </button>
               </Show>
@@ -127,7 +125,7 @@ export default (props: Props) => {
                 <Show when={props.icon}>
                   <span>{Icon && <Icon size={24} />}</span>
                 </Show>
-                {props.label || 'Click Me!'}
+                {props.noLabel ? '' : props.label || 'Click Me!'}
               </button>
             </Show>
 
@@ -137,7 +135,7 @@ export default (props: Props) => {
                   <Show when={props.icon}>
                     <span>{Icon && <Icon size={24} />}</span>
                   </Show>
-                  {props.label || 'Click Me!'}
+                  {props.noLabel ? '' : props.label || 'Click Me!'}
                 </button>
               </Show>
               <Show when={props.prefetch}>
@@ -145,7 +143,7 @@ export default (props: Props) => {
                   <Show when={props.icon}>
                     <span>{Icon && <Icon size={24} />}</span>
                   </Show>
-                  {props.label || 'Click Me!'}
+                  {props.noLabel ? '' : props.label || 'Click Me!'}
                 </button>
               </Show>
             </Show>
