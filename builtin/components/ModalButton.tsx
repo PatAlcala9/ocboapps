@@ -33,7 +33,7 @@ interface Props {
     | 'bootstrap-link'
   width?: number
   wide?: boolean
-  class?: string
+  class?: string | number | boolean | Record<string, boolean | undefined> | null | undefined
   function?: () => Promise<void>
 }
 

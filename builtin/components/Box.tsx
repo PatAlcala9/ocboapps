@@ -9,7 +9,7 @@ interface Props {
   padding?: string
   background?: string
   width?: string
-  class?: string
+  class?: string | number | boolean | Record<string, boolean | undefined> | null | undefined
   pointer?: boolean
   margin?: string
 }
