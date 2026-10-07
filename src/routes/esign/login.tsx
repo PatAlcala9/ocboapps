@@ -3,12 +3,13 @@ import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
 import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox, Background } from '@dasig'
 import { getApi } from '@dasig/api'
-import { checkConnection, securePassword } from '../../utils'
+import { checkConnection, securePassword, getListForApproval } from '../../utils'
 import { _headName, _headPassword } from 'stores/head'
 import { $head, $head_id } from 'cache/head'
 import { $registered_list } from 'cache/list'
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
 import './login.sass'
+import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
 
 export default () => {
   const navigate = useNavigate()
@@ -96,6 +97,10 @@ export default () => {
     const [dbpass] = await getApi('49dd42b9454f27280be0', headId())
     _headPassword.set(dbpass.result)
     setRole('APPROVER')
+
+    const [applicationsE, namesE] = await getListForApproval('electrical')
+    _listElectricalApplications.set(applicationsE)
+    _listElectricalNames.set(namesE)
   }
 
   const getHead = () => {

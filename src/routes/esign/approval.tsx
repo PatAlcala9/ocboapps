@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { createEffect, createSignal, flush, onSettled, Show, Loading } from 'solid-js'
+import { createEffect, createSignal, onSettled, Show, Loading } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 // import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { FiLogOut } from 'solid-icons/fi'
@@ -96,15 +96,13 @@ export default () => {
     const prefetchedElectricalApplications = _listElectricalApplications.get()
     const prefetchedElectricalNames = _listElectricalNames.get()
 
-    if (prefetchedElectricalApplications.length > 0) {
+    if (prefetchedElectricalApplications && prefetchedElectricalApplications.length > 0) {
       setApplicationListElectrical(prefetchedElectricalApplications)
       setNameListElectrical(prefetchedElectricalNames)
       return
     }
 
     const [applications, names] = await getListForApproval('electrical')
-    console.log(applications)
-    console.log(names)
     setApplicationListElectrical(applications)
     setNameListElectrical(names)
   }
@@ -139,7 +137,7 @@ export default () => {
   //   setNameListMechanical(names)
   // }
 
-  const load = async () => {
+  const load = async (division: string) => {
     setIsLoading(true)
     setConnected(await checkConnection())
     if (connected() === false) {
@@ -149,12 +147,22 @@ export default () => {
 
     setLoadingText('Getting List to Approve')
 
-    const password = await getPassword(ID)
+    const loggedid = $login_id.get()!
+    const password = await getPassword(loggedid)
     setConfigEncPassword(password)
 
-    getListForApprovalElectrical()
-    // await getListForApprovalOccupancy()
-    // await getListForApprovalMechanical()
+    if (division === 'electrical') {
+      getListForApprovalElectrical()
+    } else if (division === 'occupancy') {
+      // getListForApprovalOccupancy()
+    } else if (division === 'mechanical') {
+      // getListForApprovalMechanical()
+    } else {
+      getListForApprovalElectrical()
+      // getListForApprovalOccupancy()
+      // getListForApprovalMechanical()
+    }
+
     setIsLoading(false)
   }
 
@@ -539,39 +547,28 @@ export default () => {
   //   return parseInt(id)
   // }
 
-  // const deleteOrderofPayment = async (division: string, id: number) => {
-  //   const deleteOp = await deleteApi(`delete-orderofpayment-${division}`, {
-  //     data: id,
-  //   })
-  //   let deleteOp
-  //   if (division === 'electrical') {
-  //     deleteOp = await deleteApi('f78dea0eb4-35f307d3f4', {
-  //       data: id,
-  //     })
-  //   } else if (division === 'mechanical') {
-  //     deleteOp = await deleteApi('hEpqSx6rXJaIlw_kjnTIsPSQS', {
-  //       data: id,
-  //     })
-  //   } else if (division === 'occupancy') {
-  //     deleteOp = await deleteApi('f78dea0eb4-01d0dafaaa', {
-  //       data: id,
-  //     })
-  //   }
-  //   return deleteOp
-  // }
+  const deleteOrderofPayment = async (division: string, id: number) => {
+    let deleteOp
+    if (division === 'electrical') {
+      deleteOp = await deleteApi('f78dea0eb4-35f307d3f4', {
+        data: id,
+      })
+    } else if (division === 'mechanical') {
+      deleteOp = await deleteApi('hEpqSx6rXJaIlw_kjnTIsPSQS', {
+        data: id,
+      })
+    } else if (division === 'occupancy') {
+      deleteOp = await deleteApi('f78dea0eb4-01d0dafaaa', {
+        data: id,
+      })
+    }
+    return deleteOp
+  }
 
   const setNewStatus = async (division: string, status: string, tag: string, tagword: string, approved: number) => {
-    // const today = new Date()
     const today = await getDateTime()
     const formattedDate = dayjs(today).format('YYYY-MM-DD HH:mm:ss')
     const statusid = parseInt(applicationId().toString())
-
-    // if (division === 'electrical') {
-    //   return await postApi('post-newstatus-electrical', { data: statusid, data2: formattedDate, data3: status, data4: tag, data5: tagword, data6: parseInt(approved.toString()), data7: parseInt(ID) })
-    // } else if (division === 'oc') {
-    //   return await postApi('post-newstatus-occupancy', { data: statusid, data2: formattedDate, data3: status, data4: tag, data5: tagword, data6: parseInt(approved.toString()), data7: parseInt(ID) })
-    // }
-    // return await postApi(`post-newstatus-${division}`, { data: statusid, data2: formattedDate, data3: status, data4: tag, data5: tagword, data6: parseInt(approved.toString()), data7: parseInt(ID) })
 
     let result: boolean
     if (division === 'electrical') {
@@ -707,16 +704,15 @@ export default () => {
     const logged = $logged_in.get()
     const loginName = $login_name.get()
     const loginId = $login_id.get()
-    const loginRole = $login_role.get()
+    // const loginRole = $login_role.get()
 
     setEmployeeId(parseInt(loginId!))
     setEmployeeName(loginName!)
 
-    loggedin = logged ? true : false
+    loggedin = logged === 'true' ? true : false
 
     if (!loggedin) {
       removeEmployee()
-
       return false
     }
     return true
@@ -751,15 +747,15 @@ export default () => {
   // }
 
   const refresh = async (division: string) => {
-    // if (division === 'electrical') {
-    //   await load('electrical')
-    // } else if (division === 'occupancy') {
-    //   await load('occupancy')
-    // } else if (division === 'mechanical') {
-    //   await load('mechanical')
-    // } else {
-    //   await load('all')
-    // }
+    if (division === 'electrical') {
+      await load('electrical')
+    } else if (division === 'occupancy') {
+      await load('occupancy')
+    } else if (division === 'mechanical') {
+      await load('mechanical')
+    } else {
+      await load('all')
+    }
   }
 
   const checkIfApprovalOccupancy = async (application: string, status: string) => {
@@ -785,10 +781,10 @@ export default () => {
   //   }
   // }
 
-  // const encryptNewPassword = async () => {
-  //   const encNewPassword = await securePassword(configNewPassword(), 'v2')
-  //   setConfigNewEncPassword(encNewPassword)
-  // }
+  const encryptNewPassword = async () => {
+    const encNewPassword = await securePassword(configNewPassword())
+    setConfigNewEncPassword(encNewPassword)
+  }
 
   const convertBase64 = (blob: Blob) => {
     return new Promise((resolve, _) => {
@@ -850,7 +846,7 @@ export default () => {
 
   const init = async () => {
     const logged = await checkLogged()
-    if (logged) await load()
+    if (logged) await load('all')
     else navigate('/esign', { replace: true })
   }
 

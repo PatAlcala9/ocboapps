@@ -51,10 +51,8 @@ export default () => {
   }
 
   const init = async () => {
-    flush(async () => {
-      setConnected(await checkConnection())
-      setLoading(false)
-    })
+    setConnected(await checkConnection())
+    setLoading(false)
   }
 
   const getData = () => {
@@ -74,7 +72,7 @@ export default () => {
 
   return (
     <>
-      <Page title='e-Sign' font='roboto'>
+      <Page title='OCBO e-Sign' font='roboto'>
         <Background image='background-esign' />
 
         <Display desktop>

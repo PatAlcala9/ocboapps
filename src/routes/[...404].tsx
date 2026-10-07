@@ -3,8 +3,7 @@ import { onSettled, createSignal, Switch, Match } from 'solid-js'
 import type { RouteDefinition } from '@solidjs/router'
 import { httpStatus } from '@solidjs/web'
 import { Column, Image, Padding, Page, Background, Button } from '@dasig'
-import { getApi } from '@dasig/api'
-import { checkConnection } from '../utils'
+import { checkConnection, getDateTime } from '../utils'
 import './index.sass'
 
 export const route = {
@@ -17,16 +16,10 @@ const [day, setDay] = createSignal('')
 const [holiday, setHoliday] = createSignal('')
 
 const getDate = async () => {
-  if (connected()) {
-    const [response, responseError] = await getApi('9b8252593c09cbd0533d')
-    if (responseError !== null) return
+  let today
+  if (connected()) today = await getDateTime()
+  else today = new Date()
 
-    setMonth(dayjs(response.result).format('MMMM'))
-    setDay(dayjs(response.result).format('DD'))
-    setHoliday('NORMAL')
-    return
-  }
-  const today = new Date()
   setMonth(dayjs(today).format('MMMM'))
   setDay(dayjs(today).format('DD'))
   setHoliday('NORMAL')
