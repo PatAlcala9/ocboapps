@@ -23,11 +23,13 @@ const getDate = async () => {
 
     setMonth(dayjs(response.result).format('MMMM'))
     setDay(dayjs(response.result).format('DD'))
+    setHoliday('NORMAL')
     return
   }
   const today = new Date()
   setMonth(dayjs(today).format('MMMM'))
   setDay(dayjs(today).format('DD'))
+  setHoliday('NORMAL')
 }
 
 const checkSpecialHolidays = () => {
@@ -38,8 +40,13 @@ const checkSpecialHolidays = () => {
 
 const init = async () => {
   setConnected(await checkConnection())
-  await getDate()
-  checkSpecialHolidays()
+
+  if (connected()) {
+    await getDate()
+    checkSpecialHolidays()
+  } else {
+    setHoliday('NORMAL')
+  }
 }
 
 onSettled(() => {
