@@ -18,9 +18,6 @@ test:
 update:
   pnpm update -i
 
-# update-latest:
-#   nub update --latest
-
 dock:
   nub ./builtin/scripts/node/generateDocker.ts && docker compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
 
@@ -56,6 +53,5 @@ alias r := run
 alias b := build
 alias l := lint
 alias u := update
-# alias ul := update-latest
 alias a := add
 alias ad := addd
