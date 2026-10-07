@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { onSettled, createSignal, Switch, Match } from 'solid-js'
+import { createSignal, Switch, Match, onSettled } from 'solid-js'
 import { Column, Display, Image, Padding, Page, Row, Background, Footer, Copyright } from '@dasig'
 import { getApi } from '@dasig/api'
 import { checkConnection } from '../utils'
@@ -18,6 +18,7 @@ const getDate = async () => {
 
     setMonth(dayjs(response.result).format('MMMM'))
     setDay(dayjs(response.result).format('DD'))
+    setHoliday('NORMAL')
     return
   }
   const today = new Date()
@@ -34,8 +35,13 @@ const checkSpecialHolidays = () => {
 
 const init = async () => {
   setConnected(await checkConnection())
-  await getDate()
-  checkSpecialHolidays()
+
+  if (connected()) {
+    await getDate()
+    checkSpecialHolidays()
+  } else {
+    setHoliday('NORMAL')
+  }
 }
 
 onSettled(() => {

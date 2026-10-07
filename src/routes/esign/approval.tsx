@@ -1,29 +1,28 @@
-import { useNavigate } from '@solidjs/router'
 import dayjs from 'dayjs'
-import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
-import { FileField } from '@kobalte/core/file-field'
+import { createEffect, createSignal, flush, onSettled, Show, Loading } from 'solid-js'
+import { useNavigate } from '@solidjs/router'
+// import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
-import { createEffect, createSignal, flush, onSettled, Show } from 'solid-js'
-import { Box, Button, Clickable, Column, Input, Link, Logo, Modal, ModalButton, Padding, Page, Row, Image } from '@dasig'
-// import { checkConnection, deleteApi, getApi, getApiMulti, getDateTime, lockData, postApi, saveNewName, saveNewPassword, saveNewSignature, securePassword, voidPopsApi, voidApi, statusPopsApi } from '../../utils/functions'
-import { checkConnection, getDateTime, lockData, securePassword } from '../../utils'
-import { getApi, postApi, deleteApi } from '@dasig/api'
-import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
-import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
-
 import { RiDocumentFileCloseFill } from 'solid-icons/ri'
-import getPassword from '../../utils/functions/getPassword'
-// import getListForApproval from '../../utils/functions/getListForApproval'
-// import { _listElectricalApplications, _listElectricalNames, _listMechanicalApplications, _listMechanicalNames, _listOccupancyApplications, _listOccupancyNames } from 'stores/prefetch'
+import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
+import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
+import { Box, Button, Clickable, Column, Input, Link, Logo, Modal, ModalButton, Padding, Page, Row, Image, Background, File } from '@dasig'
+// import { checkConnection, deleteApi, getApi, getApiMulti, getDateTime, lockData, postApi, saveNewName, saveNewPassword, saveNewSignature, securePassword, voidPopsApi, voidApi, statusPopsApi } from '../../utils/functions'
+import { getApi, postApi, deleteApi } from '@dasig/api'
+import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval } from '../../utils'
+import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
+import { _listElectricalApplications, _listElectricalNames, _listMechanicalApplications, _listMechanicalNames, _listOccupancyApplications, _listOccupancyNames } from 'stores/prefetch'
+import api from 'configs/api.config.mts'
 import './approval.sass'
-
-const PESO = '₱'
-const ID = sessionStorage.getItem('id')!
-const PUBLICIP = import.meta.env.VITE_PUBLICIP
-const BACKEND = import.meta.env.VITE_BACKEND
+import EsignCard from 'components/EsignCard'
 
 export default () => {
+  const PESO = import.meta.env.VITE_PESO
+  const ID = sessionStorage.getItem('id')!
+  const PUBLICIP = import.meta.env.VITE_PUBLICIP
+  const BACKEND = api.backend.url
+
   const navigate = useNavigate()
   const [file, setFile] = createSignal<File[]>()
 
@@ -93,20 +92,22 @@ export default () => {
   let bldgadditional = false
   let loggedin = false
 
-  // const getListForApprovalElectrical = async () => {
-  //   const prefetchedElectricalApplications = _listElectricalApplications.get()
-  //   const prefetchedElectricalNames = _listElectricalNames.get()
+  const getListForApprovalElectrical = async () => {
+    const prefetchedElectricalApplications = _listElectricalApplications.get()
+    const prefetchedElectricalNames = _listElectricalNames.get()
 
-  //   if (prefetchedElectricalApplications.length > 0) {
-  //     setApplicationListElectrical(prefetchedElectricalApplications)
-  //     setNameListElectrical(prefetchedElectricalNames)
-  //     return
-  //   }
+    if (prefetchedElectricalApplications.length > 0) {
+      setApplicationListElectrical(prefetchedElectricalApplications)
+      setNameListElectrical(prefetchedElectricalNames)
+      return
+    }
 
-  //   const [applications, names] = await getListForApproval('electrical')
-  //   setApplicationListElectrical(applications)
-  //   setNameListElectrical(names)
-  // }
+    const [applications, names] = await getListForApproval('electrical')
+    console.log(applications)
+    console.log(names)
+    setApplicationListElectrical(applications)
+    setNameListElectrical(names)
+  }
 
   // const getListForApprovalOccupancy = async () => {
   //   const prefetchedOccupancyApplications = _listOccupancyApplications.get()
@@ -138,61 +139,53 @@ export default () => {
   //   setNameListMechanical(names)
   // }
 
-  // const load = async (division: string) => {
-  //   setConnected(await checkConnection())
-  //   if (connected() === false) {
-  //     setErrorMessage('Failed to fetch application list')
-  //     return
-  //   }
+  const load = async () => {
+    setIsLoading(true)
+    setConnected(await checkConnection())
+    if (connected() === false) {
+      setErrorMessage('Failed to fetch application list')
+      return
+    }
 
-  //   setIsLoading(true)
-  //   setLoadingText('Getting List to Approve')
+    setLoadingText('Getting List to Approve')
 
-  //   const password = await getPassword(ID)
-  //   setConfigEncPassword(password)
+    const password = await getPassword(ID)
+    setConfigEncPassword(password)
 
-  //   if (division === 'electrical') {
-  //     await getListForApprovalElectrical()
-  //   } else if (division === 'occupancy') {
-  //     await getListForApprovalOccupancy()
-  //   } else if (division === 'mechanical') {
-  //     // await getListForApprovalMechanical()
-  //   } else {
-  //     await getListForApprovalElectrical()
-  //     await getListForApprovalOccupancy()
-  //     // await getListForApprovalMechanical()
-  //   }
-  //   setIsLoading(false)
-  // }
+    getListForApprovalElectrical()
+    // await getListForApprovalOccupancy()
+    // await getListForApprovalMechanical()
+    setIsLoading(false)
+  }
 
-  // const reloadExcept = async (application: string) => {
-  //   const newApplicationListElectrical = applicationListElectrical().filter((item) => item !== application)
-  //   const applicationIndexElectrical = applicationListElectrical().findIndex((x) => x === application)
-  //   const newNameListElectrical = nameListElectrical()
-  //     .map((item, index) => (index === applicationIndexElectrical ? null : item))
-  //     .filter((item) => item !== null)
+  const reloadExcept = async (application: string) => {
+    const newApplicationListElectrical = applicationListElectrical().filter((item) => item !== application)
+    const applicationIndexElectrical = applicationListElectrical().findIndex((x) => x === application)
+    const newNameListElectrical = nameListElectrical()
+      .map((item, index) => (index === applicationIndexElectrical ? null : item))
+      .filter((item) => item !== null)
 
-  //   setApplicationListElectrical(newApplicationListElectrical)
-  //   setNameListElectrical(newNameListElectrical)
+    setApplicationListElectrical(newApplicationListElectrical)
+    setNameListElectrical(newNameListElectrical)
 
-  //   const newApplicationListMechanical = applicationListMechanical().filter((item) => item !== application)
-  //   const applicationIndexMechanical = applicationListMechanical().findIndex((x) => x === application)
-  //   const newNameListMechanical = nameListMechanical()
-  //     .map((item, index) => (index === applicationIndexMechanical ? null : item))
-  //     .filter((item) => item !== null)
+    const newApplicationListMechanical = applicationListMechanical().filter((item) => item !== application)
+    const applicationIndexMechanical = applicationListMechanical().findIndex((x) => x === application)
+    const newNameListMechanical = nameListMechanical()
+      .map((item, index) => (index === applicationIndexMechanical ? null : item))
+      .filter((item) => item !== null)
 
-  //   setApplicationListMechanical(newApplicationListMechanical)
-  //   setNameListMechanical(newNameListMechanical)
+    setApplicationListMechanical(newApplicationListMechanical)
+    setNameListMechanical(newNameListMechanical)
 
-  //   const newApplicationListOccupancy = applicationListOccupancy().filter((item) => item !== application)
-  //   const applicationIndexOccupancy = applicationListOccupancy().findIndex((x) => x === application)
-  //   const newNameListOccupancy = nameListOccupancy()
-  //     .map((item, index) => (index === applicationIndexOccupancy ? null : item))
-  //     .filter((item) => item !== null)
+    const newApplicationListOccupancy = applicationListOccupancy().filter((item) => item !== application)
+    const applicationIndexOccupancy = applicationListOccupancy().findIndex((x) => x === application)
+    const newNameListOccupancy = nameListOccupancy()
+      .map((item, index) => (index === applicationIndexOccupancy ? null : item))
+      .filter((item) => item !== null)
 
-  //   setApplicationListOccupancy(newApplicationListOccupancy)
-  //   setNameListOccupancy(newNameListOccupancy)
-  // }
+    setApplicationListOccupancy(newApplicationListOccupancy)
+    setNameListOccupancy(newNameListOccupancy)
+  }
 
   // const getopdetails = async (division: string, applicationNo: string) => {
   //   // const op = await getApiMulti(`get-opdetails-${division}`, applicationNo)
@@ -223,37 +216,37 @@ export default () => {
   //   }
   // }
 
-  // const getopdetailsCard = async (division: string, applicationNo: string) => {
-  //   let op: any
-  //   setDivision(division)
+  const getopdetailsCard = async (division: string, applicationNo: string) => {
+    let op: any
+    setDivision(division)
 
-  //   if (division === 'electrical') {
-  //     op = await getApiMulti('94e46bde0e2a857ed33a', applicationNo)
-  //   } else if (division === 'mechanical') {
-  //     op = await getApiMulti('ab0aec88a5615fd28f48', applicationNo)
-  //   } else if (division === 'occupancy') {
-  //     op = await getApiMulti('28f6c55c9123e46460ff', applicationNo)
-  //   }
+    if (division === 'electrical') {
+      ;[op] = await getApi('94e46bde0e2a857ed33a', applicationNo)
+    } else if (division === 'mechanical') {
+      ;[op] = await getApi('ab0aec88a5615fd28f48', applicationNo)
+    } else if (division === 'occupancy') {
+      ;[op] = await getApi('28f6c55c9123e46460ff', applicationNo)
+    }
 
-  //   if (isDetailsComplete(op.result, op.result2, op.result3, op.result4, op.result5, op.result6)) {
-  //     setIsIncomplete(false)
-  //     setSelectedApplication(applicationNo)
-  //     setSelectedName(op.result7[0])
-  //     setSelectedLocation(op.result[0])
-  //     setSelectedType(op.result2[0])
-  //     setSelectedAssessor(op.result3[0])
-  //     const total = calculateTotal(op.result4)
-  //     const formattedTotal = new Intl.NumberFormat('en-US', {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(total)
-  //     setSelectedTotal(formattedTotal)
-  //     setSelectedDate(dayjs(op.result5[0]).format('MMMM DD, YYYY'))
-  //     setApplicationId(op.result6[0])
-  //   } else {
-  //     setIsIncomplete(true)
-  //   }
-  // }
+    if (isDetailsComplete(op.result, op.result2, op.result3, op.result4, op.result5, op.result6)) {
+      setIsIncomplete(false)
+      setSelectedApplication(applicationNo)
+      setSelectedName(op.result7[0])
+      setSelectedLocation(op.result[0])
+      setSelectedType(op.result2[0])
+      setSelectedAssessor(op.result3[0])
+      const total = calculateTotal(op.result4)
+      const formattedTotal = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(total)
+      setSelectedTotal(formattedTotal)
+      setSelectedDate(dayjs(op.result5[0]).format('MMMM DD, YYYY'))
+      setApplicationId(op.result6[0])
+    } else {
+      setIsIncomplete(true)
+    }
+  }
 
   // const getopdetailsMultiple = async (division: string, applicationNo: string, index: number) => {
   //   // const op = await getApiMulti(`get-opdetails-${division}`, applicationNo)
@@ -700,7 +693,7 @@ export default () => {
 
   const closeNotification = async (application: string) => {
     setApproved(false)
-    // await reloadExcept(application)
+    await reloadExcept(application)
   }
 
   const removeEmployee = () => {
@@ -722,9 +715,8 @@ export default () => {
     loggedin = logged ? true : false
 
     if (!loggedin) {
-      console.log('a')
       removeEmployee()
-      navigate('/esign', { replace: true })
+
       return false
     }
     return true
@@ -758,17 +750,17 @@ export default () => {
   //   }
   // }
 
-  // const refresh = async (division: string) => {
-  //   if (division === 'electrical') {
-  //     await load('electrical')
-  //   } else if (division === 'occupancy') {
-  //     await load('occupancy')
-  //   } else if (division === 'mechanical') {
-  //     await load('mechanical')
-  //   } else {
-  //     await load('all')
-  //   }
-  // }
+  const refresh = async (division: string) => {
+    // if (division === 'electrical') {
+    //   await load('electrical')
+    // } else if (division === 'occupancy') {
+    //   await load('occupancy')
+    // } else if (division === 'mechanical') {
+    //   await load('mechanical')
+    // } else {
+    //   await load('all')
+    // }
+  }
 
   const checkIfApprovalOccupancy = async (application: string, status: string) => {
     const response = await getApi('e9b9c18b8b915066aa83', status, application)
@@ -806,59 +798,43 @@ export default () => {
     })
   }
 
-  // const saveConfig = async () => {
-  //   let base64image = ''
-  //   if (configNewName() !== '') await saveNewName(parseInt(ID), configNewName())
-  //   if (configNewPassword() !== '') await saveNewPassword(parseInt(ID), configNewEncPassword())
+  const saveConfig = async () => {
+    let base64image = ''
+    if (configNewName() !== '') await saveNewName(parseInt(ID), configNewName())
+    if (configNewPassword() !== '') await saveNewPassword(parseInt(ID), configNewEncPassword())
 
-  //   if (file() !== undefined) {
-  //     const blob = new Blob(file())
-  //     const base64 = await convertBase64(blob)
-  //     base64image = base64 as string
+    if (file() !== undefined) {
+      const blob = new Blob(file())
+      const base64 = await convertBase64(blob)
+      base64image = base64 as string
 
-  //     await saveNewSignature(parseInt(employeeId().toString()), base64image)
-  //   }
-
-  //   setConfigNotification(true)
-  // }
-
-  // const saveNewName = async (name: string) => {
-  //   await postApi('update-name', {
-  //     data: parseInt(ID),
-  //     data2: name
-  //   })
-  // }
-
-  // const saveNewPassword = async (password: string) => {
-  //   await postApi('update-password', {
-  //     data: parseInt(ID),
-  //     data2: password
-  //   })
-  // }
+      await saveNewSignature(parseInt(employeeId().toString()), base64image)
+    }
+    setConfigNotification(true)
+  }
 
   const logout = async () => {
     removeEmployee()
     navigate('/esign')
   }
 
-  // const updateHeadName = async () => {
-  //   const response = await getApi('5a211530266757b41510')
+  const updateHeadName = async () => {
+    const [response] = await getApi('5a211530266757b41510')
+    setEmployeeName(response.result)
+  }
 
-  //   setEmployeeName(response!)
-  // }
+  const closeConfig = async () => {
+    await updateHeadName()
+    setConfigNotification(false)
+    setOpenConfig(false)
 
-  // const closeConfig = async () => {
-  //   await updateHeadName()
-  //   setConfigNotification(false)
-  //   setOpenConfig(false)
-
-  //   setConfigEncPassword('')
-  //   setConfigNewName('')
-  //   setConfigPassword('')
-  //   setConfigNewPassword('')
-  //   setConfigNewEncPassword('')
-  //   setConfigError('')
-  // }
+    setConfigEncPassword('')
+    setConfigNewName('')
+    setConfigPassword('')
+    setConfigNewPassword('')
+    setConfigNewEncPassword('')
+    setConfigError('')
+  }
 
   const closeInfo = async () => {
     setSelectedApplication('')
@@ -873,16 +849,12 @@ export default () => {
   }
 
   const init = async () => {
-    checkLogged()
-
-    // const logged = await checkLogged()
-    // if (logged) {
-    //   await load('all')
-    // }
+    const logged = await checkLogged()
+    if (logged) await load()
+    else navigate('/esign', { replace: true })
   }
 
   onSettled(() => {
-    flush()
     init()
   })
 
@@ -901,20 +873,200 @@ export default () => {
   // })
 
   return (
-    <Page title='e-Sign - Approval' font='roboto'>
-      <Row content='split'>
-        <Row content='left' gap={2}>
-          <Image name='esign' size={160} />
-          <h1>OCBO e-Sign</h1>
+    <>
+      <Page title='e-Sign - Approval' font='roboto'>
+        <Background image='background-esign' />
+
+        <Row content='split'>
+          <Row content='left' gap={2}>
+            <Image name='esign' size={160} />
+            <h1>OCBO e-Sign</h1>
+          </Row>
+
+          <Row content='left' gap={1.75}>
+            <Box curved thickness={2} padding='1rem 1.5rem' background='#0f131d56' color='rgba(244,255,244,0.2)'>
+              <span class='name'>{employeeName()}</span>
+            </Box>
+            <Clickable onClick={() => setOpenConfig(true)}>
+              <Row gap={0.25}>
+                <FaSolidUserGear size={20} />
+                <span>Config</span>
+              </Row>
+            </Clickable>
+            <Clickable onClick={logout}>
+              <Row gap={0.25} margin='0 2rem 0 0'>
+                <FiLogOut size={20} />
+                <span>Logout</span>
+              </Row>
+            </Clickable>
+          </Row>
         </Row>
 
-        <Clickable onClick={logout}>
-          <Row gap={0.25}>
-            <FiLogOut size={20} />
-            <span>Logout</span>
+        <Show when={applicationListElectrical().length > 0}>
+          <Row content='split' padding='2rem 0 0 0'>
+            <Row gap={0.5}>
+              <span class='application-counter'>{applicationListElectrical().length}</span>
+              <span class='application-counter__text'>{`${applicationListElectrical().length > 1 ? 'Electrical Applications' : 'Electrical Application'}`}</span>
+            </Row>
+            <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
           </Row>
-        </Clickable>
-      </Row>
-    </Page>
+        </Show>
+        <Show when={applicationListElectrical().length == 0}>
+          <Row content='right' padding='2rem 0 0 0'>
+            <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
+          </Row>
+        </Show>
+
+        <Row>
+          {/*<Show when={isLoading()}>
+            <Padding top={2}>
+              <Column gap={1}>
+                <AiOutlineLoading3Quarters size={42} />
+                <span>{loadingText()}</span>
+              </Column>
+            </Padding>
+          </Show>*/}
+
+          {/*<Show when={!isLoading()}>*/}
+          <Loading
+            fallback={
+              <Padding top={2}>
+                <Column gap={1}>
+                  <AiOutlineLoading3Quarters size={42} />
+                  <span>AAAAAA</span>
+                </Column>
+              </Padding>
+            }
+          >
+            <Show when={applicationListElectrical().length > 0}>
+              <Row gap={1} padding='2rem 0 0 0'>
+                {applicationListElectrical().map((item: string, index: number) => (
+                  <EsignCard
+                    division='Electrical'
+                    applicationNo={item}
+                    name={nameListElectrical()[index]}
+                    onClick={async () => {
+                      setShowDetails(true)
+                      await getopdetailsCard('electrical', item)
+                    }}
+                  ></EsignCard>
+                ))}
+              </Row>
+            </Show>
+          </Loading>
+          {/*</Show>*/}
+        </Row>
+      </Page>
+
+      <div onClick={() => closeNotification(approvedApplication())}>
+        <Modal trigger={approved()} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+          <Padding top={1} bottom={1} left={2} right={2}>
+            <Column>
+              <Row gap={4}>
+                <FaSolidThumbsUp size={75} />
+                <Box curved thickness={3} color='#cdfbe1f0' padding='1rem'>
+                  <span class='approval'>Approved</span>
+                </Box>
+              </Row>
+              <Row padding='2rem 0 0 0'>
+                <h2>{approvedApplication()}</h2>
+              </Row>
+
+              <Row>
+                <span class='close-text'>Click anywhere to proceed</span>
+              </Row>
+            </Column>
+          </Padding>
+        </Modal>
+      </div>
+
+      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={0.8} width='32rem' animation='slide-from-top'>
+        <Padding top={1} bottom={1} left={0.1}>
+          <section class='config'>
+            <div class='config__row'>
+              Name:
+              <span class='config__row__name'>{employeeName()}</span>
+            </div>
+
+            <div class='config__edit'>
+              <span class='config__edit__title'>Change Displayed Name</span>
+              <Input value={configNewName()} onChange={setConfigNewName} placeholder='Enter new name' width='30.5rem' />
+              <span class='config__edit__info'>Leave blank to remain unchanged.</span>
+            </div>
+
+            <div class='config__edit'>
+              <span class='config__edit__title'>Change Password</span>
+              <Input type='password' value={configPassword()} onChange={setConfigPassword} placeholder='Enter current password' width='30.5rem' />
+              <Input type='password' value={configNewPassword()} onChange={setConfigNewPassword} placeholder='Enter new password' width='30.5rem' />
+
+              <Show when={configNewPassword().length !== 0}>
+                <span style='padding: 1.75rem 0 0 0'>Current Encrypted Password:</span>
+                <span>{configEncPassword()}</span>
+
+                <span style='padding: 0.75rem 0 0 0'>New Encrypted Password:</span>
+                <span>{configNewEncPassword()}</span>
+              </Show>
+            </div>
+
+            <div class='config__edit'>
+              <span class='config__edit__title'>Change Signature</span>
+              <File maxFiles={1} onFileAccept={(data) => setFile(data)} accept='.jpg, .jpeg, .png, .webp, .avif' onClick={() => setFile()} label='Drag and drop or click to upload file' buttonText='Delete' />
+            </div>
+
+            <Show when={configError() !== ''}>
+              <span class='required-config'>{configError()}</span>
+              <Button label='Cancel' corner='curved' design='bootstrap-danger' onClick={() => setOpenConfig(false)} width='100%' />
+            </Show>
+
+            <div class='config__button'>
+              <Show when={configError() === ''}>
+                <Button label='Confirm' corner='curved' design='bootstrap-primary' onClick={saveConfig} width='100%' />
+                <Button label='Cancel' corner='curved' design='bootstrap-danger' onClick={() => setOpenConfig(false)} width='100%' />
+              </Show>
+            </div>
+          </section>
+        </Padding>
+      </Modal>
+
+      <div onClick={closeConfig}>
+        <Modal trigger={configNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+          <Padding top={1} bottom={1} left={4} right={4}>
+            <Column>
+              <Row gap={4}>
+                <Box curved thickness={3} color='#cdfbe1f0' padding='1rem'>
+                  <span class='approval'>Account Updated</span>
+                </Box>
+              </Row>
+
+              <Row>
+                <span class='close-text'>Click anywhere to close</span>
+              </Row>
+            </Column>
+          </Padding>
+        </Modal>
+      </div>
+
+      <div onClick={() => setPostError(false)}>
+        <Modal trigger={postError() === true} background='#562020ff' color='#ffebebe6' opacity={0.8}>
+          <Padding top={1} bottom={1} left={4} right={4}>
+            <Column>
+              <Row>
+                <Box curved thickness={3} color='#ffebebe6' padding='1rem'>
+                  <h2>Approval and Signing Error</h2>
+                </Box>
+              </Row>
+
+              <Row>
+                <h3>{errorMessage()}</h3>
+              </Row>
+
+              <Row>
+                <span class='close-text'>Click anywhere to close</span>
+              </Row>
+            </Column>
+          </Padding>
+        </Modal>
+      </div>
+    </>
   )
 }

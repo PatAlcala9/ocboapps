@@ -1,5 +1,6 @@
-import { onSettled, createSignal, Show } from 'solid-js'
+import { onSettled, createSignal, Show, flush, Loading, isPending } from 'solid-js'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
+import { ImConnection } from 'solid-icons/im'
 import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
 import { getApi } from '@dasig/api'
 import { checkConnection } from '../../utils'
@@ -14,6 +15,7 @@ let headName: string
 let headId: string
 
 const [connected, setConnected] = createSignal(true)
+const [loading, setLoading] = createSignal(true)
 
 export default () => {
   const getAssessors = async () => {
@@ -49,18 +51,25 @@ export default () => {
   }
 
   const init = async () => {
-    setConnected(await checkConnection())
+    flush(async () => {
+      setConnected(await checkConnection())
+      setLoading(false)
+    })
+  }
 
-    if (connected()) {
-      getAssessors()
-      getRegistered()
-      getHead()
-      getHeadId()
-    }
+  const getData = () => {
+    getAssessors()
+    getRegistered()
+    getHead()
+    getHeadId()
   }
 
   onSettled(() => {
     init()
+
+    if (connected()) {
+      getData()
+    }
   })
 
   return (
@@ -75,7 +84,23 @@ export default () => {
               <h1>OCBO e-Sign</h1>
             </Row>
 
-            <Show when={connected()}>
+            <Show when={loading()}>
+              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#090c1a57'>
+                <Column alignment='center'>
+                  <Row content='left' gap={1}>
+                    <ImConnection size={24} color='#fcfcfcba' />
+                    <span class='checking-text'>CHECKING</span>
+                    <Button label='Login' corner='curved' design='bootstrap-dark' />
+                    <Button label='Register' corner='curved' design='bootstrap-dark' />
+                  </Row>
+                  <Row content='left'>
+                    <a class='checking-message'>Please wait while we check for the server</a>
+                  </Row>
+                </Column>
+              </Box>
+            </Show>
+
+            <Show when={connected() && !loading()}>
               <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56' margin='0 1rem'>
                 <Row content='left' gap={1}>
                   <Button label='Login' corner='curved' design='bootstrap-link' to='/esign/login' />
@@ -84,13 +109,13 @@ export default () => {
               </Box>
             </Show>
 
-            <Show when={!connected()}>
+            <Show when={!connected() && !loading()}>
               <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
                 <Column alignment='center'>
                   <Row content='left' gap={1}>
                     <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
                     <span class={'offline-text'}>OFFLINE</span>
-                    <Button label='Login' corner='curved' design='bootstrap-dark' />
+                    <Button label='Login' corner='curved' design='bootstrap-danger' />
                     <Button label='Register' corner='curved' design='bootstrap-danger' />
                   </Row>
                   <Row content='left'>

@@ -1,4 +1,5 @@
 @use 'sass:color'
+@use '../../../design/fonts' as fonts
 
 $textColor: #f0f8ff
 
@@ -107,11 +108,13 @@ h1
     font-weight: 400
 
 .approval
+  
   font-size: 1.75rem
   font-weight: 700
   padding: 0.5rem 1rem
 
 .config
+  font-family: fonts.$Roboto
   display: flex
   flex-direction: column
   gap: 1rem
@@ -119,13 +122,25 @@ h1
   &__row
     display: flex
     flex-direction: column
+    flex-wrap: nowrap
+    justify-content: start
+    align-items: start
+    align-content: start
     gap: 0.5rem
+
+    &__name
+      font-size: 1.25rem
 
   &__edit
     padding: 1rem 0 0 0
     display: flex
     flex-direction: column
+    flex-wrap: nowrap
+    justify-content: start
+    align-items: start
+    align-content: start
     gap: 0.5rem
+    width: inherit
 
     &__title
       font-weight: bold
@@ -168,10 +183,10 @@ h1
   text-align: center
 
 .application-counter
-  font-size: 1.5rem
+  font-size: 1.75rem
   font-weight: 500
 
   &__text
     font-size: 1rem
-    font-weight: 300
+    font-weight: 400
     opacity: 0.8
