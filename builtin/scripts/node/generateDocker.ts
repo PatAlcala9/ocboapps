@@ -1,7 +1,7 @@
-import { consola } from "consola";
-import * as fs from "node:fs";
-import * as path from "node:path";
-import { fileURLToPath } from "url";
+import { consola } from 'consola'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
+import { fileURLToPath } from 'url'
 import deployment from 'configs/deployment.config.mts'
 
 const dockerfileContent = `FROM node:${deployment.container.node_version}
@@ -12,11 +12,10 @@ RUN pnpm install --dangerously-allow-all-builds
 COPY . .
 RUN pnpm build
 
-ENV HOST=0.0.0.0
 ENV PORT=8080
 EXPOSE 8080
-CMD ["node", "--env-file-if-exists=.env.local","./dist/server/node.js"]
-`;
+CMD ["node", "--env-file-if-exists=.env.local", "./dist/server/node.js"]
+`
 
 const dockerComposeContent = `services:
   ${deployment.container.name}:
@@ -28,7 +27,7 @@ const dockerComposeContent = `services:
       dockerfile: Dockerfile
     ports:
       - ${deployment.container.port}:8080
-`;
+`
 
 const dockerIgnoreContent = `node_modules/
 .git
@@ -37,22 +36,22 @@ const dockerIgnoreContent = `node_modules/
 .output
 .vinxi
 Dockerfile
-`;
+`
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-const dockerfilePath = path.join(__dirname, "../../../Dockerfile");
-const dockercomposePath = path.join(__dirname, "../../../docker-compose.yml");
-const dockerignorePath = path.join(__dirname, "../../../.dockerignore");
+const dockerfilePath = path.join(__dirname, '../../../Dockerfile')
+const dockercomposePath = path.join(__dirname, '../../../docker-compose.yml')
+const dockerignorePath = path.join(__dirname, '../../../.dockerignore')
 
 try {
-  fs.writeFileSync(dockerfilePath, dockerfileContent);
-  fs.writeFileSync(dockercomposePath, dockerComposeContent);
-  fs.writeFileSync(dockerignorePath, dockerIgnoreContent);
+  fs.writeFileSync(dockerfilePath, dockerfileContent)
+  fs.writeFileSync(dockercomposePath, dockerComposeContent)
+  fs.writeFileSync(dockerignorePath, dockerIgnoreContent)
 
-  consola.success("Docker generated successfully");
-  consola.success("Docker build successfully");
+  consola.success('Docker generated successfully')
+  consola.success('Docker build successfully')
 } catch {
-  consola.error("Docker generation failed");
+  consola.error('Docker generation failed')
 }
