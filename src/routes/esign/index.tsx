@@ -188,8 +188,8 @@ export default () => {
             <Show when={connected()}>
               <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56'>
                 <Row content='left' gap={1}>
-                  <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('esign/login')} />
-                  <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('esign/register')} />
+                  <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
+                  <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('/esign/register')} />
                 </Row>
               </Box>
             </Show>

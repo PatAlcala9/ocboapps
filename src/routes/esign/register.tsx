@@ -2,10 +2,10 @@ import dayjs from 'dayjs'
 import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
-import { Box, Button, Column, Link, Padding, Page, Row, Image, Clickable, Combobox, Input, File, Background } from '@dasig'
+import { Box, Button, Column, Link, Padding, Page, Row, Image, Clickable, Combobox, Input, File, Background, Modal } from '@dasig'
 import { getApi, postApi } from '@dasig/api'
-import { md5, sha1, sha384 } from '@dasig/hash'
-import { checkConnection, checkPage, getDateTime } from '../../utils'
+import { md5, sha384 } from '@dasig/hash'
+import { checkConnection, checkPage, getDateTime, securePassword } from '../../utils'
 import { _headName } from 'stores/head'
 import { $assessor_list } from 'cache/list'
 import { $head } from 'cache/head'
@@ -64,7 +64,7 @@ export default () => {
       return
     }
 
-    await securePassword()
+    globalHashPassword = await securePassword(password())
     const blob = new Blob(file())
     const base64 = await convertBase64(blob)
     setBase64image(base64 as string)
@@ -78,15 +78,8 @@ export default () => {
     return formattedDate
   }
 
-  const securePassword = async () => {
-    const firstHashing = sha1(password())
-    const secondHashing = sha384(firstHashing.toString())
-    const thirdHashing = sha1(secondHashing.toString())
-    globalHashPassword = thirdHashing.toString()
-  }
-
   const convertBase64 = (blob: Blob) => {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       const reader = new FileReader()
       reader.onloadend = () => resolve(reader.result)
       reader.readAsDataURL(blob)
@@ -281,7 +274,7 @@ export default () => {
               <Row content='left' padding='3rem 0 0 2rem'>
                 <h4>Name of Approver</h4>
               </Row>
-              <Row content='left' padding='0 0 0 2rem'>
+              <Row content='left'>
                 <span class='approver-name'>{approver()}</span>
               </Row>
 
@@ -344,12 +337,12 @@ export default () => {
         </Row>
       </Page>
 
-      {/*<div onClick={gotoIndex}>
-        <Modal trigger={saved()} background="#ffffffff" color="#000000e4" opacity={0.6}>
+      <div onClick={gotoIndex}>
+        <Modal trigger={saved()} background='#ffffffff' color='#000000e4' opacity={0.6}>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row>
-                <Box curved thickness={3} color="black" padding="1rem">
+                <Box curved thickness={3} color='black' padding='1rem'>
                   <h2>e-Sign Registration Completed</h2>
                 </Box>
               </Row>
@@ -358,10 +351,10 @@ export default () => {
               </Row>
 
               <Row gap={1}>
-                <QR value={signature()} width={10} />
-                <section class="digital-sign-details">
+                {/*<QR value={signature()} width={10} />*/}
+                <section class='digital-sign-details'>
                   <div>
-                    <img class="digital-sign-details__image" src={base64image()} alt="Image of signature" />
+                    <img class='digital-sign-details__image' src={base64image()} alt='Image of signature' />
                   </div>
                   <span>Digitally signed by:</span>
                   <span>{name()}</span>
@@ -370,7 +363,7 @@ export default () => {
               </Row>
 
               <Row>
-                <span class="sub-message">Click anywhere to close</span>
+                <span class='sub-message'>Click anywhere to close</span>
               </Row>
             </Column>
           </Padding>
@@ -378,11 +371,11 @@ export default () => {
       </div>
 
       <div onClick={() => setConnected(true)}>
-        <Modal trigger={connected() === false} background="#562020ff" color="#ffebebe6" opacity={0.8}>
+        <Modal trigger={connected() === false} background='#562020ff' color='#ffebebe6' opacity={0.8}>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row>
-                <Box curved thickness={3} color="#ffebebe6" padding="1rem">
+                <Box curved thickness={3} color='#ffebebe6' padding='1rem'>
                   <h2>Connection Error</h2>
                 </Box>
               </Row>
@@ -392,12 +385,12 @@ export default () => {
               </Row>
 
               <Row>
-                <span class="close-text">Click anywhere to close</span>
+                <span class='close-text'>Click anywhere to close</span>
               </Row>
             </Column>
           </Padding>
         </Modal>
-      </div>*/}
+      </div>
     </>
   )
 }

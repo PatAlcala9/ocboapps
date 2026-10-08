@@ -532,20 +532,19 @@ export default () => {
   //   await load('all')
   // }
 
-  // const getApplicationById = async (division: string, application: string) => {
-  //   // const id = await getApi(`get-idbyapplication-${division}`, application)
-  //   let id
-  //   if (division === 'electrical') {
-  //     id = await getApi('76cce54882da3d8015cf', application)
-  //   } else if (division === 'mechanical') {
-  //     id = await getApi('112305fae2fb0443d595', application)
-  //   } else if (division === 'occupancy') {
-  //     id = await getApi('1f2977b2ed8e267ab533', application)
-  //   } else if (division === 'building') {
-  //     id = await getApi('bbab4662f5d5054aa663', application)
-  //   }
-  //   return parseInt(id)
-  // }
+  const getApplicationById = async (division: string, application: string) => {
+    let id
+    if (division === 'electrical') {
+      ;[id] = await getApi('76cce54882da3d8015cf', application)
+    } else if (division === 'mechanical') {
+      ;[id] = await getApi('112305fae2fb0443d595', application)
+    } else if (division === 'occupancy') {
+      ;[id] = await getApi('1f2977b2ed8e267ab533', application)
+    } else if (division === 'building') {
+      ;[id] = await getApi('bbab4662f5d5054aa663', application)
+    }
+    return parseInt(id.result)
+  }
 
   const deleteOrderofPayment = async (division: string, id: number) => {
     let deleteOp
@@ -735,16 +734,16 @@ export default () => {
   //   await postApi('4cd315b87a-781a6781ad', { data: parseInt(id), data2: approvedApplication(), data3: formattedDate })
   // }
 
-  // const updateDocflow = async (division: string, application: string, status: string) => {
-  //   await postApi(`update-docflow-${division}`, { data: status, data2: application })
-  //   if (division === 'electrical') {
-  //     await postApi('48e0a71f62-0604d816c0', { data: status, data2: application })
-  //   } else if (division === 'mechanical') {
-  //     await postApi('48e0a71f62-d465ed3536', { data: status, data2: application })
-  //   } else if (division === 'occupancy') {
-  //     await postApi('48e0a71f62-12e025162c', { data: status, data2: application })
-  //   }
-  // }
+  const updateDocflow = async (division: string, application: string, status: string) => {
+    await postApi(`update-docflow-${division}`, { data: status, data2: application })
+    if (division === 'electrical') {
+      await postApi('48e0a71f62-0604d816c0', { data: status, data2: application })
+    } else if (division === 'mechanical') {
+      await postApi('48e0a71f62-d465ed3536', { data: status, data2: application })
+    } else if (division === 'occupancy') {
+      await postApi('48e0a71f62-12e025162c', { data: status, data2: application })
+    }
+  }
 
   const refresh = async (division: string) => {
     if (division === 'electrical') {
@@ -763,23 +762,22 @@ export default () => {
     return response
   }
 
-  // const checkCurrentPassword = async () => {
-  //   const encCurrentPasswordV1 = await securePassword(configPassword(), 'v1')
-  //   const encCurrentPasswordV2 = await securePassword(configPassword(), 'v2')
+  const checkCurrentPassword = async () => {
+    const encCurrentPassword = await securePassword(configPassword())
 
-  //   if (encCurrentPasswordV1 === configEncPassword() || encCurrentPasswordV2 === configEncPassword()) {
-  //     if (configNewPassword() === '') {
-  //       setConfigError('New Password not provided')
-  //       setConfigNewEncPassword('')
-  //     } else {
-  //       setConfigError('')
-  //       encryptNewPassword()
-  //     }
-  //   } else {
-  //     setConfigError('Invalid Password')
-  //     setConfigNewEncPassword('')
-  //   }
-  // }
+    if (encCurrentPassword === configEncPassword()) {
+      if (configNewPassword() === '') {
+        setConfigError('Please provide new password')
+        setConfigNewEncPassword('')
+      } else {
+        setConfigError('')
+        encryptNewPassword()
+      }
+    } else {
+      setConfigError('Invalid Password')
+      setConfigNewEncPassword('')
+    }
+  }
 
   const encryptNewPassword = async () => {
     const encNewPassword = await securePassword(configNewPassword())
@@ -900,12 +898,15 @@ export default () => {
         </Row>
 
         <Show when={applicationListElectrical().length > 0}>
-          <Row content='split' padding='2rem 0 0 0'>
+          <Row content='split' padding='2rem 1rem 0 1rem'>
             <Row gap={0.5}>
               <span class='application-counter'>{applicationListElectrical().length}</span>
               <span class='application-counter__text'>{`${applicationListElectrical().length > 1 ? 'Electrical Applications' : 'Electrical Application'}`}</span>
             </Row>
-            <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
+            <Row gap={0.5}>
+              <Input value={configNewName()} onChange={setConfigNewName} placeholder='Filter Application' width='18rem' />
+              <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
+            </Row>
           </Row>
         </Show>
         <Show when={applicationListElectrical().length == 0}>
@@ -915,43 +916,24 @@ export default () => {
         </Show>
 
         <Row>
-          {/*<Show when={isLoading()}>
+          <Show when={isLoading()}>
             <Padding top={2}>
               <Column gap={1}>
                 <AiOutlineLoading3Quarters size={42} />
                 <span>{loadingText()}</span>
               </Column>
             </Padding>
-          </Show>*/}
+          </Show>
 
-          {/*<Show when={!isLoading()}>*/}
-          <Loading
-            fallback={
-              <Padding top={2}>
-                <Column gap={1}>
-                  <AiOutlineLoading3Quarters size={42} />
-                  <span>AAAAAA</span>
-                </Column>
-              </Padding>
-            }
-          >
+          <Show when={!isLoading()}>
             <Show when={applicationListElectrical().length > 0}>
               <Row gap={1} padding='2rem 0 0 0'>
                 {applicationListElectrical().map((item: string, index: number) => (
-                  <EsignCard
-                    division='Electrical'
-                    applicationNo={item}
-                    name={nameListElectrical()[index]}
-                    onClick={async () => {
-                      setShowDetails(true)
-                      await getopdetailsCard('electrical', item)
-                    }}
-                  ></EsignCard>
+                  <EsignCard division='Electrical' applicationNo={item} name={nameListElectrical()[index]} onHover={async () => await getopdetailsCard('electrical', item)} onClick={async () => setShowDetails(true)}></EsignCard>
                 ))}
               </Row>
             </Show>
-          </Loading>
-          {/*</Show>*/}
+          </Show>
         </Row>
       </Page>
 
@@ -1062,6 +1044,100 @@ export default () => {
               </Row>
             </Column>
           </Padding>
+        </Modal>
+      </div>
+
+      <div onClick={closeInfo}>
+        <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='slide-from-top'>
+          <Row content='center' gap={1}>
+            <Box curved thickness={1} color='rgba(244,244,244,0.1)' background='transparent' padding='1rem' width='100%'>
+              {/*<Padding left={2} right={2}>*/}
+              <Show when={selectedApplication() !== ''}>
+                <span class='modal-card__application-number'>{selectedApplication()}</span>
+              </Show>
+              <Show when={selectedApplication() === ''}>
+                <span class='modal-card__application-number'>----------</span>
+              </Show>
+
+              <Padding top={1}>
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Name of Applicant:</span>
+                  <Show when={selectedName() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedName()} </span>
+                  </Show>
+                  <Show when={selectedName() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Location:</span>
+                  <Show when={selectedLocation() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedLocation()}</span>
+                  </Show>
+                  <Show when={selectedLocation() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Type:</span>
+                  <Show when={selectedType() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedType().toUpperCase()}</span>
+                  </Show>
+                  <Show when={selectedType() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Assessed By:</span>
+                  <Show when={selectedAssessor() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedAssessor()}</span>
+                  </Show>
+                  <Show when={selectedAssessor() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Date Assessed:</span>
+                  <Show when={selectedDate() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedDate().toUpperCase()}</span>
+                  </Show>
+                  <Show when={selectedDate() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Total Fee:</span>
+
+                  <Show when={selectedTotal() !== ''}>
+                    <span class='modal-card__row__detail__price'>
+                      {PESO} {selectedTotal()}
+                    </span>
+                  </Show>
+                  <Show when={selectedTotal() === ''}>
+                    <span class='modal-card__row__detail__price'>{PESO} --.--</span>
+                  </Show>
+                </section>
+              </Padding>
+
+              <Column padding='2rem 0 0 0'>
+                <Show when={selectedApplication() !== ''}>
+                  {/*<Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' onClick={() => approveHandler(division(), selectedApplication())} />*/}
+                  <Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' />
+                </Show>
+                <Show when={selectedApplication() === ''}>
+                  <span class='loading-data'>Loading data, please wait</span>
+                </Show>
+
+                <span class='modal-card__cancel'>Click anywhere to cancel</span>
+              </Column>
+              {/*</Padding>*/}
+            </Box>
+          </Row>
         </Modal>
       </div>
     </>
