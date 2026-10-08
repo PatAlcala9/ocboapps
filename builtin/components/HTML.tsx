@@ -1,15 +1,33 @@
 import { type Element, Show } from 'solid-js'
-import background1 from '../../images/background.avif'
-import background2 from '../../images/background.webp'
 import site from 'configs/site.config.mts'
 import { HydrationScript } from '@solidjs/web'
 
 interface Props {
   children: Element
-  preloadBackground?: boolean
+  preloadBackground?: boolean | string
 }
 
 export default (props: Props) => {
+  const images = import.meta.glob('/images/*.{avif,webp}', {
+    eager: true,
+    query: '?url',
+    import: 'default',
+  })
+
+  const getSources = () => {
+    if (typeof props.preloadBackground === 'string') {
+      const webp = images[`/images/${props.preloadBackground}.webp`]
+      const avif = images[`/images/${props.preloadBackground}.avif`]
+      return { webp, avif }
+    }
+    return {
+      webp: '/images/background.webp',
+      avif: '/images/background.avif',
+    }
+  }
+
+  const { webp, avif } = getSources()
+
   return (
     <html lang='en'>
       <head>
@@ -33,8 +51,8 @@ export default (props: Props) => {
           <link rel='preconnect' href='https://cdn.jsdelivr.net' />
         </Show>
         <Show when={props.preloadBackground}>
-          <link rel='preload' href={background1} as='image' type='image/svg+xml' />
-          <link rel='preload' href={background2} as='image' type='image/svg+xml' />
+          <link rel='preload' href={avif} as='image' type='image/avif' />
+          <link rel='preload' href={webp} as='image' type='image/webp' />
         </Show>
         <HydrationScript />
       </head>

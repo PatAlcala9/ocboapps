@@ -45,6 +45,8 @@ export default () => {
   return (
     <Page title='OCBO Apps' font='inter'>
       <Display desktop tablet>
+        <Background image='background2026' />
+
         <Switch>
           <Match when={holiday() === 'CHRISTMAS'}>
             <Background image='background-christmas' />
