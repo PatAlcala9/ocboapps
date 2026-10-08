@@ -1,9 +1,11 @@
-import { onSettled, createSignal, Show, flush, Loading, isPending } from 'solid-js'
+import { onSettled, createSignal, Show } from 'solid-js'
+import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
 import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
 import { getApi } from '@dasig/api'
 import { checkConnection } from '../../utils'
+import { _page } from 'stores/page'
 import './index.sass'
 
 import { $head, $head_id } from 'cache/head'
@@ -18,6 +20,8 @@ const [connected, setConnected] = createSignal(true)
 const [loading, setLoading] = createSignal(true)
 
 export default () => {
+  const navigate = useNavigate()
+
   const getAssessors = async () => {
     const [assessors, asserrorsError] = await getApi('e60dbde84b2a5307d399')
     if (asserrorsError !== null) return
@@ -50,6 +54,11 @@ export default () => {
     $head_id.set(headId)
   }
 
+  const gotoPage = async (page: string) => {
+    _page.set(page)
+    navigate(page)
+  }
+
   const init = async () => {
     setConnected(await checkConnection())
     setLoading(false)
@@ -60,6 +69,8 @@ export default () => {
     getRegistered()
     getHead()
     getHeadId()
+
+    _page.set('/esign')
   }
 
   onSettled(() => {
@@ -101,8 +112,8 @@ export default () => {
             <Show when={connected() && !loading()}>
               <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56' margin='0 1rem'>
                 <Row content='left' gap={1}>
-                  <Button label='Login' corner='curved' design='bootstrap-link' to='/esign/login' />
-                  <Button label='Register' corner='curved' design='bootstrap-primary' to='/esign/register' />
+                  <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
+                  <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('/esign/register')} />
                 </Row>
               </Box>
             </Show>
@@ -177,8 +188,8 @@ export default () => {
             <Show when={connected()}>
               <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56'>
                 <Row content='left' gap={1}>
-                  <Button label='Login' corner='curved' design='bootstrap-link' to='esign/login' />
-                  <Button label='Register' corner='curved' design='bootstrap-primary' to='esign/register' />
+                  <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('esign/login')} />
+                  <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('esign/register')} />
                 </Row>
               </Box>
             </Show>

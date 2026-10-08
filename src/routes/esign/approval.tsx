@@ -10,7 +10,7 @@ import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
 import { Box, Button, Clickable, Column, Input, Link, Logo, Modal, ModalButton, Padding, Page, Row, Image, Background, File } from '@dasig'
 // import { checkConnection, deleteApi, getApi, getApiMulti, getDateTime, lockData, postApi, saveNewName, saveNewPassword, saveNewSignature, securePassword, voidPopsApi, voidApi, statusPopsApi } from '../../utils/functions'
 import { getApi, postApi, deleteApi } from '@dasig/api'
-import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval } from '../../utils'
+import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval, checkPage } from '../../utils'
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
 import { _listElectricalApplications, _listElectricalNames, _listMechanicalApplications, _listMechanicalNames, _listOccupancyApplications, _listOccupancyNames } from 'stores/prefetch'
 import api from 'configs/api.config.mts'
@@ -845,6 +845,7 @@ export default () => {
   }
 
   const init = async () => {
+    checkPage()
     const logged = await checkLogged()
     if (logged) await load('all')
     else navigate('/esign', { replace: true })

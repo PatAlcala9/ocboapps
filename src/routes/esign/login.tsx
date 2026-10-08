@@ -3,13 +3,14 @@ import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
 import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox, Background } from '@dasig'
 import { getApi } from '@dasig/api'
-import { checkConnection, securePassword, getListForApproval } from '../../utils'
+import { checkConnection, securePassword, getListForApproval, checkPage } from '../../utils'
 import { _headName, _headPassword } from 'stores/head'
+import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
 import { $head, $head_id } from 'cache/head'
 import { $registered_list } from 'cache/list'
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
 import './login.sass'
-import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
+import { _page } from 'stores/page'
 
 export default () => {
   const navigate = useNavigate()
@@ -81,11 +82,13 @@ export default () => {
   }
 
   const gotoApproval = () => {
+    _page.set('/esign/approval')
     navigate('/esign/approval', { replace: true })
   }
 
   const gotoPrinting = () => {
-    navigate('/esign/printing')
+    _page.set('/esign/printing')
+    navigate('/esign/printing', { replace: true })
   }
 
   const navigateToRolePage = () => {
@@ -114,6 +117,7 @@ export default () => {
   }
 
   onSettled(() => {
+    checkPage()
     getHead()
     getList()
   })
@@ -196,7 +200,18 @@ export default () => {
                     <span class='approver-name'>{head()}</span>
                   </Padding>
 
-                  <Input center value={password()} onChange={setPassword} type='password' placeholder='Password' width='63%' size={1} />
+                  <Input
+                    center
+                    value={password()}
+                    onChange={setPassword}
+                    type='password'
+                    placeholder='Password'
+                    width='63%'
+                    size={1}
+                    onKeyDown={(event: KeyboardEvent) => {
+                      if (event.key === 'Enter') login()
+                    }}
+                  />
 
                   <Padding top={2}>
                     <Show when={password()}>
@@ -220,7 +235,18 @@ export default () => {
                     <Combobox options={registeredList()} placeholder="Assessor's Name" value={name()} onChange={setName} width='22.25rem' />
                   </Padding>
 
-                  <Input center value={password()} onChange={setPassword} type='password' placeholder='Password' width='63%' size={1} />
+                  <Input
+                    center
+                    value={password()}
+                    onChange={setPassword}
+                    type='password'
+                    placeholder='Password'
+                    width='63%'
+                    size={1}
+                    onKeyDown={(event: KeyboardEvent) => {
+                      if (event.key === 'Enter') login()
+                    }}
+                  />
 
                   <Padding top={2}>
                     <Show when={password() && name()}>

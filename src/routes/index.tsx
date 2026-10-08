@@ -55,10 +55,6 @@ export default () => {
           <Match when={holiday() === 'VALENTINES'}>
             <Background image='background-valentines' />
           </Match>
-
-          <Match when={holiday() === 'NORMAL'}>
-            <Background image='background2026' />
-          </Match>
         </Switch>
 
         <Row gap={0.5} content='left'>

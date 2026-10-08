@@ -49,6 +49,8 @@ onSettled(() => {
 export default function NotFound() {
   return (
     <Page title='Not Found - OCBO Apps' font='inter'>
+      <Background image='background2026' />
+
       <Switch>
         <Match when={holiday() === 'CHRISTMAS'}>
           <Background image='background-christmas' />
@@ -56,10 +58,6 @@ export default function NotFound() {
 
         <Match when={holiday() === 'VALENTINES'}>
           <Background image='background-valentines' />
-        </Match>
-
-        <Match when={holiday() === 'NORMAL'}>
-          <Background image='background2026' />
         </Match>
       </Switch>
 
