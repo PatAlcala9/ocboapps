@@ -1,5 +1,5 @@
-import '../components-styles/Box.sass'
 import { type Element, createMemo } from 'solid-js'
+import '../components-styles/Box.sass'
 
 interface Props {
   thickness: number
