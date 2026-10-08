@@ -10,7 +10,7 @@ interface Props {
 
 export default (props: Props) => {
   return (
-    <Link to={props.site} newtab>
+    <Link to={props.site} replace>
       <section class='com-card'>
         <Column>
           <Image data-testid='image' name={props.image} size={140} />
