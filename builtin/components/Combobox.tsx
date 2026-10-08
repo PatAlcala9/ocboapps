@@ -1,4 +1,3 @@
-import { type Setter } from 'solid-js'
 import { FaSolidAngleDown } from 'solid-icons/fa'
 import { AiOutlineCheck } from 'solid-icons/ai'
 import { Combobox } from '@kobalte/core/combobox'
@@ -8,7 +7,7 @@ interface Props {
   options: any[]
   placeholder: string
   value: string
-  onChange: Setter<string>
+  onChange: (value: string | null) => void
   width?: string
 }
 

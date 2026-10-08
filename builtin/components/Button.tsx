@@ -1,7 +1,6 @@
-import '../components-styles/Button.sass'
-import type { Element } from 'solid-js'
+import { type Element, Show, Switch, Match } from 'solid-js'
 import { Row } from '../index'
-import { Show, Switch, Match } from 'solid-js'
+import '../components-styles/Button.sass'
 
 interface Props {
   label?: string
@@ -39,6 +38,7 @@ interface Props {
   prefetch?: boolean
   onMouseOver?: () => void
   noLabel?: boolean
+  replace?: boolean
 }
 
 const getBorderRadius = (edge: Props['corner']) => {
@@ -57,6 +57,7 @@ const getBorderRadius = (edge: Props['corner']) => {
 export default (props: Props) => {
   const borderRadius = getBorderRadius(props.corner)
   const Icon = props.icon
+
   return (
     <>
       <Show when={props.to}>
