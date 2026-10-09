@@ -117,10 +117,14 @@ export default () => {
     setRegisteredList(list)
   }
 
-  onSettled(() => {
+  const init = () => {
     checkPage()
     getHead()
     getList()
+  }
+
+  onSettled(() => {
+    init()
   })
 
   return (

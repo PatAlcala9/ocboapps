@@ -1,25 +1,25 @@
 import dayjs from 'dayjs'
-import { createEffect, createSignal, onSettled, Show, Loading } from 'solid-js'
+import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
-// import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
-import { RiDocumentFileCloseFill } from 'solid-icons/ri'
+// import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
-import { Box, Button, Clickable, Column, Input, Link, Logo, Modal, ModalButton, Padding, Page, Row, Image, Background, File } from '@dasig'
-// import { checkConnection, deleteApi, getApi, getApiMulti, getDateTime, lockData, postApi, saveNewName, saveNewPassword, saveNewSignature, securePassword, voidPopsApi, voidApi, statusPopsApi } from '../../utils/functions'
+import { Box, Button, Clickable, Column, Input, Modal, Padding, Page, Row, Image, Background, File } from '@dasig'
 import { getApi, postApi, deleteApi } from '@dasig/api'
-import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval, checkPage } from '../../utils'
+import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval, checkPage, voidPopsApi, statusPopsApi } from '../../utils'
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
+import { $head_id } from 'cache/head'
 import { _listElectricalApplications, _listElectricalNames, _listMechanicalApplications, _listMechanicalNames, _listOccupancyApplications, _listOccupancyNames } from 'stores/prefetch'
-import api from 'configs/api.config.mts'
 import './approval.sass'
+
 import EsignCard from 'components/EsignCard'
+import api from 'configs/api.config.mts'
 
 export default () => {
   const PESO = import.meta.env.VITE_PESO
-  const ID = sessionStorage.getItem('id')!
+  const ID = $head_id.get()!
   const PUBLICIP = import.meta.env.VITE_PUBLICIP
   const BACKEND = api.backend.url
 
@@ -194,35 +194,6 @@ export default () => {
     setApplicationListOccupancy(newApplicationListOccupancy)
     setNameListOccupancy(newNameListOccupancy)
   }
-
-  // const getopdetails = async (division: string, applicationNo: string) => {
-  //   // const op = await getApiMulti(`get-opdetails-${division}`, applicationNo)
-  //   let op: any
-  //   if (division === 'electrical') {
-  //     op = await getApiMulti('533b63af79c27bb782f3', applicationNo)
-  //   } else if (division === 'mechanical') {
-  //     op = await getApiMulti('ab0aec88a5615fd28f48', applicationNo)
-  //   } else if (division === 'occupancy') {
-  //     op = await getApiMulti('185caa987eba4376ba0d', applicationNo)
-  //   }
-
-  //   if (isDetailsComplete(op.result, op.result2, op.result3, op.result4, op.result5, op.result6)) {
-  //     setIsIncomplete(false)
-  //     setLocation(op.result[0])
-  //     setType(op.result2[0])
-  //     setAssessor(op.result3[0])
-  //     const total = calculateTotal(op.result4)
-  //     const formattedTotal = new Intl.NumberFormat('en-US', {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(total)
-  //     setTotalOp(formattedTotal)
-  //     setDateOp(dayjs(op.result5[0]).format('MMMM DD, YYYY'))
-  //     setApplicationId(op.result6[0])
-  //   } else {
-  //     setIsIncomplete(true)
-  //   }
-  // }
 
   const getopdetailsCard = async (division: string, applicationNo: string) => {
     let op: any
@@ -470,41 +441,40 @@ export default () => {
   //   }
   // }
 
-  // const lockOpData = async (division: string, application: string) => {
-  //   // const dataToLock = await getApi(`get-opdata-${division}`, application)
-  //   let dataToLock
-  //   if (division === 'electrical') {
-  //     dataToLock = await getApi('8c72fe205d3cba3d417c', application)
-  //   } else if (division === 'mechanical') {
-  //     dataToLock = await getApi('60c54d25f24c9aa3c446', application)
-  //   } else if (division === 'occupancy') {
-  //     dataToLock = await getApi('74c13dcb597ce97f6193', application)
-  //   }
-  //   const lockedData = await lockData(dataToLock)
-  //   const fixedLockedData = lockedData.replace(/\//g, '~')
-  //   const saveLockedData = await postApi('8c019ea819-531f73875c', { data: application, data2: fixedLockedData })
-  //   return saveLockedData
-  // }
+  const lockOpData = async (division: string, application: string) => {
+    let dataToLock
+    if (division === 'electrical') {
+      ;[dataToLock] = await getApi('8c72fe205d3cba3d417c', application)
+    } else if (division === 'mechanical') {
+      ;[dataToLock] = await getApi('60c54d25f24c9aa3c446', application)
+    } else if (division === 'occupancy') {
+      ;[dataToLock] = await getApi('74c13dcb597ce97f6193', application)
+    }
+    const lockedData = await lockData(dataToLock.result)
+    const fixedLockedData = lockedData.replace(/\//g, '~')
+    const saveLockedData = await postApi('8c019ea819-531f73875c', { data: application, data2: fixedLockedData })
+    return saveLockedData
+  }
 
-  // const voidPopsOp = async (application: string) => {
-  //   const response = await voidPopsApi(application)
-  //   return response
-  // }
+  const voidPopsOp = async (application: string) => {
+    const response = await voidPopsApi(application)
+    return response
+  }
 
-  // const voidPopsOpLocal = async (application: string) => {
-  //   const response = await voidApi('fe377458d5-527793ef64', { data: application })
-  //   return response
-  // }
+  const voidPopsOpLocal = async (application: string) => {
+    const response = await deleteApi('fe377458d5-527793ef64', { data: application })
+    return response
+  }
 
-  // const checkStatusPopsLocal = async (application: string) => {
-  //   const response = await getApiMulti('1431ee20d8f6a0a03c74', application)
-  //   return response
-  // }
+  const checkStatusPopsLocal = async (application: string) => {
+    const [response] = await getApi('1431ee20d8f6a0a03c74', application)
+    return response
+  }
 
-  // const statusPopsOp = async (application: string) => {
-  //   const response = await statusPopsApi(application)
-  //   return response
-  // }
+  const statusPopsOp = async (application: string) => {
+    const response = await statusPopsApi(application)
+    return response
+  }
 
   // const returnAssessment = async (division: string, application: string) => {
   //   const id = await getApplicationById(division, application)
@@ -592,68 +562,68 @@ export default () => {
     }
   }
 
-  // const postPops = async (division: string, application: string) => {
-  //   let response
+  const postPops = async (division: string, application: string) => {
+    let response
 
-  //   if (division === 'electrical') {
-  //     response = await getApiMulti('935758ca840c20723c72', application)
-  //   } else if (division === 'mechanical') {
-  //     response = await getApiMulti('7cff1c47fd874ce8eefc', application)
-  //   } else if (division === 'occupancy') {
-  //     response = await getApiMulti('bee657d5fb112e8fade9', application)
-  //   }
+    if (division === 'electrical') {
+      ;[response] = await getApi('935758ca840c20723c72', application)
+    } else if (division === 'mechanical') {
+      ;[response] = await getApi('7cff1c47fd874ce8eefc', application)
+    } else if (division === 'occupancy') {
+      ;[response] = await getApi('bee657d5fb112e8fade9', application)
+    }
 
-  //   const customerid = response.result2[0]
-  //   const customerName = response.result3[0]
-  //   const location = response.result4[0]
-  //   const amountList = response.result5
-  //   const lguList = response.result6
-  //   const dpwhList = response.result7
-  //   const boList = response.result8
-  //   const codeList = response.result9
+    const customerid = response.result2[0]
+    const customerName = response.result3[0]
+    const location = response.result4[0]
+    const amountList = response.result5
+    const lguList = response.result6
+    const dpwhList = response.result7
+    const boList = response.result8
+    const codeList = response.result9
 
-  //   const today = await getDateTime()
-  //   const formattedDate = dayjs(today).format('YYYY-MM-DD')
-  //   const formattedDatewithTime = dayjs(today).format('YYYY-MM-DD HH:mm:ss')
+    const today = await getDateTime()
+    const formattedDate = dayjs(today).format('YYYY-MM-DD')
+    const formattedDatewithTime = dayjs(today).format('YYYY-MM-DD HH:mm:ss')
 
-  //   if (BACKEND.includes('localhost')) {
-  //     for (let i = 0; i < response.result.length; i++) {
-  //       await postApi('4cd315b87a-5eac74e8cd', {
-  //         data: application,
-  //         data2: formattedDate,
-  //         data3: customerid,
-  //         data4: customerName,
-  //         data5: location,
-  //         data6: codeList[i],
-  //         data7: amountList[i],
-  //         data8: assessor(),
-  //         data9: formattedDatewithTime,
-  //         data10: lguList[i],
-  //         data11: dpwhList[i],
-  //         data12: boList[i],
-  //         data13: PUBLICIP,
-  //       })
-  //     }
-  //   } else {
-  //     for (let i = 0; i < response.result.length; i++) {
-  //       await postApi('4cd315b87a-dd1854c8df', {
-  //         data: application,
-  //         data2: formattedDate,
-  //         data3: customerid,
-  //         data4: customerName,
-  //         data5: location,
-  //         data6: codeList[i],
-  //         data7: amountList[i],
-  //         data8: assessor(),
-  //         data9: formattedDatewithTime,
-  //         data10: lguList[i],
-  //         data11: dpwhList[i],
-  //         data12: boList[i],
-  //         data13: PUBLICIP,
-  //       })
-  //     }
-  //   }
-  // }
+    if (BACKEND.includes('localhost')) {
+      for (let i = 0; i < response.result.length; i++) {
+        await postApi('4cd315b87a-5eac74e8cd', {
+          data: application,
+          data2: formattedDate,
+          data3: customerid,
+          data4: customerName,
+          data5: location,
+          data6: codeList[i],
+          data7: amountList[i],
+          data8: assessor(),
+          data9: formattedDatewithTime,
+          data10: lguList[i],
+          data11: dpwhList[i],
+          data12: boList[i],
+          data13: PUBLICIP,
+        })
+      }
+    } else {
+      for (let i = 0; i < response.result.length; i++) {
+        await postApi('4cd315b87a-dd1854c8df', {
+          data: application,
+          data2: formattedDate,
+          data3: customerid,
+          data4: customerName,
+          data5: location,
+          data6: codeList[i],
+          data7: amountList[i],
+          data8: assessor(),
+          data9: formattedDatewithTime,
+          data10: lguList[i],
+          data11: dpwhList[i],
+          data12: boList[i],
+          data13: PUBLICIP,
+        })
+      }
+    }
+  }
 
   // const checkPops = async (application: string) => {
   //   const response = await getApi('check-popsrecord', application)
@@ -726,13 +696,13 @@ export default () => {
     }
   }
 
-  // const postTransaction = async () => {
-  //   const id = await geteSignId()
-  //   const today = await getDateTime()
-  //   const formattedDate = dayjs(today).format('YYYY-MM-DD HH:mm:ss')
+  const postTransaction = async () => {
+    const id = await geteSignId()
+    const today = await getDateTime()
+    const formattedDate = dayjs(today).format('YYYY-MM-DD HH:mm:ss')
 
-  //   await postApi('4cd315b87a-781a6781ad', { data: parseInt(id), data2: approvedApplication(), data3: formattedDate })
-  // }
+    await postApi('4cd315b87a-781a6781ad', { data: parseInt(id), data2: approvedApplication(), data3: formattedDate })
+  }
 
   const updateDocflow = async (division: string, application: string, status: string) => {
     await postApi(`update-docflow-${division}`, { data: status, data2: application })

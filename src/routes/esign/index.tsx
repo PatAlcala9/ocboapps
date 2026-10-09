@@ -2,9 +2,9 @@ import { onSettled, createSignal, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background } from '@dasig'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable } from '@dasig'
 import { getApi } from '@dasig/api'
-import { checkConnection } from '../../utils'
+import { checkConnection, setPage } from '../../utils'
 import { _page } from 'stores/page'
 import './index.sass'
 
@@ -55,13 +55,14 @@ export default () => {
   }
 
   const gotoPage = async (page: string) => {
-    _page.set(page)
+    setPage(page)
     navigate(page)
   }
 
   const init = async () => {
     setConnected(await checkConnection())
     setLoading(false)
+    setPage('/esign')
   }
 
   const getData = () => {
@@ -69,8 +70,6 @@ export default () => {
     getRegistered()
     getHead()
     getHeadId()
-
-    _page.set('/esign')
   }
 
   onSettled(() => {
@@ -93,46 +92,54 @@ export default () => {
               <h1>OCBO e-Sign</h1>
             </Row>
 
-            <Show when={loading()}>
-              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#090c1a57'>
-                <Column alignment='center'>
-                  <Row content='left' gap={1}>
-                    <ImConnection size={24} color='#fcfcfcba' />
-                    <span class='checking-text'>CHECKING</span>
-                    <Button label='Login' corner='curved' design='bootstrap-dark' />
-                    <Button label='Register' corner='curved' design='bootstrap-dark' />
-                  </Row>
-                  <Row content='left'>
-                    <a class='checking-message'>Please wait while we check for the server</a>
-                  </Row>
-                </Column>
-              </Box>
-            </Show>
+            <Row gap={0.5}>
+              <Show when={loading()}>
+                <Box curved thickness={0} padding='0.75rem 1.25rem' background='#090c1a57'>
+                  <Column alignment='center'>
+                    <Row content='left' gap={1}>
+                      <ImConnection size={24} color='#fcfcfcba' />
+                      <span class='checking-text'>CHECKING</span>
+                      <Button label='Login' corner='curved' design='bootstrap-dark' />
+                      <Button label='Register' corner='curved' design='bootstrap-dark' />
+                    </Row>
+                    <Row content='left'>
+                      <a class='checking-message'>Please wait while we check for the server</a>
+                    </Row>
+                  </Column>
+                </Box>
+              </Show>
 
-            <Show when={connected() && !loading()}>
-              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56' margin='0 1rem'>
-                <Row content='left' gap={1}>
-                  <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
-                  <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('/esign/register')} />
-                </Row>
-              </Box>
-            </Show>
-
-            <Show when={!connected() && !loading()}>
-              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
-                <Column alignment='center'>
+              <Show when={connected() && !loading()}>
+                <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56' margin='0 1rem'>
                   <Row content='left' gap={1}>
-                    <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
-                    <span class={'offline-text'}>OFFLINE</span>
-                    <Button label='Login' corner='curved' design='bootstrap-danger' />
-                    <Button label='Register' corner='curved' design='bootstrap-danger' />
+                    <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
+                    <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('/esign/register')} />
                   </Row>
-                  <Row content='left'>
-                    <a class='offline-message'>Please check your server connection and reload the page</a>
-                  </Row>
-                </Column>
-              </Box>
-            </Show>
+                </Box>
+              </Show>
+
+              <Show when={!connected() && !loading()}>
+                <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
+                  <Column alignment='center'>
+                    <Row content='left' gap={1}>
+                      <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
+                      <span class={'offline-text'}>OFFLINE</span>
+                      <Button label='Login' corner='curved' design='bootstrap-danger' />
+                      <Button label='Register' corner='curved' design='bootstrap-danger' />
+                    </Row>
+                    <Row content='left'>
+                      <a class='offline-message'>Please check your server connection and reload the page</a>
+                    </Row>
+                  </Column>
+                </Box>
+              </Show>
+
+              <Clickable onClick={() => gotoPage('/')}>
+                <Box curved thickness={0} padding='0 1rem 0 0'>
+                  <Image name='ocbo-portal' size={32}></Image>
+                </Box>
+              </Clickable>
+            </Row>
           </Row>
 
           <Row content='split'>

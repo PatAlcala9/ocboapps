@@ -82,6 +82,7 @@ export default () => {
 
         <Row gap={2.5}>
           <Card image='esign' name='OCBO e-Sign' description='A secure way of signing permits' site='/esign' />
+          {/*<Card image='inquiry' name='OCBO Inquiry' description='Search and Monitor application in real time' site='/inquiry' />*/}
         </Row>
       </Display>
 
