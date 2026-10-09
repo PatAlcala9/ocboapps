@@ -1,5 +1,5 @@
-import './Card.sass'
 import { Column, Image, Link } from '@dasig'
+import './Card.sass'
 
 interface Props {
   image: string

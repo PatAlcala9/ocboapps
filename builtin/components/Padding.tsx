@@ -1,5 +1,4 @@
 import type { Element } from 'solid-js'
-// import '../components-styles/Padding.sass'
 
 interface Props {
   left?: number
@@ -7,7 +6,6 @@ interface Props {
   top?: number
   bottom?: number
   children: Element
-  // fit?: boolean
 }
 
 export default (props: Props) => {

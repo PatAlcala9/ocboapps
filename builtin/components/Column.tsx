@@ -1,5 +1,5 @@
-import '../components-styles/Column.sass'
 import type { Element } from 'solid-js'
+import '../components-styles/Column.sass'
 
 interface Props {
   children: Element
