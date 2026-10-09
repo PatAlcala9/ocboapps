@@ -5,7 +5,6 @@ import { _optn, _applicationNo, _date, _name, _type, _location, _assessor, _feeL
 import dayjs from 'dayjs'
 // @ts-ignore
 import QRCode from 'qrcode'
-// import { SHA3, MD5 } from 'crypto-js'
 import { sha3, md5 } from '@dasig/hash'
 export default async () => {
   const PESO = import.meta.env.VITE_PESO
