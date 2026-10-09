@@ -4,5 +4,5 @@ import { _page } from 'stores/page'
 export default async () => {
   const navigate = useNavigate()
   const page = _page.get()
-  return navigate(page)
+  navigate(page)
 }
