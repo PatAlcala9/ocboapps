@@ -3,7 +3,7 @@ import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
 import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox, Background } from '@dasig'
 import { getApi } from '@dasig/api'
-import { checkConnection, securePassword, checkPage } from '../../utils'
+import { checkConnection, securePassword, checkPage, setPage } from '../../utils'
 import { _headName, _headPassword } from 'stores/head'
 import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
 import { $head, $head_id } from 'cache/head'
@@ -82,12 +82,12 @@ export default () => {
   }
 
   const gotoApproval = () => {
-    _page.set('/esign/approval')
+    setPage('/esign/approval')
     navigate('/esign/approval', { replace: true })
   }
 
   const gotoPrinting = () => {
-    _page.set('/esign/printing')
+    setPage('/esign/printing')
     navigate('/esign/printing', { replace: true })
   }
 

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { createSignal, onSettled, Show } from 'solid-js'
+import { createEffect, createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
@@ -227,36 +227,6 @@ export default () => {
     }
   }
 
-  // const getopdetailsMultiple = async (division: string, applicationNo: string, index: number) => {
-  //   // const op = await getApiMulti(`get-opdetails-${division}`, applicationNo)
-  //   let op: any
-  //   if (division === 'electrical') {
-  //     op = await getApiMulti('533b63af79c27bb782f3', applicationNo)
-  //   } else if (division === 'mechanical') {
-  //     op = await getApiMulti('ab0aec88a5615fd28f48', applicationNo)
-  //   } else if (division === 'occupancy') {
-  //     op = await getApiMulti('185caa987eba4376ba0d', applicationNo)
-  //   }
-
-  //   if (isDetailsComplete(op.result, op.result2, op.result3, op.result4, op.result5, op.result6)) {
-  //     setIsIncomplete(false)
-  //     setSelectedLocations((prev) => [...prev, op.result[index]])
-  //     setSelectedTypes((prev) => [...prev, op.result2[index]])
-  //     setSelectedAssessors((prev) => [...prev, op.result3[index]])
-  //     const total = calculateTotal(op.result4)
-  //     const formattedTotal = new Intl.NumberFormat('en-US', {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(total)
-  //     // setTotalOp(formattedTotal)
-  //     setSelectedTotals((prev) => [...prev, formattedTotal])
-  //     setDateOp(dayjs(op.result5[0]).format('MMMM DD, YYYY'))
-  //     setApplicationId(op.result6[0])
-  //   } else {
-  //     setIsIncomplete(true)
-  //   }
-  // }
-
   const isDetailsComplete = (result: string[], result2: string[], result3: string[], result4: string[], result5: string[], result6: string[]) => {
     return result.length > 0 && result2.length > 0 && result3.length > 0 && result4.length > 0 && result5.length > 0 && result6.length > 0 ? true : false
   }
@@ -266,143 +236,143 @@ export default () => {
     return total
   }
 
-  // const approveHandler = async (division: string, application: string) => {
-  //   let signed: boolean = false
-  //   let forprinting: boolean = false
-  //   let updateOrderofpayment: boolean = false
+  const approveHandler = async (division: string, application: string) => {
+    let signed: boolean = false
+    let forprinting: boolean = false
+    let updateOrderofpayment: boolean = false
 
-  //   let popsExist: boolean = false
-  //   let popsPaid: boolean = false
+    let popsExist: boolean = false
+    let popsPaid: boolean = false
 
-  //   setConnected(await checkConnection())
-  //   if (connected() === false) {
-  //     setErrorMessage('No Connection on Server')
-  //     return
-  //   }
+    setConnected(await checkConnection())
+    if (connected() === false) {
+      setErrorMessage('No Connection on Server')
+      return
+    }
 
-  //   setIsLoading(true)
-  //   setLoadingText('Checking POPS record')
+    setIsLoading(true)
+    setLoadingText('Checking POPS record')
 
-  //   if (BACKEND.includes('localhost')) {
-  //     const status = await checkStatusPopsLocal(application)
-  //     if (status.result > 0) popsExist = true
-  //     if (status.result2 > 0) popsPaid = true
-  //   } else {
-  //     const status = await await statusPopsOp(application)
-  //     if (status.message === 'Success') popsExist = true
-  //     if (status.pops_paid === true) popsPaid = true
-  //   }
+    if (BACKEND.includes('localhost')) {
+      const status = await checkStatusPopsLocal(application)
+      if (status.result > 0) popsExist = true
+      if (status.result2 > 0) popsPaid = true
+    } else {
+      const status = await statusPopsOp(application)
+      if (status.message === 'Success') popsExist = true
+      if (status.pops_paid === true) popsPaid = true
+    }
 
-  //   if (popsExist) {
-  //     if (popsPaid) {
-  //       setIsLoading(false)
-  //       setPostError(true)
-  //       setErrorMessage('Application Already Paid')
-  //       return
-  //     } else {
-  //       if (BACKEND.includes('localhost')) {
-  //         setLoadingText('Clearing unpaid POPS record')
-  //         const voidOP = await voidPopsOpLocal(application)
+    if (popsExist) {
+      if (popsPaid) {
+        setIsLoading(false)
+        setPostError(true)
+        setErrorMessage('Application Already Paid')
+        return
+      } else {
+        if (BACKEND.includes('localhost')) {
+          setLoadingText('Clearing unpaid POPS record')
+          const voidOP = await voidPopsOpLocal(application)
 
-  //         if (!voidOP) {
-  //           setIsLoading(false)
-  //           setPostError(true)
-  //           setErrorMessage('POPS Record found but failed to void')
-  //           return
-  //         }
-  //       } else {
-  //         setLoadingText('Clearing unpaid POPS record')
-  //         const voidOP = await voidPopsOp(application)
+          if (!voidOP) {
+            setIsLoading(false)
+            setPostError(true)
+            setErrorMessage('POPS Record found but failed to void')
+            return
+          }
+        } else {
+          setLoadingText('Clearing unpaid POPS record')
+          const voidOP = await voidPopsOp(application)
 
-  //         if (voidOP.toUpper().includes('ERROR')) {
-  //           setIsLoading(false)
-  //           setPostError(true)
-  //           setErrorMessage('POPS Record found but failed to void')
-  //           return
-  //         }
-  //       }
-  //       setIsLoading(false)
-  //       setPostError(true)
-  //       setErrorMessage(`A potential duplicate was found for ${application}; please contact IT to fix it`)
-  //       return
-  //     }
-  //   }
+          if (voidOP.toUpper().includes('ERROR')) {
+            setIsLoading(false)
+            setPostError(true)
+            setErrorMessage('POPS Record found but failed to void')
+            return
+          }
+        }
+        setIsLoading(false)
+        setPostError(true)
+        setErrorMessage(`A potential duplicate was found for ${application}; please contact IT to fix it`)
+        return
+      }
+    }
 
-  //   setLoadingText('Posting new record to POPS')
-  //   // await postPops(division, application)
+    setLoadingText('Posting new record to POPS')
+    await postPops(division, application)
 
-  //   setLoadingText(`Approving ${application}`)
-  //   const dataLocked = await lockOpData(division, application)
+    setLoadingText(`Approving ${application}`)
+    const dataLocked = await lockOpData(division, application)
 
-  //   if (dataLocked) {
-  //     if (division === 'electrical') {
-  //       setLoadingText(`Pushing ${application} for printing`)
-  //       signed = await setNewStatus(division, 'ELECTRICAL ORDER OF PAYMENT APPROVED AND SIGNED', '170', 'ELECOPAPPROVEDSIGNED', 1)
-  //       updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
-  //       if (!signed) return
+    if (dataLocked) {
+      if (division === 'electrical') {
+        setLoadingText(`Pushing ${application} for printing`)
+        signed = await setNewStatus(division, 'ELECTRICAL ORDER OF PAYMENT APPROVED AND SIGNED', '170', 'ELECOPAPPROVEDSIGNED', 1)
+        updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
+        if (!signed) return
 
-  //       forprinting = await setNewStatus(division, 'FOR ELECTRICAL ORDER OF PAYMENT PRINTING', '95', 'ELECOPPRINT', 0)
-  //       if (!forprinting) return
+        forprinting = await setNewStatus(division, 'FOR ELECTRICAL ORDER OF PAYMENT PRINTING', '95', 'ELECOPPRINT', 0)
+        if (!forprinting) return
 
-  //       updateOrderofpayment = await updateOp(division)
+        updateOrderofpayment = await updateOp(division)
 
-  //       if (updateOrderofpayment) {
-  //         setLoadingText('Adding new transaction record')
-  //         postTransaction()
-  //         setApprovedApplication(application)
-  //         setApproved(true)
-  //       }
-  //     } else if (division === 'occupancy') {
-  //       setLoadingText('Checking for building additionals')
-  //       const additionalResult = await getApi('316badad46015679b94e', application)
-  //       // bldgadditional = additionalResult > 0
+        if (updateOrderofpayment) {
+          setLoadingText('Adding new transaction record')
+          postTransaction()
+          setApprovedApplication(application)
+          setApproved(true)
+        }
+      } else if (division === 'occupancy') {
+        setLoadingText('Checking for building additionals')
+        const [additionalResult] = await getApi('316badad46015679b94e', application)
+        bldgadditional = additionalResult.result > 0
 
-  //       signed = await setNewStatus(division, 'OCCUPANCY ORDER OF PAYMENT APPROVED AND SIGNED', '172', 'OCCOPAPPROVEDSIGNED', 1)
-  //       updateDocflow(division, application, 'FOR OCCUPANCY RECOMMENDING APPROVAL')
-  //       if (bldgadditional) {
-  //         const neededToUpdate = await checkIfApprovalOccupancy(application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
-  //         if (!neededToUpdate) updateDocflow(division, application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
-  //       }
-  //       if (!signed) return
+        signed = await setNewStatus(division, 'OCCUPANCY ORDER OF PAYMENT APPROVED AND SIGNED', '172', 'OCCOPAPPROVEDSIGNED', 1)
+        updateDocflow(division, application, 'FOR OCCUPANCY RECOMMENDING APPROVAL')
+        if (bldgadditional) {
+          const neededToUpdate = await checkIfApprovalOccupancy(application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
+          if (!neededToUpdate) updateDocflow(division, application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
+        }
+        if (!signed) return
 
-  //       forprinting = await setNewStatus(division, 'APPROVED FOR PRINTING OF BUREAU OF FIRE AND ORDER OF PAYMENT', '23', 'OCORDEROFPAYMENT', 0)
-  //       if (!forprinting) return
+        forprinting = await setNewStatus(division, 'APPROVED FOR PRINTING OF BUREAU OF FIRE AND ORDER OF PAYMENT', '23', 'OCORDEROFPAYMENT', 0)
+        if (!forprinting) return
 
-  //       updateOrderofpayment = await updateOp(division)
+        updateOrderofpayment = await updateOp(division)
 
-  //       if (updateOrderofpayment) {
-  //         setLoadingText('Adding new transaction record')
-  //         postTransaction()
-  //         setApprovedApplication(application)
-  //         setApproved(true)
-  //       }
-  //     } else if (division === 'mechanical') {
-  //       setLoadingText(`Pushing ${application} for printing`)
-  //       signed = await setNewStatus(division, 'MECHANICAL ORDER OF PAYMENT APPROVED AND SIGNED', '175', 'MECHCOPAPPROVEDSIGNED', 1)
+        if (updateOrderofpayment) {
+          setLoadingText('Adding new transaction record')
+          postTransaction()
+          setApprovedApplication(application)
+          setApproved(true)
+        }
+      } else if (division === 'mechanical') {
+        setLoadingText(`Pushing ${application} for printing`)
+        signed = await setNewStatus(division, 'MECHANICAL ORDER OF PAYMENT APPROVED AND SIGNED', '175', 'MECHCOPAPPROVEDSIGNED', 1)
 
-  //       updateDocflow(division, application, 'FOR MECHANICAL ORDER OF PAYMENT APPROVAL')
-  //       if (!signed) return
+        updateDocflow(division, application, 'FOR MECHANICAL ORDER OF PAYMENT APPROVAL')
+        if (!signed) return
 
-  //       forprinting = await setNewStatus(division, 'FOR MECHANICAL ORDER OF PAYMENT PRINTING', '112', 'MECHOPPRINT', 0)
-  //       if (!forprinting) return
+        forprinting = await setNewStatus(division, 'FOR MECHANICAL ORDER OF PAYMENT PRINTING', '112', 'MECHOPPRINT', 0)
+        if (!forprinting) return
 
-  //       updateOrderofpayment = await updateOp(division)
+        updateOrderofpayment = await updateOp(division)
 
-  //       if (updateOrderofpayment) {
-  //         setLoadingText('Adding new transaction record')
-  //         postTransaction()
-  //         setApprovedApplication(application)
-  //         setApproved(true)
-  //       }
-  //     }
-  //   } else {
-  //     setIsLoading(false)
-  //     setPostError(true)
-  //     setErrorMessage('Error on posting on POPS Server, please try again')
-  //     return
-  //   }
-  //   setIsLoading(false)
-  // }
+        if (updateOrderofpayment) {
+          setLoadingText('Adding new transaction record')
+          postTransaction()
+          setApprovedApplication(application)
+          setApproved(true)
+        }
+      }
+    } else {
+      setIsLoading(false)
+      setPostError(true)
+      setErrorMessage('Error on posting on POPS Server, please try again')
+      return
+    }
+    setIsLoading(false)
+  }
 
   // const showDetailsHandlerGroup = async (division: string, items: Array<string>) => {
   //   setMultitpleSelect(true)
@@ -502,37 +472,37 @@ export default () => {
   //   await load('all')
   // }
 
-  const getApplicationById = async (division: string, application: string) => {
-    let id
-    if (division === 'electrical') {
-      ;[id] = await getApi('76cce54882da3d8015cf', application)
-    } else if (division === 'mechanical') {
-      ;[id] = await getApi('112305fae2fb0443d595', application)
-    } else if (division === 'occupancy') {
-      ;[id] = await getApi('1f2977b2ed8e267ab533', application)
-    } else if (division === 'building') {
-      ;[id] = await getApi('bbab4662f5d5054aa663', application)
-    }
-    return parseInt(id.result)
-  }
+  // const getApplicationById = async (division: string, application: string) => {
+  //   let id
+  //   if (division === 'electrical') {
+  //     ;[id] = await getApi('76cce54882da3d8015cf', application)
+  //   } else if (division === 'mechanical') {
+  //     ;[id] = await getApi('112305fae2fb0443d595', application)
+  //   } else if (division === 'occupancy') {
+  //     ;[id] = await getApi('1f2977b2ed8e267ab533', application)
+  //   } else if (division === 'building') {
+  //     ;[id] = await getApi('bbab4662f5d5054aa663', application)
+  //   }
+  //   return parseInt(id.result)
+  // }
 
-  const deleteOrderofPayment = async (division: string, id: number) => {
-    let deleteOp
-    if (division === 'electrical') {
-      deleteOp = await deleteApi('f78dea0eb4-35f307d3f4', {
-        data: id,
-      })
-    } else if (division === 'mechanical') {
-      deleteOp = await deleteApi('hEpqSx6rXJaIlw_kjnTIsPSQS', {
-        data: id,
-      })
-    } else if (division === 'occupancy') {
-      deleteOp = await deleteApi('f78dea0eb4-01d0dafaaa', {
-        data: id,
-      })
-    }
-    return deleteOp
-  }
+  // const deleteOrderofPayment = async (division: string, id: number) => {
+  //   let deleteOp
+  //   if (division === 'electrical') {
+  //     deleteOp = await deleteApi('f78dea0eb4-35f307d3f4', {
+  //       data: id,
+  //     })
+  //   } else if (division === 'mechanical') {
+  //     deleteOp = await deleteApi('hEpqSx6rXJaIlw_kjnTIsPSQS', {
+  //       data: id,
+  //     })
+  //   } else if (division === 'occupancy') {
+  //     deleteOp = await deleteApi('f78dea0eb4-01d0dafaaa', {
+  //       data: id,
+  //     })
+  //   }
+  //   return deleteOp
+  // }
 
   const setNewStatus = async (division: string, status: string, tag: string, tagword: string, approved: number) => {
     const today = await getDateTime()
@@ -625,38 +595,6 @@ export default () => {
     }
   }
 
-  // const checkPops = async (application: string) => {
-  //   const response = await getApi('check-popsrecord', application)
-  //   const result = response
-
-  //   return parseInt(result) > 0
-  // }
-
-  // const calculateAmounts = () => {
-  //   const amounts: string[] = amountList()
-  //   let gflguList: number[] = []
-  //   let gfdpwhList: number[] = []
-  //   let tfboList: number[] = []
-
-  //   for (let i = 0; i < amounts.length; i++) {
-  //     const gflgu = parseFloat(amounts[i]) * 0.8
-  //     const gfdpwh = parseFloat(amounts[i]) * 0.05
-  //     const tfbo = parseFloat(amounts[i]) * 0.15
-
-  //     const roundedGflgu = parseFloat(gflgu.toFixed(2))
-  //     const roundedGfdpwh = parseFloat(gfdpwh.toFixed(2))
-  //     const roundedTfbo = parseFloat(tfbo.toFixed(2))
-
-  //     gflguList.push(roundedGflgu)
-  //     gfdpwhList.push(roundedGfdpwh)
-  //     tfboList.push(roundedTfbo)
-  //   }
-
-  //   setGflgu(gflguList)
-  //   setGfdpwh(gfdpwhList)
-  //   setTfbo(tfboList)
-  // }
-
   const closeNotification = async (application: string) => {
     setApproved(false)
     await reloadExcept(application)
@@ -728,8 +666,8 @@ export default () => {
   }
 
   const checkIfApprovalOccupancy = async (application: string, status: string) => {
-    const response = await getApi('e9b9c18b8b915066aa83', status, application)
-    return response
+    const [response] = await getApi('e9b9c18b8b915066aa83', status, application)
+    return response.result
   }
 
   const checkCurrentPassword = async () => {
@@ -1021,7 +959,6 @@ export default () => {
         <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='slide-from-top'>
           <Row content='center' gap={1}>
             <Box curved thickness={1} color='rgba(244,244,244,0.1)' background='transparent' padding='1rem' width='100%'>
-              {/*<Padding left={2} right={2}>*/}
               <Show when={selectedApplication() !== ''}>
                 <span class='modal-card__application-number'>{selectedApplication()}</span>
               </Show>
@@ -1096,8 +1033,8 @@ export default () => {
 
               <Column padding='2rem 0 0 0'>
                 <Show when={selectedApplication() !== ''}>
-                  {/*<Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' onClick={() => approveHandler(division(), selectedApplication())} />*/}
-                  <Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' />
+                  <Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' onClick={() => approveHandler(division(), selectedApplication())} />
+                  {/*<Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' />*/}
                 </Show>
                 <Show when={selectedApplication() === ''}>
                   <span class='loading-data'>Loading data, please wait</span>
@@ -1105,7 +1042,6 @@ export default () => {
 
                 <span class='modal-card__cancel'>Click anywhere to cancel</span>
               </Column>
-              {/*</Padding>*/}
             </Box>
           </Row>
         </Modal>
