@@ -41,6 +41,12 @@ background:
 
 license:
   nub ./builtin/scripts/node/generateLicense.ts
+  
+secret:
+  nub ./builtin/scripts/node/generateRandomCharacters.ts --name 'secret key' --digit 32
+
+nonce:
+  nub ./builtin/scripts/node/generateRandomCharacters.ts --name nonce --digit 24
 
 add package:
   pnpm add {{ package }}
