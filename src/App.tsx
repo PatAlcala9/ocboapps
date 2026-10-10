@@ -9,7 +9,7 @@ export default function App() {
       {(props) => (
         <>
           <Title>Dasig App</Title>
-          <Loading fallback={<main>Loading…</main>}>{props.children}</Loading>
+          <Loading fallback={<main class='page-loading'>Rending Page</main>}>{props.children}</Loading>
         </>
       )}
     </Router>
