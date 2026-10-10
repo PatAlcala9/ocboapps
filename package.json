@@ -13,9 +13,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@solidjs/diagnostics": "^2.0.0-rc.13",
+    "@solidjs/diagnostics": "^2.0.0-rc.14",
     "@solidjs/testing-library": "^1.0.0-beta.3",
-    "@solidjs/vite-plugin": "^3.0.0-next.47",
+    "@solidjs/vite-plugin": "^3.0.0-next.48",
     "@testing-library/jest-dom": "^7.0.1",
     "@types/node": "^26.6.4",
     "@types/yargs": "^17.0.35",
@@ -25,7 +25,7 @@
     "oxlint": "~1.87.0",
     "sass-embedded": "^1.105.1",
     "typescript": "^7.0.2",
-    "vite": "^8.3.3",
+    "vite": "^8.3.4",
     "vitest": "^5.0.3"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "@rabbit-company/xchacha20": "^2.3.0",
     "@solidjs/meta": "^1.0.0-next.2",
     "@solidjs/router": "2.0.0-next.28",
-    "@solidjs/web": "^2.0.0-rc.13",
+    "@solidjs/web": "^2.0.0-rc.14",
     "consola": "^3.4.2",
     "dayjs": "^1.11.23",
     "jspdf": "^4.2.1",
@@ -45,7 +45,7 @@
     "qrcode": "^1.5.4",
     "sharp": "^0.35.5",
     "solid-icons": "^1.2.0",
-    "solid-js": "^2.0.0-rc.13",
+    "solid-js": "^2.0.0-rc.14",
     "uuid": "^14.0.2",
     "yargs": "^18.2.0"
   }
