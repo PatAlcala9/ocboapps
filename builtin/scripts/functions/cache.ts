@@ -1,32 +1,30 @@
-import site from 'configs/site.config.mts'
-import security from 'configs/security.config.mts'
-import { xchacha20poly1305 } from '@noble/ciphers/chacha.js';
+import site from 'configs/site.config'
+import security from 'configs/security.config'
+import { xchacha20poly1305 } from '@noble/ciphers/chacha.js'
 
 const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 
 const bytesToHex = (bytes: Uint8Array<ArrayBuffer>) => {
-  return Array.from(bytes, byte =>
-    byte.toString(16).padStart(2, "0")
-  ).join("");
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
 const hexToBytes = (hex: string) => {
-  if (typeof hex !== "string") {
-    throw new TypeError("hex must be a string");
+  if (typeof hex !== 'string') {
+    throw new TypeError('hex must be a string')
   }
 
   if (!/^[0-9a-fA-F]*$/.test(hex) || hex.length % 2 !== 0) {
-    throw new Error("Invalid hex string");
+    throw new Error('Invalid hex string')
   }
 
-  const bytes = new Uint8Array(hex.length / 2);
+  const bytes = new Uint8Array(hex.length / 2)
 
   for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+    bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16)
   }
 
-  return bytes;
+  return bytes
 }
 
 const encryptXCP = (text: string) => {
@@ -45,7 +43,7 @@ const decryptXCP = (encrypted: string) => {
   const nonceBytes = encoder.encode(security.cache.nonce)
 
   const itemBytes = hexToBytes(encrypted)
-  const chacha = xchacha20poly1305(keyBytes, nonceBytes);
+  const chacha = xchacha20poly1305(keyBytes, nonceBytes)
   const decrypted = chacha.decrypt(itemBytes)
   const decryptedString = decoder.decode(decrypted)
 

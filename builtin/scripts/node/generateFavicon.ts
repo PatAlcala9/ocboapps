@@ -2,7 +2,7 @@ import { consola } from "consola";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import sharp from "sharp";
-import site from 'configs/site.config.mts'
+import site from 'configs/site.config'
 
 try {
 	const dirPath = path.resolve("./public");

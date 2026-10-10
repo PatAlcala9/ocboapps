@@ -1,8 +1,8 @@
 import { ofetch } from 'ofetch'
 import dayjs from 'dayjs'
 import { encrypt } from '@dasig/rsa'
-import api from 'configs/api.config.mts'
-import security from 'configs/security.config.mts'
+import api from 'configs/api.config'
+import security from 'configs/security.config'
 
 const TOKEN_NAME = security.token.name
 const TOKEN_EXPIRATION = security.token.expiration

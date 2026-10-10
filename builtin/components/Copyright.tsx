@@ -1,4 +1,4 @@
-import site from 'configs/site.config.mts'
+import site from 'configs/site.config'
 
 export default () => {
   return (

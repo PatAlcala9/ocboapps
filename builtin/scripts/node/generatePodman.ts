@@ -2,7 +2,7 @@ import { consola } from "consola";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import os from "os";
-import deployment from 'configs/deployment.config.mts'
+import deployment from 'configs/deployment.config'
 
 const podmanContent = `[Unit]
 Description=Dasig

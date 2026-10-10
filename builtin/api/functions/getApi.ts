@@ -1,5 +1,5 @@
 import { ofetch } from 'ofetch'
-import api from 'configs/api.config.mts'
+import api from 'configs/api.config'
 
 const URL = api.backend.url
 const RETRY = api.request.retries

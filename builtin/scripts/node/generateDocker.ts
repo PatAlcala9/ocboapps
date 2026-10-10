@@ -2,7 +2,7 @@ import { consola } from 'consola'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { fileURLToPath } from 'url'
-import deployment from 'configs/deployment.config.mts'
+import deployment from 'configs/deployment.config'
 
 const dockerfileContent = `FROM node:${deployment.container.node_version}
 WORKDIR /app

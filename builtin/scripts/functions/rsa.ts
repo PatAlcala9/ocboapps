@@ -1,4 +1,4 @@
-import security from 'configs/security.config.mts'
+import security from 'configs/security.config'
 
 const PUBLIC_KEY = security.rsa.public_key
 
