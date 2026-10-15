@@ -40,13 +40,13 @@ background:
   nub ./builtin/scripts/node/optimizeBackground.ts
 
 license:
-  nub ./builtin/scripts/node/generateLicense.ts
+  ./builtin/tools/generate-license ./configs/site.config.json
   
 secret:
-  nub ./builtin/scripts/node/generateRandomCharacters.ts --name 'secret key' --digit 32
+  ./builtin/tools/generate-random-characters 'secret key' 32
 
 nonce:
-  nub ./builtin/scripts/node/generateRandomCharacters.ts --name nonce --digit 24
+  ./builtin/tools/generate-random-characters nonce 24
 
 add package:
   pnpm add {{ package }}
