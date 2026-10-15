@@ -6,6 +6,7 @@ interface Props {
   name: string
   description: string
   site: string
+  imageSize?: number
 }
 
 export default (props: Props) => {
@@ -13,7 +14,7 @@ export default (props: Props) => {
     <Link to={props.site} replace>
       <section class='com-card'>
         <Column>
-          <Image data-testid='image' name={props.image} size={140} />
+          <Image data-testid='image' name={props.image} size={props.imageSize || 140} />
           <span class='com-card__name'>{props.name}</span>
           <span class='com-card__description'>{props.description}</span>
         </Column>
