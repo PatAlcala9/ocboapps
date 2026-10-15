@@ -11,7 +11,7 @@ const bytesToHex = (bytes: Uint8Array<ArrayBuffer>) => {
 
 const hexToBytes = (hex: string) => {
   if (typeof hex !== 'string') {
-    throw new TypeError('hex must be a string')
+    throw new TypeError('Hex must be a string')
   }
 
   if (!/^[0-9a-fA-F]*$/.test(hex) || hex.length % 2 !== 0) {

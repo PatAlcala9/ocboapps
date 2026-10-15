@@ -24,7 +24,7 @@ export default async (api: string, body: { [key: string]: unknown }) => {
       headers: {
         Accept: 'application/json',
         'Cache-Control': 'no-cache',
-        'Dasig-Token': hash,
+        'OCBO-Token': hash,
         'Post-Id': postid,
       },
       retry: RETRY,

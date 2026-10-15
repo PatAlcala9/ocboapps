@@ -39,6 +39,8 @@ export const encrypt = async (text: string): Promise<string> => {
   )
 
   const bytes = new Uint8Array(encrypted)
+  const array = btoa(String.fromCharCode(...bytes))
+  const arrayFixed = array.replace(/\//g, '~')
 
-  return btoa(String.fromCharCode(...bytes))
+  return arrayFixed
 }
