@@ -16,7 +16,7 @@ type CacheType = {
 
 const security = {
   token: {
-    name: 'ocboapps', // output: dasig-token
+    name: 'ocbo', // output: dasig-token
     encryption: 'rsa',
     expiration: 9, // seconds
   } satisfies TokenType,
