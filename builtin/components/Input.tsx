@@ -11,10 +11,10 @@ interface Props {
   width?: string
   size?: number
   center?: boolean
-  list?: string
   onKeyDown?: (event: KeyboardEvent) => void
   font?: string
   fontWeight?: number
+  corner?: 'flat' | 'rounded' | 'curved'
 }
 
 export default (props: Props) => {
@@ -33,8 +33,7 @@ export default (props: Props) => {
             placeholder={props.placeholder}
             onInput={(event) => props.onChange(event.currentTarget.value)}
             onKeyDown={props.onKeyDown}
-            style={`width: ${props.width ? props.width : 'auto'}; font-size: ${props.size ? props.size : '1'}rem; text-align: ${props.center ? 'center' : 'left'}; font-family: ${props.font ? props.font : 'inherit'}; font-weight: ${props.fontWeight ? props.fontWeight : 400};`}
-            list={props.list}
+            style={`width: ${props.width ? props.width : 'auto'}; font-size: ${props.size ? props.size : '1'}rem; text-align: ${props.center ? 'center' : 'left'}; font-family: ${props.font ? props.font : 'inherit'}; font-weight: ${props.fontWeight ? props.fontWeight : 400}; border-radius: ${props.corner === 'flat' ? '0' : props.corner === 'rounded' ? '2rem' : '0.5rem'};`}
           />
         </Column>
       </section>

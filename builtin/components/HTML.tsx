@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default (props: Props) => {
-  const images = import.meta.glob('/images/*.{avif,webp}', {
+  const images = import.meta.glob('/images/*.avif', {
     eager: true,
     query: '?url',
     import: 'default',
@@ -16,17 +16,15 @@ export default (props: Props) => {
 
   const getSources = () => {
     if (typeof props.preloadBackground === 'string') {
-      const webp = images[`/images/${props.preloadBackground}.webp`]
       const avif = images[`/images/${props.preloadBackground}.avif`]
-      return { webp, avif }
+      return { avif }
     }
     return {
-      webp: '/images/background.webp',
       avif: '/images/background.avif',
     }
   }
 
-  const { webp, avif } = getSources()
+  const { avif } = getSources()
 
   return (
     <html lang='en'>
@@ -52,7 +50,6 @@ export default (props: Props) => {
         </Show>
         <Show when={props.preloadBackground}>
           <link rel='preload' href={avif} as='image' type='image/avif' />
-          <link rel='preload' href={webp} as='image' type='image/webp' />
         </Show>
         <HydrationScript />
       </head>

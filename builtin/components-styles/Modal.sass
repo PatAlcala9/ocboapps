@@ -23,26 +23,56 @@
 .bounce
   animation: modalBounce 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards
 
+.appear-from-top
+  animation: modalAppearFromTop 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards
+
 .slide-from-top
   animation: modalSlideFromTop 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards
 
+.appear-from-right
+  animation: modalAppearFromRight 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards
+
+.slide-from-right
+  animation: modalSlideFromRight 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards
+
 @keyframes modalBounce
   0%
-    transform: scale(0.24) translate3d(0, -50px, 0)
-  45%
-    transform: scale(0.84) translate3d(0, 10px, 0)
-  65%
-    transform: scale(0.72) translate3d(0, -5px, 0)
-  85%
-    transform: scale(0.824) translate3d(0, 5px, 0)
+    transform: scale(0.75) translate3d(0, 30px, 0)
+  55%
+    transform: scale(1.04) translate3d(0, -8px, 0)
+  75%
+    transform: scale(0.98) translate3d(0, 4px, 0)
   100%
-    transform: scale(0.8) translate3d(0, 0, 0)
+    transform: scale(1) translate3d(0, 0, 0)
   
-  
-@keyframes modalSlideFromTop
+@keyframes modalAppearFromTop
   0%
     opacity: 0
     transform: translate3d(0, -50px, 0)
+  100%
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+
+@keyframes modalSlideFromTop
+  0%
+    opacity: 0
+    transform: translate3d(0, -50vh, 0)
+  100%
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+
+@keyframes modalAppearFromRight
+  0%
+    opacity: 0
+    transform: translate3d(50px, 0, 0)
+  100%
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+
+@keyframes modalSlideFromRight
+  0%
+    opacity: 0
+    transform: translate3d(50vw, 0, 0)
   100%
     opacity: 1
     transform: translate3d(0, 0, 0)

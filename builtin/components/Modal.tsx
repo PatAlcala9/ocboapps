@@ -1,6 +1,5 @@
+import { type Element, Show } from 'solid-js'
 import '../components-styles/Modal.sass'
-import type { Element } from 'solid-js'
-import { Show } from 'solid-js'
 
 interface Props {
   children: Element
@@ -10,7 +9,7 @@ interface Props {
   opacity?: number
   trigger: boolean
   width?: string
-  animation?: 'bounce' | 'slide-from-top'
+  animation?: 'bounce' | 'appear-from-top' | 'slide-from-top' | 'appear-from-right' | 'slide-from-right'
 }
 
 export default (props: Props) => {
