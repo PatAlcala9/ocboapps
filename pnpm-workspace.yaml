@@ -5,3 +5,5 @@ minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - '@types/node@26.6.4'
   - vite@8.3.2
+  - '@solidjs/babel-plugin@2.0.0-rc.14'
+  - '@solidjs/vite-plugin@3.0.0-next.48'
