@@ -216,6 +216,7 @@ export default () => {
                     onKeyDown={(event: KeyboardEvent) => {
                       if (event.key === 'Enter') login()
                     }}
+                    corner='curved'
                   />
 
                   <Padding top={2}>

@@ -15,7 +15,7 @@ import { _listElectricalApplications, _listElectricalNames, _listMechanicalAppli
 import './approval.sass'
 
 import EsignCard from 'components/EsignCard'
-import api from 'configs/api.config.mts'
+import api from 'configs/api.config'
 
 export default () => {
   const PESO = import.meta.env.VITE_PESO
@@ -438,7 +438,7 @@ export default () => {
 
   const checkStatusPopsLocal = async (application: string) => {
     const [response] = await getApi('1431ee20d8f6a0a03c74', application)
-    return response
+    return response.result
   }
 
   const statusPopsOp = async (application: string) => {
@@ -536,7 +536,8 @@ export default () => {
     let response
 
     if (division === 'electrical') {
-      ;[response] = await getApi('935758ca840c20723c72', application)
+      // ;[response] = await getApi('935758ca840c20723c72', application)
+      console.log(application)
     } else if (division === 'mechanical') {
       ;[response] = await getApi('7cff1c47fd874ce8eefc', application)
     } else if (division === 'occupancy') {
