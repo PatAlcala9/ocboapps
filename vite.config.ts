@@ -1,6 +1,7 @@
 import { fileRoutes } from 'filesystem-routing/vite'
 import { defineConfig } from 'vitest/config'
 import solid from '@solidjs/vite-plugin'
+import { compression } from 'vite-plugin-compression2'
 
 export default defineConfig({
   resolve: {
@@ -15,6 +16,9 @@ export default defineConfig({
     // modules the fileRoutes plugin emits (their ids end in a query string).
     solid({ start: { node: true }, ssr: true, extensions: ['.jsx', '.tsx'], diagnostics: true }),
     fileRoutes({ types: true }),
+    compression({
+      algorithms: ['brotliCompress'],
+    }),
   ],
   server: {
     port: 3000,
