@@ -32,6 +32,7 @@
       "images/*": ["images/*"],
       "stores/*": ["src/stores/*"],
       "cache/*": ["src/cache/*"],
+      "services": ["src/services/index.ts"],
     },
   },
   "include": ["src", "builtin", "configs", "images"],
