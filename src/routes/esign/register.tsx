@@ -5,7 +5,7 @@ import { IoChevronBack } from 'solid-icons/io'
 import { Box, Button, Column, Link, Padding, Page, Row, Image, Clickable, Combobox, Input, File, Background, Modal } from '@dasig'
 import { getApi, postApi } from '@dasig/api'
 import { md5, sha384 } from '@dasig/hash'
-import { checkConnection, checkPage, getDateTime, securePassword } from '../../utils'
+import { checkConnection, checkPage, getDateTime, securePassword } from 'services'
 import { _headName } from 'stores/head'
 import { $assessor_list } from 'cache/list'
 import { $head } from 'cache/head'
@@ -117,6 +117,11 @@ export default () => {
     await checkRegistered(head)
   }
 
+  const setApproverRole = () => {
+    setRole('APPROVER')
+    checkRegistered($head.get()!)
+  }
+
   const updateRegistered = async () => {
     const registered = await getAssessors()
     sessionStorage.setItem('assessors', JSON.stringify([...registered]))
@@ -187,7 +192,7 @@ export default () => {
               <Show when={role() !== 'APPROVER'}>
                 <Clickable
                   onClick={() => {
-                    setRole('APPROVER')
+                    setApproverRole()
                   }}
                 >
                   <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>

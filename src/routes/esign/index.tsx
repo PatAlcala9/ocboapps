@@ -4,7 +4,7 @@ import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
 import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable } from '@dasig'
 import { getApi } from '@dasig/api'
-import { checkConnection, setPage } from '../../utils'
+import { checkConnection, setPage } from 'services'
 import { _page } from 'stores/page'
 import './index.sass'
 

@@ -32,7 +32,7 @@ import {
   _type,
   _units,
 } from 'stores/pdfinfo.ts'
-import { checkConnection, createPdfElectrical, createPdfOccupancy, createPdfMechanical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage } from '../../utils'
+import { checkConnection, createPdfElectrical, createPdfOccupancy, createPdfMechanical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage } from 'services'
 import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
 import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 import EsignCard from 'components/EsignCard.tsx'

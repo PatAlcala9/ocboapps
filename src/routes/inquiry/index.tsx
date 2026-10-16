@@ -1,7 +1,7 @@
 import { createSignal, onSettled } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
-import { Page, Background, Footer, Image, Row, Copyright, Padding, Input, Clickable, Box, Modal } from '@dasig'
-import { setPage } from '../../utils'
+import { Page, Background, Footer, Image, Row, Copyright, Padding, Input, Clickable, Box, Modal, Column } from '@dasig'
+import { setPage } from 'services'
 import { _page } from 'stores/page'
 import './index.sass'
 import { getApi } from '@dasig/api'
@@ -76,11 +76,13 @@ export default () => {
           </Clickable>
         </Row>
 
-        <Clickable onClick={() => setResult(true)}>
-          <Image name='inquiry' size={140} />
-        </Clickable>
-        <h1 class='title'>OCBO Inquiry</h1>
-        <Input placeholder='Enter application to inquire' value={inquire()} onChange={setInquire} size={1.25} width='460px' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
+        <Column>
+          <Clickable onClick={() => setResult(true)}>
+            <Image name='inquiry' size={140} />
+          </Clickable>
+          <h1 class='title'>OCBO Inquiry</h1>
+          <Input placeholder='Enter application to inquire' value={inquire()} onChange={setInquire} size={1.25} width='460px' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
+        </Column>
 
         <Footer margin={1}>
           <Row content='split'>

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { createSignal, Switch, Match, onSettled } from 'solid-js'
 import { Column, Display, Image, Padding, Page, Row, Background, Footer, Copyright } from '@dasig'
-import { checkConnection, getDateTime } from '../utils'
+import { checkConnection, getDateTime } from 'services'
 import Card from 'components/Card'
 import './index.sass'
 

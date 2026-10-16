@@ -3,7 +3,7 @@ import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
 import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable, Input, Combobox, Background } from '@dasig'
 import { getApi } from '@dasig/api'
-import { checkConnection, securePassword, checkPage, setPage } from '../../utils'
+import { checkConnection, securePassword, checkPage, setPage } from 'services'
 import { _headName, _headPassword } from 'stores/head'
 import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
 import { $head, $head_id } from 'cache/head'
@@ -52,6 +52,7 @@ export default () => {
       dbpassword = dbpass.result
     }
     const hashPassword = await securePassword(password())
+    console.log(hashPassword)
 
     if (dbpassword === '0') {
       setErrorMessage('Not yet registered. Please proceed to Registration.')

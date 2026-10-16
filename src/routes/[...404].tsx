@@ -3,7 +3,7 @@ import { onSettled, createSignal, Switch, Match } from 'solid-js'
 import type { RouteDefinition } from '@solidjs/router'
 import { httpStatus } from '@solidjs/web'
 import { Column, Image, Padding, Page, Background, Button } from '@dasig'
-import { checkConnection, getDateTime } from '../utils'
+import { checkConnection, getDateTime } from 'services'
 import './index.sass'
 
 export const route = {

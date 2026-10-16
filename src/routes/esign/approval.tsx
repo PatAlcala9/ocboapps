@@ -8,7 +8,7 @@ import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
 import { Box, Button, Clickable, Column, Input, Modal, Padding, Page, Row, Image, Background, File } from '@dasig'
 import { getApi, postApi, deleteApi } from '@dasig/api'
-import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval, checkPage, voidPopsApi, statusPopsApi } from '../../utils'
+import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval, checkPage, voidPopsApi, statusPopsApi } from 'services'
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
 import { $head_id } from 'cache/head'
 import { _listElectricalApplications, _listElectricalNames, _listMechanicalApplications, _listMechanicalNames, _listOccupancyApplications, _listOccupancyNames } from 'stores/prefetch'
@@ -868,7 +868,7 @@ export default () => {
         </Modal>
       </div>
 
-      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={0.8} width='32rem' animation='slide-from-top'>
+      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={0.8} width='32rem' animation='appear-from-top'>
         <Padding top={1} bottom={1} left={0.1}>
           <section class='config'>
             <div class='config__row'>
@@ -957,7 +957,7 @@ export default () => {
       </div>
 
       <div onClick={closeInfo}>
-        <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='slide-from-top'>
+        <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='appear-from-top'>
           <Row content='center' gap={1}>
             <Box curved thickness={1} color='rgba(244,244,244,0.1)' background='transparent' padding='1rem' width='100%'>
               <Show when={selectedApplication() !== ''}>
