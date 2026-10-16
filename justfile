@@ -22,10 +22,10 @@ update-latest:
   pnpm update -i --latest
 
 dock:
-  nub ./builtin/scripts/node/generateDocker.ts && docker compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
+  ./builtin/tools/generate-docker ./configs/deployment.config.json && docker compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
 
 pod:
-  nub ./builtin/scripts/node/generateDocker.ts && nub ./builtin/scripts/node/generatePodman.ts && podman-compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
+  ./builtin/tools/generate-docker ./configs/deployment.config.json && ./builtin/tools/generate-podman ./configs/deployment.config.json && podman-compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
 
 favicon:
   nub ./builtin/scripts/node/generateFavicon.ts
