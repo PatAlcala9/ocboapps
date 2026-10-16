@@ -1,10 +1,10 @@
 {
   "website": {
-    "name": "Dasig",
-    "short_name": "Dasig",
-    "description": "A framework for pure-speed applications",
-    "developer": "Pat Alcala",
-    "designer": "Pat Alcala"
+    "name": "Office of the City Building Official Applications",
+    "short_name": "OCBO Apps",
+    "description": "An Online Portal to Office of the City Building Official Applications",
+    "developer": "Patrick Alvin Alcala",
+    "designer": "Patrick Alvin Alcala"
   },
 
   "font": {
@@ -12,7 +12,7 @@
   },
 
   "copyright": {
-    "name": "Pat Alcala",
+    "name": "Office of the City Building Official",
     "year": 2026,
     "color": "#ffffffff"
   },

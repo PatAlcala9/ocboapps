@@ -1,6 +1,6 @@
 {
   "token": {
-    "name": "dasig",
+    "name": "ocbo",
     "encryption": "rsa",
     "expiration": 9
   },
