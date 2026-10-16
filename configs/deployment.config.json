@@ -1,0 +1,7 @@
+{
+  "container": {
+    "name": "dasig",
+    "port": 9000,
+    "node_version": "24.20-alpine"
+  }
+}

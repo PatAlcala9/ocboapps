@@ -1,0 +1,11 @@
+{
+  "token": {
+    "name": "dasig",
+    "encryption": "rsa",
+    "expiration": 9
+  },
+
+  "cache": {
+    "encrypt": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "website": {
+    "name": "Dasig",
+    "short_name": "Dasig",
+    "description": "A framework for pure-speed applications",
+    "developer": "Pat Alcala",
+    "designer": "Pat Alcala"
+  },
+
+  "font": {
+    "local": false
+  },
+
+  "copyright": {
+    "name": "Pat Alcala",
+    "year": 2026,
+    "color": "#ffffffff"
+  },
+
+  "license": {
+    "identifier": "mit"
+  },
+
+  "cache": {
+    "enabled": true
+  }
+}
