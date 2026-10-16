@@ -9,8 +9,8 @@ type RequestType = {
 
 const api = {
   backend: {
-    url: 'http://localhost:4000/api/',
-    // url: 'https://ocboapps.davaocity.gov.ph/esign-server/api/',
+    // url: 'http://localhost:4000/api/',
+    url: 'https://ocboapps.davaocity.gov.ph/esign-server/api/',
   } satisfies BackendType,
 
   request: {
