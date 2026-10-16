@@ -7,7 +7,6 @@
 
     // Modules
     "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "module": "ESNext",
@@ -18,22 +17,23 @@
     "strict": true,
     "skipLibCheck": true,
     "types": ["vite/client", "@testing-library/jest-dom/vitest"],
-    "baseUrl": ".",
+
+    // Custom Paths
     "paths": {
-      "@dasig": ["builtin/index.ts"],
-      "@dasig/api": ["builtin/api/index.ts"],
-      "@dasig/store": ["builtin/scripts/functions/store.ts"],
-      "@dasig/cache": ["builtin/scripts/functions/cache.ts"],
-      "@dasig/uuid": ["builtin/scripts/functions/uuid.ts"],
-      "@dasig/hash": ["builtin/scripts/functions/hash.ts"],
-      "@dasig/rsa": ["builtin/scripts/functions/rsa.ts"],
-      "configs/*": ["configs/*"],
-      "components/*": ["src/components/*"],
-      "images/*": ["images/*"],
-      "stores/*": ["src/stores/*"],
-      "cache/*": ["src/cache/*"],
-      "services": ["src/services/index.ts"],
-    },
+      "@dasig": ["./builtin/index.ts"],
+      "@dasig/api": ["./builtin/api/index.ts"],
+      "@dasig/store": ["./builtin/scripts/functions/store.ts"],
+      "@dasig/cache": ["./builtin/scripts/functions/cache.ts"],
+      "@dasig/uuid": ["./builtin/scripts/functions/uuid.ts"],
+      "@dasig/hash": ["./builtin/scripts/functions/hash.ts"],
+      "@dasig/rsa": ["./builtin/scripts/functions/rsa.ts"],
+      "configs/*": ["./configs/*"],
+      "components/*": ["./src/components/*"],
+      "images/*": ["./images/*"],
+      "stores/*": ["./src/stores/*"],
+      "cache/*": ["./src/cache/*"],
+      "services": ["./src/services/index.ts"]
+    }
   },
-  "include": ["src", "builtin", "configs", "images"],
+  "include": ["src", "builtin", "configs", "images"]
 }

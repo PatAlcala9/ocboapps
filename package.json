@@ -1,41 +1,24 @@
 {
   "name": "ocboapps",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
+  "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node --env-file-if-exists=.env server.js",
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview",
-    "test": "vitest",
-    "lint": "oxlint -c oxlint.config.mjs src"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@solidjs/diagnostics": "^2.0.0-rc.15",
-    "@solidjs/testing-library": "^1.0.0-beta.3",
-    "@solidjs/vite-plugin": "^3.0.0-next.50",
-    "@testing-library/jest-dom": "^7.0.1",
-    "@types/node": "^26.6.5",
-    "@types/yargs": "^17.0.35",
-    "eslint-plugin-solid": "~0.18.1",
-    "filesystem-routing": "0.4.0",
-    "jsdom": "^30.1.2",
-    "oxlint": "~1.88.0",
-    "sass-embedded": "^1.105.1",
-    "typescript": "^7.0.2",
-    "vite": "^8.3.4",
-    "vite-plugin-compression2": "^2.5.3",
-    "vitest": "^5.0.4"
+    "dev": "vp dev",
+    "build": "vp build",
+    "serve": "vp preview",
+    "test": "vp test",
+    "lint": "vp lint src",
+    "start": "node --env-file-if-exists=.env.local server.js"
   },
   "dependencies": {
-    "@kobalte/core": "^2.0.0-alpha.2",
+    "@kobalte/core": "2.0.0-alpha.3",
     "@noble/ciphers": "^2.4.0",
     "@noble/hashes": "^2.4.0",
     "@rabbit-company/xchacha20": "^2.3.0",
     "@solidjs/meta": "^1.0.0-next.2",
-    "@solidjs/router": "2.0.0-next.28",
+    "@solidjs/router": "^2.0.0-next.40",
     "@solidjs/web": "^2.0.0-rc.15",
     "consola": "^3.4.2",
     "dayjs": "^1.11.23",
@@ -49,5 +32,28 @@
     "solid-js": "^2.0.0-rc.15",
     "uuid": "^14.0.3",
     "yargs": "^18.2.0"
+  },
+  "devDependencies": {
+    "@solidjs/diagnostics": "^2.0.0-rc.15",
+    "@solidjs/testing-library": "^1.0.0-beta.3",
+    "@solidjs/vite-plugin": "^3.0.0-next.50",
+    "@testing-library/jest-dom": "^7.0.0",
+    "eslint-plugin-solid": "~0.18.1",
+    "filesystem-routing": "0.4.0",
+    "jsdom": "^30.1.2",
+    "oxlint": "^1.88.0",
+    "sass-embedded": "^1.105.1",
+    "typescript": "^7.0.2",
+    "vite": "catalog:",
+    "vite-plugin-compression2": "^2.5.3",
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.11.2",
+      "onFail": "download"
+    }
   }
 }

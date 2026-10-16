@@ -1,9 +1,58 @@
+# pnpm settings for this project (honored even for a single-package project —
+# this file marks the workspace root). The Solid packages release in lockstep
+# and templates track them closely; exclude the whole family from any
+# minimumReleaseAge policy so fresh Solid releases install immediately.
+#
+# NOTE: this exclusion is a temporary measure for the Solid 2.0 prerelease
+# cycle (frequent lockstep releases where new floors would otherwise fail
+# under an age policy). It should be removed once Solid 2.0 is stable —
+# at that point a caret range nearly always contains an age-satisfying
+# release and the policy can protect these packages like any other.
+minimumReleaseAgeExclude:
+  - solid-js
+  - '@solidjs/*'
+  - filesystem-routing
+  - '@vitest/browser-preview@5.0.5'
+  - '@vitest/browser@5.0.5'
+  - '@vitest/mocker@5.0.5'
+  - '@vitest/pretty-format@5.0.5'
+  - '@vitest/snapshot@5.0.5'
+  - '@vitest/spy@5.0.5'
+  - '@vitest/ui@5.0.5'
+  - '@vitest/utils@5.0.5'
+  - '@voidzero-dev/vite-plus-core@1.3.0'
+  - '@voidzero-dev/vite-plus-darwin-arm64@1.3.0'
+  - '@voidzero-dev/vite-plus-darwin-x64@1.3.0'
+  - '@voidzero-dev/vite-plus-linux-arm64-gnu@1.3.0'
+  - '@voidzero-dev/vite-plus-linux-arm64-musl@1.3.0'
+  - '@voidzero-dev/vite-plus-linux-x64-gnu@1.3.0'
+  - '@voidzero-dev/vite-plus-linux-x64-musl@1.3.0'
+  - '@voidzero-dev/vite-plus-win32-arm64-msvc@1.3.0'
+  - '@voidzero-dev/vite-plus-win32-x64-msvc@1.3.0'
+  - vite-plus@1.3.0
+  - vitest@5.0.5
+  - '@kobalte/core@2.0.0-alpha.3'
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.3.0
+  vitest: 5.0.5
+  vite-plus: 1.3.0
+overrides:
+  vite@*: 'catalog:'
+  vitest@*: 'catalog:'
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: '*'
+    vitest: '*'
 allowBuilds:
   '@parcel/watcher': true
   core-js: true
-# minimumReleaseAge: 10080
-minimumReleaseAgeExclude:
-  - '@types/node@26.6.4'
-  - vite@8.3.2
-  - '@solidjs/babel-plugin@2.0.0-rc.14'
-  - '@solidjs/vite-plugin@3.0.0-next.48 || 3.0.0-next.50'
+permissions:
+  '@solidjs/diagnostics':
+    skills: false
+  '@solidjs/web':
+    skills: false
+  solid-js:
+    skills: false
