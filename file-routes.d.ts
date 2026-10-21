@@ -35,15 +35,21 @@ declare module "virtual:file-routes" {
   /** The flat route manifest, in scan order. */
   const routes: readonly [
     {
-      path: "/esign/";
+      path: "/*404";
       page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/esign/index")>;
+      $component: FileRouteLazyRef<typeof import("./src/routes/[...404]")>;
+      $$route: FileRouteEagerRef<typeof import("./src/routes/[...404]")>;
+    },
+    {
+      path: "/esign/approval";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/approval")>;
       $$route?: undefined;
     },
     {
-      path: "/esign/register";
+      path: "/esign/";
       page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/esign/register")>;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/index")>;
       $$route?: undefined;
     },
     {
@@ -53,9 +59,15 @@ declare module "virtual:file-routes" {
       $$route?: undefined;
     },
     {
-      path: "/esign/approval";
+      path: "/esign/printing";
       page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/esign/approval")>;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/printing")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/esign/register";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/register")>;
       $$route?: undefined;
     },
     {
@@ -65,10 +77,10 @@ declare module "virtual:file-routes" {
       $$route?: undefined;
     },
     {
-      path: "/*404";
+      path: "/inquiry/";
       page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/[...404]")>;
-      $$route: FileRouteEagerRef<typeof import("./src/routes/[...404]")>;
+      $component: FileRouteLazyRef<typeof import("./src/routes/inquiry/index")>;
+      $$route?: undefined;
     }
   ];
   export default routes;
@@ -100,6 +112,14 @@ declare module "virtual:file-routes" {
       children?: undefined;
     },
     {
+      path: "/inquiry/";
+      id: "/inquiry/";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/inquiry/index")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
       path: "/esign/login";
       id: "/esign/login";
       page: true;
@@ -112,6 +132,14 @@ declare module "virtual:file-routes" {
       id: "/esign/approval";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/esign/approval")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/esign/printing";
+      id: "/esign/printing";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/esign/printing")>;
       $$route?: undefined;
       children?: undefined;
     },
