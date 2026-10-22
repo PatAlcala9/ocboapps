@@ -1,5 +1,5 @@
 import { type Element, Show } from 'solid-js'
-import site from 'configs/site.config'
+import site from 'configs/site.config.json'
 import { HydrationScript } from '@solidjs/web'
 
 interface Props {

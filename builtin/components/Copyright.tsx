@@ -1,4 +1,4 @@
-import site from 'configs/site.config'
+import site from 'configs/site.config.json'
 
 export default () => {
   return (
