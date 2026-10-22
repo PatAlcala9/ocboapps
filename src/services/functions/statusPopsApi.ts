@@ -1,5 +1,5 @@
 import { ofetch } from 'ofetch'
-import api from 'configs/api.config'
+import api from 'configs/api.config.json'
 
 const API = api.backend.url
 
