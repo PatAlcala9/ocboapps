@@ -31,13 +31,13 @@ favicon:
   nub ./builtin/scripts/node/generateFavicon.ts
 
 logo size:
-  nub ./builtin/scripts/node/optimizeLogo.ts --size {{ size }}
+  ./builtin/tools/optimize-image logo {{ size }}
 
 image name size:
-  nub ./builtin/scripts/node/optimizeImage.ts --name {{ name }} --size {{ size }}
+  ./builtin/tools/optimize-image {{ name }} {{ size }}
 
 background:
-  nub ./builtin/scripts/node/optimizeBackground.ts
+  ./builtin/tools/optimize-image background 0
 
 license:
   ./builtin/tools/generate-license ./configs/site.config.json
