@@ -15,7 +15,7 @@ import { _listElectricalApplications, _listElectricalNames, _listMechanicalAppli
 import './approval.sass'
 
 import EsignCard from 'components/EsignCard'
-import api from 'configs/api.config'
+import api from 'configs/api.config.json'
 
 export default () => {
   const PESO = import.meta.env.VITE_PESO
