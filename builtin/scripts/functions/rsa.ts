@@ -1,6 +1,4 @@
-import security from 'configs/security.config'
-
-const PUBLIC_KEY = security.rsa.public_key
+const PUBLIC_KEY = import.meta.env.VITE_RSA_PUBLIC_KEY
 
 const pemToArrayBuffer = (pem: string): ArrayBuffer => {
   const base64 = pem
