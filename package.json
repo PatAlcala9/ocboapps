@@ -10,7 +10,7 @@
     "serve": "vp preview",
     "test": "vp test",
     "lint": "vp lint src",
-    "start": "node --env-file-if-exists=.env.local server.js"
+    "start": "node --env-file-if-exists=.env.local ./dist/server/node.js"
   },
   "dependencies": {
     "@kobalte/core": "2.0.0-alpha.3",
@@ -19,7 +19,7 @@
     "@rabbit-company/xchacha20": "^2.3.0",
     "@solidjs/meta": "^1.0.0-next.2",
     "@solidjs/router": "^2.0.0-next.41",
-    "@solidjs/web": "^2.0.0-rc.16",
+    "@solidjs/web": "^2.0.0-rc.17",
     "consola": "^3.4.2",
     "dayjs": "^1.11.23",
     "jspdf": "^4.2.1",
@@ -29,20 +29,20 @@
     "qrcode": "^1.5.4",
     "sharp": "^0.35.5",
     "solid-icons": "^1.2.0",
-    "solid-js": "^2.0.0-rc.16",
+    "solid-js": "^2.0.0-rc.17",
     "uuid": "^14.0.3",
     "yargs": "^18.2.0"
   },
   "devDependencies": {
-    "@solidjs/diagnostics": "^2.0.0-rc.16",
-    "@solidjs/testing-library": "^1.0.0-beta.3",
-    "@solidjs/vite-plugin": "^3.0.0-next.50",
+    "@solidjs/diagnostics": "^2.0.0-rc.17",
+    "@solidjs/testing-library": "^1.0.0-rc.2",
+    "@solidjs/vite-plugin": "^3.0.0-next.51",
     "@testing-library/jest-dom": "^7.0.0",
     "eslint-plugin-solid": "~0.18.1",
     "filesystem-routing": "0.4.0",
     "jsdom": "^30.1.3",
     "oxlint": "^1.89.0",
-    "sass-embedded": "^1.105.2",
+    "sass-embedded": "^1.106.0",
     "typescript": "^7.0.2",
     "vite": "catalog:",
     "vite-plugin-compression2": "^2.5.3",
@@ -52,7 +52,12 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.11.2",
+      "version": "12.14.0",
+      "onFail": "download"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "24.x",
       "onFail": "download"
     }
   }
