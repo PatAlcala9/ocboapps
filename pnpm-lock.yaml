@@ -198,8 +198,8 @@ importers:
         specifier: ^1.0.0-next.2
         version: 1.0.0-next.2(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(solid-js@2.0.0-rc.17)
       '@solidjs/router':
-        specifier: ^2.0.0-next.41
-        version: 2.0.0-next.41(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(filesystem-routing@0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(supports-color@8.1.1))(solid-js@2.0.0-rc.17)
+        specifier: ^2.0.0-next.42
+        version: 2.0.0-next.42(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(filesystem-routing@0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(supports-color@8.1.1))(solid-js@2.0.0-rc.17)
       '@solidjs/web':
         specifier: ^2.0.0-rc.17
         version: 2.0.0-rc.17(solid-js@2.0.0-rc.17)
@@ -248,7 +248,7 @@ importers:
         version: 1.0.0-rc.2(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(solid-js@2.0.0-rc.17)
       '@solidjs/vite-plugin':
         specifier: ^3.0.0-next.51
-        version: 3.0.0-next.51(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5))(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(solid-js@2.0.0-rc.17)(supports-color@8.1.1)
+        version: 3.0.0-next.51(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5))(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(solid-js@2.0.0-rc.17)(supports-color@8.1.1)
       '@testing-library/jest-dom':
         specifier: ^7.0.0
         version: 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5)
@@ -257,31 +257,34 @@ importers:
         version: 0.18.1(eslint@10.10.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2)
       filesystem-routing:
         specifier: 0.4.0
-        version: 0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(supports-color@8.1.1)
+        version: 0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(supports-color@8.1.1)
       jsdom:
         specifier: ^30.1.3
         version: 30.1.3(@noble/hashes@2.4.0)
+      node:
+        specifier: runtime:24.x
+        version: runtime:24.22.1
       oxlint:
         specifier: ^1.89.0
-        version: 1.89.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
+        version: 1.89.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
       sass-embedded:
-        specifier: ^1.106.0
-        version: 1.106.0
+        specifier: ^1.106.1
+        version: 1.106.1
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
       vite:
         specifier: 'catalog:'
-        version: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
+        version: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
       vite-plugin-compression2:
         specifier: ^2.5.3
         version: 2.5.3
       vite-plus:
         specifier: 'catalog:'
-        version: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)
+        version: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)
       vitest:
         specifier: 'catalog:'
-        version: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+        version: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
 
 packages:
 
@@ -1595,12 +1598,12 @@ packages:
       '@solidjs/web': ^2.0.0-rc.0
       solid-js: ^2.0.0-rc.0
 
-  '@solidjs/router@2.0.0-next.41':
-    resolution: {integrity: sha512-wCnhq37p4dpTYuy2Zz8nlf9Si/t4cMXUiMY0r7MxzHSH2c4jUiSrA8LkSdif6swwAIT/dOP7Pbv4hM1qY5ZOuA==}
+  '@solidjs/router@2.0.0-next.42':
+    resolution: {integrity: sha512-UMeBFTLk5DzIi4Kj0lmoyB0JmGXDB1gYVPwKXkyaHJccjXX6LbFOJkNoJCRzm7K88/NxR8rh10fjbJO6vzfxXA==}
     peerDependencies:
-      '@solidjs/web': ^2.0.0-rc.15
+      '@solidjs/web': ^2.0.0-rc.17
       filesystem-routing: '>=0.4.0'
-      solid-js: ^2.0.0-rc.15
+      solid-js: ^2.0.0-rc.17
     peerDependenciesMeta:
       filesystem-routing:
         optional: true
@@ -2733,6 +2736,138 @@ packages:
     resolution: {integrity: sha512-kQK9LGGFiHtrWiNhZtA7Qbw17AQz+dmsEKODRIVTXA9+e5MS/2gZEBhYJt13GrAz5/IOZKddH/0Z3TP/Zgo+yw==}
     engines: {node: '>=18'}
 
+  node@runtime:24.22.1:
+    resolution:
+      type: variations
+      variants:
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-9ie20HmCnmSKS4AP+oidN9viORNQcDADDbhaqGFZGiY=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-aix-ppc64.tar.gz
+          targets:
+            - cpu: ppc64
+              os: aix
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-icaCWT12zUQjP6U7FWMmTn3py7GJytFpE1xbT637wKc=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-darwin-arm64.tar.gz
+          targets:
+            - cpu: arm64
+              os: darwin
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-0TJVfn7iuFrwiwyMNDOOZcZDDyI40B9ydyjvQtyDsDU=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-darwin-x64.tar.gz
+          targets:
+            - cpu: x64
+              os: darwin
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-M8N74jS6i+4EGWEEexkWD019DxZOjiRveL3RD+/xSLM=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-arm64.tar.gz
+          targets:
+            - cpu: arm64
+              os: linux
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-nOVyhEUBaynkmtCY96M2Bhql93DRd9knJ4vCb9Ym5kM=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-ppc64le.tar.gz
+          targets:
+            - cpu: ppc64le
+              os: linux
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-cZea6xw4W8jugxANODo7HsClIC4D35+ZanBAMwnK/7U=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-s390x.tar.gz
+          targets:
+            - cpu: s390x
+              os: linux
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-myUNKdariuON0jAZ4sBKbWspFqsdrXIcX24dorKQHGo=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-x64-musl.tar.gz
+          targets:
+            - cpu: x64
+              os: linux
+              libc: musl
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-62co53xXajUWLBIsRcyt8iTYn/AKvI2uRswol8YALXw=
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-x64.tar.gz
+          targets:
+            - cpu: x64
+              os: linux
+        - resolution:
+            archive: zip
+            bin:
+              node: node.exe
+            integrity: sha256-oMgHMZ/t4kxKDY+EVkyCphm9MTsWsQwAfDg8JgnpkXE=
+            prefix: node-v24.22.1-win-arm64
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-win-arm64.zip
+          targets:
+            - cpu: arm64
+              os: win32
+        - resolution:
+            archive: zip
+            bin:
+              node: node.exe
+            integrity: sha256-0gRtKMLD3NIRrFFFwL8w4gR++d+zBmk8jG4uzNi5X6U=
+            prefix: node-v24.22.1-win-x64
+            type: binary
+            url: https://nodejs.org/download/release/v24.22.1/node-v24.22.1-win-x64.zip
+          targets:
+            - cpu: x64
+              os: win32
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-glQSWCWj5eg0vYomDatMgwP3IEZKdBUG7CeYm5uhdps=
+            type: binary
+            url: https://unofficial-builds.nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-arm64-musl.tar.gz
+          targets:
+            - cpu: arm64
+              os: linux
+              libc: musl
+        - resolution:
+            archive: tarball
+            bin:
+              node: bin/node
+            integrity: sha256-Cp7dzi0ujzrdvpT6RtdRMlstdPf9HOYylhZNNrbfxuU=
+            type: binary
+            url: https://unofficial-builds.nodejs.org/download/release/v24.22.1/node-v24.22.1-linux-x64-musl.tar.gz
+          targets:
+            - cpu: x64
+              os: linux
+              libc: musl
+    version: 24.22.1
+    hasBin: true
+
   obug@3.0.0:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
@@ -2929,125 +3064,125 @@ packages:
   rxjs@7.8.2:
     resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
 
-  sass-embedded-all-unknown@1.106.0:
-    resolution: {integrity: sha512-BBv1APhkkFmK7fMCPHeoO9vMFwDCTc21KU4IHNKm9Pxo3yZRzX3+/RFjAPn5DKukfrTeGHhYtZYVlIXaXNxxIA==}
+  sass-embedded-all-unknown@1.106.1:
+    resolution: {integrity: sha512-5jUnX+WVeovsbORYHBfPMiAtb5/qTnWpuLrlg0ZEjo4AKLjkM3gXkRCReYBEi/bLC3JhBcWWwG/yPqJwd8/lLw==}
     cpu: ['!arm', '!arm64', '!riscv64', '!x64']
 
-  sass-embedded-android-arm64@1.106.0:
-    resolution: {integrity: sha512-mO6M96Ke//DeQrS2QaMwqOSNNwXXDv2V8YqQld6C1NFQmnvDOvrlK1SuWd2gyD7eoHujKISmQYrdrhzRmjmt5A==}
+  sass-embedded-android-arm64@1.106.1:
+    resolution: {integrity: sha512-USQo5LkotweQnofhTCZYBtI35HkbIRUx+YfI6AvNN/Wr45ewCbUnTOYvQc+DLFFcm+g9cp64kLrySPdLbkuPzQ==}
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [android]
 
-  sass-embedded-android-arm@1.106.0:
-    resolution: {integrity: sha512-x1bzZDsikzIYZAcPUCpczFcgjoR/lcbVuUtG1zjYMim9d72mRphni9e0N6SBrF3TTOtIPMWr/kI73PiSt5KbEQ==}
+  sass-embedded-android-arm@1.106.1:
+    resolution: {integrity: sha512-xtLTJzkh2/oGI0kZ787ef55zKzmk6UO6nsIMV8CE9n2qMG3JvyU91EU+BxjvknRR9BTVvbQOCLqW5j0psFOeAQ==}
     engines: {node: '>=14.0.0'}
     cpu: [arm]
     os: [android]
 
-  sass-embedded-android-riscv64@1.106.0:
-    resolution: {integrity: sha512-2Wy3bgHFd6UCDRPFC5zfB5WIv1vOF7TFOQX+G1ec8z8KJxp0I2/BflzV9hvcdDDrThskuEOqw6tCcjsC5LSD1Q==}
+  sass-embedded-android-riscv64@1.106.1:
+    resolution: {integrity: sha512-OyEAsl8q6xpZgsK4zupwfhVUYvjJaMPgILyXtx326DSPc5lKOwWpXa8rhI2H3eAB76xU61C/5RavIkH1iaqQeQ==}
     engines: {node: '>=14.0.0'}
     cpu: [riscv64]
     os: [android]
 
-  sass-embedded-android-x64@1.106.0:
-    resolution: {integrity: sha512-UxLFUN3NqJCNfusBYpWIGfs3wDXbUBKWkbsNlyMPsrBpUiqTfj5Q5S1MaxP6KSqJdzC7tXG9oQVRHeZAHGkYxQ==}
+  sass-embedded-android-x64@1.106.1:
+    resolution: {integrity: sha512-cczQbbtwex6mtaXS/8UwCSx6613EHiVLQNpkeVmk5oN08HpzPsWMoyzuGa2hdfh0by9mHXismdLk8fh9wdEQ+w==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [android]
 
-  sass-embedded-darwin-arm64@1.106.0:
-    resolution: {integrity: sha512-BVpUWiAHlPdR65UVIFLZAe3kHcs2wpdnBfileJPCRWHAb17jeH77ny8EEmaf9ESHshuLzD2IHHr666RSHvr3/A==}
+  sass-embedded-darwin-arm64@1.106.1:
+    resolution: {integrity: sha512-j8p5iM8v0lGFwfO6sagHkrokD7/zlEkCpfRiBDzvW+FdD/JqOW1nemVz/CexHeeR28ULrUNnE1fKJ/FN9TjTEw==}
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [darwin]
 
-  sass-embedded-darwin-x64@1.106.0:
-    resolution: {integrity: sha512-r08IGm8pqs1wGccmUZB4rpd/Y21ZhoSV+cqt47tGLCvJlhjuDW/KBfrEjhzofrhlk8N9tiHhlZxHBHn09rf5wQ==}
+  sass-embedded-darwin-x64@1.106.1:
+    resolution: {integrity: sha512-WMszbY07IZ/GOaRlrMI3o+h7eiiOKBppLT+GSunSQsVcr2N4rlmM2rXlLsfub1praplLB4FWqMY1St8kLSjmZg==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [darwin]
 
-  sass-embedded-linux-arm64@1.106.0:
-    resolution: {integrity: sha512-xQ3KW+RauN75H7/XOy7vHNtMcRH6AREl1Z00I7Lrcu3r+2/islFjQ95aBvuwbbWTA1nm1ahfYGTvzDFPH8wT4Q==}
+  sass-embedded-linux-arm64@1.106.1:
+    resolution: {integrity: sha512-CBUcLDCBUiB6vlMO5VwtTywpapeE8cmr/UJ//xwNwByNGxc6JvoBru5XA1bhPquRjgNNMs90u89ybgap8gN31Q==}
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [linux]
     libc: glibc
 
-  sass-embedded-linux-arm@1.106.0:
-    resolution: {integrity: sha512-+2d9RzXhhDzpEPrLRx3DS5D2TMYEfpkvgZgTrFQso4Ls/N9du9VRZQ338IFFSOdGzPTI6r+T3lrNKHwX+jSOYA==}
+  sass-embedded-linux-arm@1.106.1:
+    resolution: {integrity: sha512-EfhuxqURaMpP/eG4bg3fk4XZvRzMJBIw2iSVNRRbpwMOZLhDce8Eys95rTuOuU2R9/pHMwcVwpj/ZU3mZyLHog==}
     engines: {node: '>=14.0.0'}
     cpu: [arm]
     os: [linux]
     libc: glibc
 
-  sass-embedded-linux-musl-arm64@1.106.0:
-    resolution: {integrity: sha512-hnlSDdUhUuN1dWsSKoEG7pLO8lxXV3HpI4TPQ2jY94hAmPkJBirKL0YEltJ5GSmT/pQXChM+yHQG+FXU85H4jw==}
+  sass-embedded-linux-musl-arm64@1.106.1:
+    resolution: {integrity: sha512-yDUGDnNbPOoVaeEapLomFnwQkLQF4pveitqjq3J9Oi7qmg8mM/PXJYWOqCOq1ifXSbnnWppfuylUSkGTwnO1Hg==}
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [linux]
     libc: musl
 
-  sass-embedded-linux-musl-arm@1.106.0:
-    resolution: {integrity: sha512-GSxME0TZqX81lqqcV4IB0MiYqm0Spg6/UAe4iarvncPmuphhJOO9LtDczbkoACzvheskU7Wr+HCLMh6EUqJHaQ==}
+  sass-embedded-linux-musl-arm@1.106.1:
+    resolution: {integrity: sha512-ToaDrOiunMuD64XLelRqjC0LWuEKt8q6vpqPsHdSN8T5paJWrAXP8EXMcuR/iIBigsssifAPym/MHEWLkLSTlg==}
     engines: {node: '>=14.0.0'}
     cpu: [arm]
     os: [linux]
     libc: musl
 
-  sass-embedded-linux-musl-riscv64@1.106.0:
-    resolution: {integrity: sha512-Jx/Mapq8XQGWCKgifdwYHvd4sHL0vHcDDbPBYow8HxWM1D2gx1rpNciSpugQIvSxp57CGA9zKcR0ICKD6iDlLA==}
+  sass-embedded-linux-musl-riscv64@1.106.1:
+    resolution: {integrity: sha512-mQwiwXzfYlT/3Tb7TAvly9eoJc6Q6z+PC2e8mtuajr77DWAGa+8Ibte1umkG/F6o9jFNG8k752A4EAlSRTXfNg==}
     engines: {node: '>=14.0.0'}
     cpu: [riscv64]
     os: [linux]
     libc: musl
 
-  sass-embedded-linux-musl-x64@1.106.0:
-    resolution: {integrity: sha512-doUIMjKqVH7gIdYLhmWI9u21uhKFAJmTErUbe2PDpMxcC93A43eHHTKW/TJFUU9H96kpAN5tYLjy9L50VE7nTA==}
+  sass-embedded-linux-musl-x64@1.106.1:
+    resolution: {integrity: sha512-GwVa+GJGeu8ACw06aGXz8uuc9rFXRJsceMHHi02fpuv3qsy2asMgy9xgN4GPVJLac4yjCBmf09sUUqWpOCrkzw==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [linux]
     libc: musl
 
-  sass-embedded-linux-riscv64@1.106.0:
-    resolution: {integrity: sha512-DJkozHZtr2kW9k8F4q8Dc1q+WGE6pU0yjkkG8B9s6Giul5rnYsDlCSCljzOZxDl9NfK6FC8gF744z0JFCypZig==}
+  sass-embedded-linux-riscv64@1.106.1:
+    resolution: {integrity: sha512-biV7fnrlTBAfl+bzIMTgGUHaW803NJti4XcKpX70ukOOKOgxsEwwvk21tI0w8VLKIyXFuLKM3TJxe3Ze1DR0tQ==}
     engines: {node: '>=14.0.0'}
     cpu: [riscv64]
     os: [linux]
     libc: glibc
 
-  sass-embedded-linux-x64@1.106.0:
-    resolution: {integrity: sha512-Hf8BJtpQfczWfjGpPZ5ZPpCHZkSUjbwmzdxCkVWWD+UhlyzTQKbo+Ff9110HlY+1lQmT0nU87Sh+x4q8MVjQPA==}
+  sass-embedded-linux-x64@1.106.1:
+    resolution: {integrity: sha512-Ev2UktLmdFVvCFeSNyow0HNdxmNHqcXLRgEeesKpw4mtcuLN5HHocOJw9LrHiTbcpMPsfxgymS4jJBg43AptaA==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [linux]
     libc: glibc
 
-  sass-embedded-unknown-all@1.106.0:
-    resolution: {integrity: sha512-jMVJaCjnHD6N3WQXNwwYVT8+nQ0pQgPClkRUhy0DZRs+ueJRpGzct8xY5XsWZBVdYEH+ZqKxVsST1A175svMxA==}
+  sass-embedded-unknown-all@1.106.1:
+    resolution: {integrity: sha512-uaeOeGCaHnhqpfZnjy5wGMcuyYbnDyXhzWCniGctqCj/Inlst4eDZaweowo+sJLExRvmToBhQ8seZyEvfGMQ4g==}
     os: ['!android', '!darwin', '!linux', '!win32']
 
-  sass-embedded-win32-arm64@1.106.0:
-    resolution: {integrity: sha512-j98Nx2pL/eHO2dCOAPPBFYXni68lgxEsb44LHbSphRQ+M8HiFVrg3KKmYFHPvBehJN/JMmnxwjSdjL63vvafcg==}
+  sass-embedded-win32-arm64@1.106.1:
+    resolution: {integrity: sha512-EiDwpthGDIX25B4d5lVEYgxzqRSdSFoi8czHHesXFYinroDHmgTpqgv7MhYmGogTCvei3o8AahX2Wl1BanWJQg==}
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [win32]
 
-  sass-embedded-win32-x64@1.106.0:
-    resolution: {integrity: sha512-e23FDY+Z7yGu4yRs/AroQ6ZKjmi8ikB4VKzXWQw/zlBp+HRuwUlcQ0QqNJezaRB28w/D+e2sGLhITvknIjQhsA==}
+  sass-embedded-win32-x64@1.106.1:
+    resolution: {integrity: sha512-j3OIOIXrNqbggtWlht7M/mkYybmGeGtvP7FRUx0NTDC6yeRhc16QTOoHb+z8S6NO9x0frg8eQS+F5qF7+DCKBQ==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [win32]
 
-  sass-embedded@1.106.0:
-    resolution: {integrity: sha512-tmdfFueQZ/F5szU4y+gxeRQ2wbF+IvIsL+hspPF9/ZZWPNzYmVjKGzYTVmOyFqggqY1JW3lM50i0fnlBmpN91A==}
+  sass-embedded@1.106.1:
+    resolution: {integrity: sha512-OoaTjMm7PcQnCo/AZNSKM/KdAeaX57edhmOp2bH8hcGNph2VDIg404gOSMZxGKNL+lbc7Ng0S/IYLAbs0YmgfA==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
-  sass@1.106.0:
-    resolution: {integrity: sha512-JHAqUksyijU5tsmDLCDq8/IX3Mq8mVkOtxvcXnUdwy8vsX5MVnvQauMomauxyuEux8uBJdT/OuBwWBYavoWUqQ==}
+  sass@1.106.1:
+    resolution: {integrity: sha512-kD+Gi66vycZcbJt+42NC4z4PXNMcCajVrJPhqoKKXy5cOBMmJQt052CxIBcRjwYXeImHYOpu/ydWWGZQIenl7A==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -4434,19 +4569,19 @@ snapshots:
       '@solidjs/web': 2.0.0-rc.17(solid-js@2.0.0-rc.17)
       solid-js: 2.0.0-rc.17
     optionalDependencies:
-      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
 
   '@solidjs/meta@1.0.0-next.2(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(solid-js@2.0.0-rc.17)':
     dependencies:
       '@solidjs/web': 2.0.0-rc.17(solid-js@2.0.0-rc.17)
       solid-js: 2.0.0-rc.17
 
-  '@solidjs/router@2.0.0-next.41(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(filesystem-routing@0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(supports-color@8.1.1))(solid-js@2.0.0-rc.17)':
+  '@solidjs/router@2.0.0-next.42(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(filesystem-routing@0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(supports-color@8.1.1))(solid-js@2.0.0-rc.17)':
     dependencies:
       '@solidjs/web': 2.0.0-rc.17(solid-js@2.0.0-rc.17)
       solid-js: 2.0.0-rc.17
     optionalDependencies:
-      filesystem-routing: 0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(supports-color@8.1.1)
+      filesystem-routing: 0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(supports-color@8.1.1)
 
   '@solidjs/signals@2.0.0-rc.17': {}
 
@@ -4456,7 +4591,7 @@ snapshots:
       '@testing-library/dom': 10.4.2
       solid-js: 2.0.0-rc.17
 
-  '@solidjs/vite-plugin@3.0.0-next.51(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5))(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(solid-js@2.0.0-rc.17)(supports-color@8.1.1)':
+  '@solidjs/vite-plugin@3.0.0-next.51(@solidjs/web@2.0.0-rc.17(solid-js@2.0.0-rc.17))(@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5))(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(solid-js@2.0.0-rc.17)(supports-color@8.1.1)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@babel/core': 7.29.7(supports-color@8.1.1)
@@ -4466,8 +4601,8 @@ snapshots:
       '@types/babel__core': 7.20.5
       merge-anything: 5.1.7
       solid-js: 2.0.0-rc.17
-      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
-      vitefu: 1.1.3(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
+      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
+      vitefu: 1.1.3(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
     optionalDependencies:
       '@testing-library/jest-dom': 7.0.1(@testing-library/dom@10.4.2)(vitest@5.0.5)
     transitivePeerDependencies:
@@ -4505,7 +4640,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
 
   '@testing-library/user-event@14.6.8(@testing-library/dom@10.4.2)':
     dependencies:
@@ -4677,29 +4812,29 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitest/browser-preview@5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(vitest@5.0.5)':
+  '@vitest/browser-preview@5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(vitest@5.0.5)':
     dependencies:
       '@testing-library/dom': 10.4.2
       '@testing-library/user-event': 14.6.8(@testing-library/dom@10.4.2)
-      '@vitest/browser': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(vitest@5.0.5)
-      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+      '@vitest/browser': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(vitest@5.0.5)
+      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
     transitivePeerDependencies:
       - bufferutil
       - msw
       - utf-8-validate
       - vite
 
-  '@vitest/browser@5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(vitest@5.0.5)':
+  '@vitest/browser@5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(vitest@5.0.5)':
     dependencies:
       '@blazediff/core': 1.10.0
-      '@vitest/mocker': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
+      '@vitest/mocker': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
       '@vitest/ui': 5.0.5(vitest@5.0.5)
       '@vitest/utils': 5.0.5
       magic-string: 1.4.3
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
       ws: 8.22.0
     transitivePeerDependencies:
       - bufferutil
@@ -4707,14 +4842,14 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/mocker@5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))':
+  '@vitest/mocker@5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@vitest/spy': 5.0.5
       estree-walker: 3.0.3
       magic-string: 1.4.3
     optionalDependencies:
-      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
+      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
 
   '@vitest/pretty-format@5.0.5':
     dependencies:
@@ -4737,7 +4872,7 @@ snapshots:
       pathe: 2.0.3
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
 
   '@vitest/utils@5.0.5':
     dependencies:
@@ -4745,7 +4880,7 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.2.0
 
-  '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)':
+  '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)':
     dependencies:
       '@oxc-project/runtime': 0.154.0
       '@oxc-project/types': 0.154.0
@@ -4762,8 +4897,8 @@ snapshots:
       '@voidzero-dev/vite-plus-win32-arm64-msvc': 1.3.0
       '@voidzero-dev/vite-plus-win32-x64-msvc': 1.3.0
       fsevents: 2.3.3
-      sass: 1.106.0
-      sass-embedded: 1.106.0
+      sass: 1.106.1
+      sass-embedded: 1.106.1
       typescript: 7.0.2
 
   '@voidzero-dev/vite-plus-darwin-arm64@1.3.0':
@@ -5139,7 +5274,7 @@ snapshots:
     dependencies:
       flat-cache: 6.1.23
 
-  filesystem-routing@0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(supports-color@8.1.1):
+  filesystem-routing@0.4.0(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(supports-color@8.1.1):
     dependencies:
       '@babel/core': 7.29.7(supports-color@8.1.1)
       '@types/babel__core': 7.20.5
@@ -5150,7 +5285,7 @@ snapshots:
       oxc-parser: 0.139.0
       radix3: 1.1.2
     optionalDependencies:
-      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
+      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
     transitivePeerDependencies:
       - supports-color
 
@@ -5419,6 +5554,8 @@ snapshots:
 
   node-releases@2.0.57: {}
 
+  node@runtime:24.22.1: {}
+
   obug@3.0.0: {}
 
   ofetch@1.5.1:
@@ -5461,7 +5598,7 @@ snapshots:
       '@oxc-parser/binding-win32-ia32-msvc': 0.139.0
       '@oxc-parser/binding-win32-x64-msvc': 0.139.0
 
-  oxfmt@0.73.0(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)):
+  oxfmt@0.73.0(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)):
     dependencies:
       tinypool: 2.2.0
     optionalDependencies:
@@ -5484,7 +5621,7 @@ snapshots:
       '@oxfmt/binding-win32-arm64-msvc': 0.73.0
       '@oxfmt/binding-win32-ia32-msvc': 0.73.0
       '@oxfmt/binding-win32-x64-msvc': 0.73.0
-      vite-plus: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)
+      vite-plus: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)
 
   oxlint-tsgolint@7.0.2004:
     optionalDependencies:
@@ -5495,7 +5632,7 @@ snapshots:
       '@oxlint-tsgolint/win32-arm64': 7.0.2004
       '@oxlint-tsgolint/win32-x64': 7.0.2004
 
-  oxlint@1.88.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)):
+  oxlint@1.88.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)):
     optionalDependencies:
       '@oxlint/binding-android-arm-eabi': 1.88.0
       '@oxlint/binding-android-arm64': 1.88.0
@@ -5517,9 +5654,9 @@ snapshots:
       '@oxlint/binding-win32-ia32-msvc': 1.88.0
       '@oxlint/binding-win32-x64-msvc': 1.88.0
       oxlint-tsgolint: 7.0.2004
-      vite-plus: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)
+      vite-plus: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)
 
-  oxlint@1.89.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)):
+  oxlint@1.89.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)):
     optionalDependencies:
       '@oxlint/binding-android-arm-eabi': 1.89.0
       '@oxlint/binding-android-arm64': 1.89.0
@@ -5541,7 +5678,7 @@ snapshots:
       '@oxlint/binding-win32-ia32-msvc': 1.89.0
       '@oxlint/binding-win32-x64-msvc': 1.89.0
       oxlint-tsgolint: 7.0.2004
-      vite-plus: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)
+      vite-plus: 1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)
 
   p-limit@2.3.0:
     dependencies:
@@ -5657,65 +5794,65 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  sass-embedded-all-unknown@1.106.0:
+  sass-embedded-all-unknown@1.106.1:
     dependencies:
-      sass: 1.106.0
+      sass: 1.106.1
     optional: true
 
-  sass-embedded-android-arm64@1.106.0:
+  sass-embedded-android-arm64@1.106.1:
     optional: true
 
-  sass-embedded-android-arm@1.106.0:
+  sass-embedded-android-arm@1.106.1:
     optional: true
 
-  sass-embedded-android-riscv64@1.106.0:
+  sass-embedded-android-riscv64@1.106.1:
     optional: true
 
-  sass-embedded-android-x64@1.106.0:
+  sass-embedded-android-x64@1.106.1:
     optional: true
 
-  sass-embedded-darwin-arm64@1.106.0:
+  sass-embedded-darwin-arm64@1.106.1:
     optional: true
 
-  sass-embedded-darwin-x64@1.106.0:
+  sass-embedded-darwin-x64@1.106.1:
     optional: true
 
-  sass-embedded-linux-arm64@1.106.0:
+  sass-embedded-linux-arm64@1.106.1:
     optional: true
 
-  sass-embedded-linux-arm@1.106.0:
+  sass-embedded-linux-arm@1.106.1:
     optional: true
 
-  sass-embedded-linux-musl-arm64@1.106.0:
+  sass-embedded-linux-musl-arm64@1.106.1:
     optional: true
 
-  sass-embedded-linux-musl-arm@1.106.0:
+  sass-embedded-linux-musl-arm@1.106.1:
     optional: true
 
-  sass-embedded-linux-musl-riscv64@1.106.0:
+  sass-embedded-linux-musl-riscv64@1.106.1:
     optional: true
 
-  sass-embedded-linux-musl-x64@1.106.0:
+  sass-embedded-linux-musl-x64@1.106.1:
     optional: true
 
-  sass-embedded-linux-riscv64@1.106.0:
+  sass-embedded-linux-riscv64@1.106.1:
     optional: true
 
-  sass-embedded-linux-x64@1.106.0:
+  sass-embedded-linux-x64@1.106.1:
     optional: true
 
-  sass-embedded-unknown-all@1.106.0:
+  sass-embedded-unknown-all@1.106.1:
     dependencies:
-      sass: 1.106.0
+      sass: 1.106.1
     optional: true
 
-  sass-embedded-win32-arm64@1.106.0:
+  sass-embedded-win32-arm64@1.106.1:
     optional: true
 
-  sass-embedded-win32-x64@1.106.0:
+  sass-embedded-win32-x64@1.106.1:
     optional: true
 
-  sass-embedded@1.106.0:
+  sass-embedded@1.106.1:
     dependencies:
       '@bufbuild/protobuf': 2.16.0
       colorjs.io: 0.7.1
@@ -5725,26 +5862,26 @@ snapshots:
       sync-child-process: 1.0.2
       varint: 6.0.0
     optionalDependencies:
-      sass-embedded-all-unknown: 1.106.0
-      sass-embedded-android-arm: 1.106.0
-      sass-embedded-android-arm64: 1.106.0
-      sass-embedded-android-riscv64: 1.106.0
-      sass-embedded-android-x64: 1.106.0
-      sass-embedded-darwin-arm64: 1.106.0
-      sass-embedded-darwin-x64: 1.106.0
-      sass-embedded-linux-arm: 1.106.0
-      sass-embedded-linux-arm64: 1.106.0
-      sass-embedded-linux-musl-arm: 1.106.0
-      sass-embedded-linux-musl-arm64: 1.106.0
-      sass-embedded-linux-musl-riscv64: 1.106.0
-      sass-embedded-linux-musl-x64: 1.106.0
-      sass-embedded-linux-riscv64: 1.106.0
-      sass-embedded-linux-x64: 1.106.0
-      sass-embedded-unknown-all: 1.106.0
-      sass-embedded-win32-arm64: 1.106.0
-      sass-embedded-win32-x64: 1.106.0
+      sass-embedded-all-unknown: 1.106.1
+      sass-embedded-android-arm: 1.106.1
+      sass-embedded-android-arm64: 1.106.1
+      sass-embedded-android-riscv64: 1.106.1
+      sass-embedded-android-x64: 1.106.1
+      sass-embedded-darwin-arm64: 1.106.1
+      sass-embedded-darwin-x64: 1.106.1
+      sass-embedded-linux-arm: 1.106.1
+      sass-embedded-linux-arm64: 1.106.1
+      sass-embedded-linux-musl-arm: 1.106.1
+      sass-embedded-linux-musl-arm64: 1.106.1
+      sass-embedded-linux-musl-riscv64: 1.106.1
+      sass-embedded-linux-musl-x64: 1.106.1
+      sass-embedded-linux-riscv64: 1.106.1
+      sass-embedded-linux-x64: 1.106.1
+      sass-embedded-unknown-all: 1.106.1
+      sass-embedded-win32-arm64: 1.106.1
+      sass-embedded-win32-x64: 1.106.1
 
-  sass@1.106.0:
+  sass@1.106.1:
     dependencies:
       chokidar: 5.0.0
       immutable: 5.1.9
@@ -5980,22 +6117,22 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2):
+  vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2):
     dependencies:
       '@oxc-project/types': 0.154.0
       '@oxlint/plugins': 1.88.0
-      '@vitest/browser': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(vitest@5.0.5)
-      '@vitest/browser-preview': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(vitest@5.0.5)
-      '@vitest/mocker': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
+      '@vitest/browser': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(vitest@5.0.5)
+      '@vitest/browser-preview': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(vitest@5.0.5)
+      '@vitest/mocker': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
       '@vitest/pretty-format': 5.0.5
       '@vitest/snapshot': 5.0.5
       '@vitest/spy': 5.0.5
       '@vitest/utils': 5.0.5
-      oxfmt: 0.73.0(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
-      oxlint: 1.88.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
+      oxfmt: 0.73.0(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
+      oxlint: 1.88.0(oxlint-tsgolint@7.0.2004)(vite-plus@1.3.0(@vitest/ui@5.0.5)(jsdom@30.1.3(@noble/hashes@2.4.0))(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
       oxlint-tsgolint: 7.0.2004
-      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
-      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
+      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
+      vitest: 5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0))
     optionalDependencies:
       '@voidzero-dev/vite-plus-darwin-arm64': 1.3.0
       '@voidzero-dev/vite-plus-darwin-x64': 1.3.0
@@ -6040,14 +6177,14 @@ snapshots:
       - vue-tsc
       - yaml
 
-  vitefu@1.1.3(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)):
+  vitefu@1.1.3(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)):
     optionalDependencies:
-      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
+      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
 
-  vitest@5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0)):
+  vitest@5.0.5(@vitest/browser-preview@5.0.5)(@vitest/ui@5.0.5)(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(jsdom@30.1.3(@noble/hashes@2.4.0)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))
+      '@vitest/mocker': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -6058,10 +6195,10 @@ snapshots:
       tinybench: 6.2.2
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2)'
+      vite: '@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2)'
       why-is-node-running: 3.2.1
     optionalDependencies:
-      '@vitest/browser-preview': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.0)(sass@1.106.0)(typescript@7.0.2))(vitest@5.0.5)
+      '@vitest/browser-preview': 5.0.5(@voidzero-dev/vite-plus-core@1.3.0(sass-embedded@1.106.1)(sass@1.106.1)(typescript@7.0.2))(vitest@5.0.5)
       '@vitest/ui': 5.0.5(vitest@5.0.5)
       jsdom: 30.1.3(@noble/hashes@2.4.0)
     transitivePeerDependencies:
