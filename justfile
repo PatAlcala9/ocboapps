@@ -27,8 +27,11 @@ dock:
 pod:
   ./builtin/tools/generate-docker ./configs/deployment.config.json && ./builtin/tools/generate-podman ./configs/deployment.config.json && podman-compose up -d && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
 
+dockhub username image:
+  ./builtin/tools/generate-docker ./configs/deployment.config.json && docker build -t {{username}}/{{image}} . && rm .dockerignore && rm docker-compose.yml && rm Dockerfile
+
 favicon:
-  nub ./builtin/scripts/node/generateFavicon.ts
+  ./builtin/tools/generate-favicon ./configs/site.config.json
 
 logo size:
   ./builtin/tools/optimize-image logo {{ size }}
