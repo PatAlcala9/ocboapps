@@ -1,4 +1,4 @@
-import { store } from "@dasig/store";
+import { store } from "../../builtin/services/store";
 
 export const _optn = store('string')
 export const _applicationNo = store('string')

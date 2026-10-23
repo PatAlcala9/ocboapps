@@ -1,4 +1,4 @@
-import { sha1, sha384 } from '@dasig/hash'
+import { sha1, sha384 } from '../../../builtin/services/hash'
 
 export default async (password: string) => {
   const firstHashing = await sha1(password)

@@ -1,4 +1,4 @@
-import { store } from "@dasig/store";
+import { store } from "../../builtin/services/store";
 
 export const _listElectricalApplications = store('arraystring')
 export const _listElectricalNames = store('arraystring')

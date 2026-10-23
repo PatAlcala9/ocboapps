@@ -2,7 +2,8 @@ import { onSettled, createSignal, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable } from '@dasig'
+import { BiRegularQr } from 'solid-icons/bi'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable, Padding } from '@dasig'
 import { getApi } from '@dasig/api'
 import { checkConnection, setPage } from 'services'
 import { _page } from 'stores/page'
@@ -192,7 +193,7 @@ export default () => {
               <h1>OCBO e-Sign</h1>
             </Row>
 
-            <Show when={connected()}>
+            {/*<Show when={connected()}>
               <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56'>
                 <Row content='left' gap={1}>
                   <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
@@ -214,7 +215,56 @@ export default () => {
                   </Row>
                 </Column>
               </Box>
-            </Show>
+            </Show>*/}
+
+            <Row gap={0.5}>
+              <Show when={loading()}>
+                <Box curved thickness={0} padding='0.75rem 1.25rem' background='#090c1a57'>
+                  <Column alignment='center'>
+                    <Row content='left' gap={1}>
+                      <ImConnection size={24} color='#fcfcfcba' />
+                      <span class='checking-text'>CHECKING</span>
+                      <Button label='Login' corner='curved' design='bootstrap-dark' />
+                      <Button label='Register' corner='curved' design='bootstrap-dark' />
+                    </Row>
+                    <Row content='left'>
+                      <a class='checking-message'>Please wait while we check for the server</a>
+                    </Row>
+                  </Column>
+                </Box>
+              </Show>
+
+              <Show when={connected() && !loading()}>
+                <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56' margin='0 1rem'>
+                  <Row content='left' gap={1}>
+                    <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
+                    <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('/esign/register')} />
+                  </Row>
+                </Box>
+              </Show>
+
+              <Show when={!connected() && !loading()}>
+                <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
+                  <Column alignment='center'>
+                    <Row content='left' gap={1}>
+                      <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
+                      <span class={'offline-text'}>OFFLINE</span>
+                      <Button label='Login' corner='curved' design='bootstrap-danger' />
+                      <Button label='Register' corner='curved' design='bootstrap-danger' />
+                    </Row>
+                    <Row content='left'>
+                      <a class='offline-message'>Please check your server connection and reload the page</a>
+                    </Row>
+                  </Column>
+                </Box>
+              </Show>
+
+              <Clickable onClick={() => gotoPage('/')}>
+                <Box curved thickness={0} padding='0 1rem 0 0'>
+                  <Image name='ocbo-portal' size={32}></Image>
+                </Box>
+              </Clickable>
+            </Row>
           </Row>
 
           <Row content='split'>
@@ -255,10 +305,19 @@ export default () => {
         </Display>
 
         <Display mobile>
-          <Column>
-            <Image name='esign' size={120} />
+          <Column content='center'>
+            <Padding top={2}>
+              <Image name='esign-mobile' size={160} />
+            </Padding>
             <h1>OCBO e-Sign</h1>
-            <span>Please use OCBO e-Sign Mobile Version</span>
+            <span class='mobile--subtitle'>Mobile</span>
+
+            <Box thickness={1} margin='10rem 0 0 0' padding='1rem 2rem' curved color='rgba(41, 60, 78, 0.914)' background='rgba(16, 22, 28, 0.58)'>
+              <Column content='center' gap={0.5}>
+                <BiRegularQr size={50} />
+                <span>Validate</span>
+              </Column>
+            </Box>
           </Column>
         </Display>
       </Page>

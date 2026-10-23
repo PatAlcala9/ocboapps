@@ -1,4 +1,4 @@
-import { cache } from "@dasig/cache";
+import { cache } from "../../builtin/services/cache";
 
 export const $logged_in = cache('loggedin')
 export const $login_role = cache('login-role')

@@ -1,4 +1,4 @@
-import { store } from "@dasig/store";
+import { store } from "../../builtin/services/store";
 
 export const _headId = store('number')
 export const _headName = store('string')

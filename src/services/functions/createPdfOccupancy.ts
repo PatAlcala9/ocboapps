@@ -29,7 +29,7 @@ import {
 import dayjs from 'dayjs'
 // @ts-ignore
 import QRCode from 'qrcode'
-import { sha3, md5 } from '@dasig/hash'
+import { sha3, md5 } from '../../../builtin/services/hash'
 
 export default async () => {
   const PESO = import.meta.env.VITE_PESO
