@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 import { ofetch } from 'ofetch'
-import { encrypt } from '@dasig/rsa'
+import { encrypt } from '../../services/rsa'
 import api from 'configs/api.config.json'
 import security from 'configs/security.config.json'
-import { uuid } from '@dasig/uuid'
+import { uuid } from '../../services/uuid'
 
 const TOKEN_NAME = security.token.name
 const TOKEN_EXPIRATION = security.token.expiration

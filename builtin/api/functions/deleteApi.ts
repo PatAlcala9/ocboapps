@@ -1,6 +1,6 @@
 import { ofetch } from 'ofetch'
 import dayjs from 'dayjs'
-import { encrypt } from '@dasig/rsa'
+import { encrypt } from '../../services/rsa'
 import api from 'configs/api.config.json'
 import security from 'configs/security.config.json'
 
