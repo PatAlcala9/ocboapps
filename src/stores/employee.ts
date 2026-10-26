@@ -1,4 +1,4 @@
-import { store } from "../../builtin/services/store";
+import { store } from "@dasig/store";
 
 export const _employeeId = store('number')
 export const _employeeName = store('string')

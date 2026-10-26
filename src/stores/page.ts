@@ -1,3 +1,3 @@
-import { store } from '../../builtin/services/store'
+import { store } from '@dasig/store'
 
 export const _page = store('string')
