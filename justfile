@@ -1,7 +1,7 @@
 set quiet
 
 install:
-  pnpm install
+  pnpm install --frozen-lockfile
 
 run:
   pnpm dev
