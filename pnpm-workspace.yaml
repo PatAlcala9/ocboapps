@@ -8,6 +8,9 @@
 # under an age policy). It should be removed once Solid 2.0 is stable —
 # at that point a caret range nearly always contains an age-satisfying
 # release and the policy can protect these packages like any other.
+# minimumReleaseAge: 10080
+# blockExoticSubdeps: true
+# trustPolicy: no-downgrade
 minimumReleaseAgeExclude:
   - solid-js
   - '@solidjs/*'
@@ -32,10 +35,11 @@ minimumReleaseAgeExclude:
   - vite-plus@1.3.0
   - vitest@5.0.5
   - '@kobalte/core@2.0.0-alpha.3'
+  - oxlint@1.89.0
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@1.3.0
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
   vitest: 5.0.5
-  vite-plus: 1.3.0
+  vite-plus: 1.4.0
 overrides:
   vite@*: 'catalog:'
   vitest@*: 'catalog:'
