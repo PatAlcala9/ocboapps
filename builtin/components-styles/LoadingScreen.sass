@@ -1,0 +1,32 @@
+.dasig-loadingscreen-rotate
+  aspect-ratio: 1
+  background-size: 50% 50%
+  background-repeat: no-repeat
+  position: relative
+  animation: rotate 2s infinite
+
+.dasig-loadingscreen-grow
+  aspect-ratio: 1
+  background-size: 50% 50%
+  background-repeat: no-repeat
+  position: relative
+  animation: grow 1s infinite
+
+.dasig-loadingscreen--text
+  padding: 1rem 0 0 0
+  font-weight: 300
+  font-size: 1.25rem
+
+@keyframes rotate
+  from 
+    transform: rotate(0deg) scale(1) 
+  to 
+    transform: rotate(360deg) scale(1) 
+
+@keyframes grow
+  from 
+    transform: scale(0.9)
+  50% 
+    transform: scale(1.2)
+  to 
+    transform: scale(0.9)
