@@ -1,12 +1,12 @@
+// oxlint-disable typescript/no-floating-promises
+
 import dayjs from 'dayjs'
-import { createEffect, createSignal, onSettled, Show } from 'solid-js'
+import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
-// import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
-import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
-import { Box, Button, Clickable, Column, Input, Modal, Padding, Page, Row, Image, Background, File } from '@dasig'
+import { Box, Button, Clickable, Column, Input, Modal, Padding, Page, Row, Image, Background, File, LoadingScreen } from '@dasig'
 import { getApi, postApi, deleteApi } from '@dasig/api'
 import { checkConnection, getDateTime, lockData, securePassword, saveNewSignature, saveNewName, saveNewPassword, getPassword, getListForApproval, checkPage, voidPopsApi, statusPopsApi } from 'services'
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
@@ -42,6 +42,7 @@ export default () => {
   // const [dateOpList, setDateOpList] = createSignal<string[]>([])
 
   const [applicationListElectrical, setApplicationListElectrical] = createSignal<string[]>([])
+  const [applicationListElectricalFiltered, setApplicationListElectricalFiltered] = createSignal<string[]>([])
   const [nameListElectrical, setNameListElectrical] = createSignal<string[]>([])
   const [applicationListOccupancy, setApplicationListOccupancy] = createSignal<string[]>([])
   const [nameListOccupancy, setNameListOccupancy] = createSignal<string[]>([])
@@ -91,6 +92,7 @@ export default () => {
 
   let bldgadditional = false
   let loggedin = false
+  let filter = ''
 
   const getListForApprovalElectrical = async () => {
     const prefetchedElectricalApplications = _listElectricalApplications.get()
@@ -152,13 +154,13 @@ export default () => {
     setConfigEncPassword(password)
 
     if (division === 'electrical') {
-      getListForApprovalElectrical()
+      await getListForApprovalElectrical()
     } else if (division === 'occupancy') {
-      // getListForApprovalOccupancy()
+      // await getListForApprovalOccupancy()
     } else if (division === 'mechanical') {
       // getListForApprovalMechanical()
     } else {
-      getListForApprovalElectrical()
+      await getListForApprovalElectrical()
       // getListForApprovalOccupancy()
       // getListForApprovalMechanical()
     }
@@ -318,7 +320,7 @@ export default () => {
 
         if (updateOrderofpayment) {
           setLoadingText('Adding new transaction record')
-          postTransaction()
+          await postTransaction()
           setApprovedApplication(application)
           setApproved(true)
         }
@@ -342,7 +344,7 @@ export default () => {
 
         if (updateOrderofpayment) {
           setLoadingText('Adding new transaction record')
-          postTransaction()
+          await postTransaction()
           setApprovedApplication(application)
           setApproved(true)
         }
@@ -438,7 +440,7 @@ export default () => {
 
   const checkStatusPopsLocal = async (application: string) => {
     const [response] = await getApi('1431ee20d8f6a0a03c74', application)
-    return response.result
+    return response
   }
 
   const statusPopsOp = async (application: string) => {
@@ -536,8 +538,7 @@ export default () => {
     let response
 
     if (division === 'electrical') {
-      // ;[response] = await getApi('935758ca840c20723c72', application)
-      console.log(application)
+      ;[response] = await getApi('935758ca840c20723c72', application)
     } else if (division === 'mechanical') {
       ;[response] = await getApi('7cff1c47fd874ce8eefc', application)
     } else if (division === 'occupancy') {
@@ -644,7 +645,7 @@ export default () => {
   }
 
   const updateDocflow = async (division: string, application: string, status: string) => {
-    await postApi(`update-docflow-${division}`, { data: status, data2: application })
+    // await postApi(`update-docflow-${division}`, { data: status, data2: application })
     if (division === 'electrical') {
       await postApi('48e0a71f62-0604d816c0', { data: status, data2: application })
     } else if (division === 'mechanical') {
@@ -701,6 +702,19 @@ export default () => {
     })
   }
 
+  const filterList = async (filter: string) => {
+    const items = applicationListElectrical()
+    const filteredApplications = items.filter((item: string) => item.includes(filter))
+
+    if (filter.length !== 0 && filteredApplications.length > 0) {
+      setApplicationListElectrical(filteredApplications)
+    } else if (filter.length !== 0 && filteredApplications.length === 0) {
+      setApplicationListElectrical([])
+    } else {
+      await load('electrical')
+    }
+  }
+
   const saveConfig = async () => {
     let base64image = ''
     if (configNewName() !== '') await saveNewName(parseInt(ID), configNewName())
@@ -752,7 +766,7 @@ export default () => {
   }
 
   const init = async () => {
-    checkPage()
+    await checkPage()
     const logged = await checkLogged()
     if (logged) await load('all')
     else navigate('/esign', { replace: true })
@@ -806,30 +820,22 @@ export default () => {
           </Row>
         </Row>
 
-        <Show when={applicationListElectrical().length > 0}>
-          <Row content='split' padding='2rem 1rem 0 1rem'>
-            <Row gap={0.5}>
-              <span class='application-counter'>{applicationListElectrical().length}</span>
-              <span class='application-counter__text'>{`${applicationListElectrical().length > 1 ? 'Electrical Applications' : 'Electrical Application'}`}</span>
-            </Row>
-            <Row gap={0.5}>
-              <Input value={configNewName()} onChange={setConfigNewName} placeholder='Filter Application' width='18rem' />
-              <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
-            </Row>
+        <Row content='split' padding='2rem 1rem 0 1rem'>
+          <Row gap={0.5}>
+            <span class='application-counter'>{applicationListElectrical().length}</span>
+            <span class='application-counter__text'>{`${applicationListElectrical().length > 1 ? 'Electrical Applications' : 'Electrical Application'}`}</span>
           </Row>
-        </Show>
-        <Show when={applicationListElectrical().length == 0}>
-          <Row content='right' padding='2rem 0 0 0'>
+          <Row gap={0.5}>
+            <Input value={filter} onChange={(app) => filterList(app as string)} placeholder='Filter Application' width='18rem' />
             <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
           </Row>
-        </Show>
+        </Row>
 
         <Row>
           <Show when={isLoading()}>
             <Padding top={2}>
               <Column gap={1}>
-                <AiOutlineLoading3Quarters size={42} />
-                <span>{loadingText()}</span>
+                <LoadingScreen text={loadingText()} image='esign-boxonly-white' imageSize={96} animation='rotate' />
               </Column>
             </Padding>
           </Show>
@@ -838,7 +844,15 @@ export default () => {
             <Show when={applicationListElectrical().length > 0}>
               <Row gap={1} padding='2rem 0 0 0'>
                 {applicationListElectrical().map((item: string, index: number) => (
-                  <EsignCard division='Electrical' applicationNo={item} name={nameListElectrical()[index]} onHover={async () => await getopdetailsCard('electrical', item)} onClick={async () => setShowDetails(true)}></EsignCard>
+                  <EsignCard
+                    division='Electrical'
+                    applicationNo={item}
+                    name={nameListElectrical()[index]}
+                    onClick={async () => {
+                      setShowDetails(true)
+                      await getopdetailsCard('electrical', item)
+                    }}
+                  ></EsignCard>
                 ))}
               </Row>
             </Show>
@@ -935,7 +949,7 @@ export default () => {
       </div>
 
       <div onClick={() => setPostError(false)}>
-        <Modal trigger={postError() === true} background='#562020ff' color='#ffebebe6' opacity={0.8}>
+        <Modal trigger={postError() === true} background='#562020ff' color='#ffebebe6' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row>
@@ -958,93 +972,143 @@ export default () => {
 
       <div onClick={closeInfo}>
         <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='appear-from-top'>
-          <Row content='center' gap={1}>
-            <Box curved thickness={1} color='rgba(244,244,244,0.1)' background='transparent' padding='1rem' width='100%'>
-              <Show when={selectedApplication() !== ''}>
-                <span class='modal-card__application-number'>{selectedApplication()}</span>
-              </Show>
-              <Show when={selectedApplication() === ''}>
-                <span class='modal-card__application-number'>----------</span>
-              </Show>
+          <Show when={isIncomplete()}>
+            <Padding top={0} left={2} right={2} bottom={0}>
+              <span class='modal__application-number'>{item}</span>
 
-              <Padding top={1}>
-                <section class='modal-card__row'>
-                  <span class='modal-card__row__label'>Name of Applicant:</span>
-                  <Show when={selectedName() !== ''}>
-                    <span class='modal-card__row__detail'>{selectedName()} </span>
-                  </Show>
-                  <Show when={selectedName() === ''}>
-                    <span class='modal-card__row__detail'>-------------------</span>
-                  </Show>
-                </section>
+              <Padding top={1} left={0} right={0} bottom={0}>
+                <Column padding='0 0 1rem 0'>
+                  <Box curved thickness={3} color='#c85656' padding='1rem'>
+                    <h2 class='incomplete__error'>Signing Error</h2>
+                  </Box>
+                  <h3 class='incomplete__error'>Missing Data Detected</h3>
+                </Column>
 
-                <section class='modal-card__row'>
-                  <span class='modal-card__row__label'>Location:</span>
-                  <Show when={selectedLocation() !== ''}>
-                    <span class='modal-card__row__detail'>{selectedLocation()}</span>
-                  </Show>
-                  <Show when={selectedLocation() === ''}>
-                    <span class='modal-card__row__detail'>-------------------</span>
-                  </Show>
-                </section>
-
-                <section class='modal-card__row'>
-                  <span class='modal-card__row__label'>Type:</span>
-                  <Show when={selectedType() !== ''}>
-                    <span class='modal-card__row__detail'>{selectedType().toUpperCase()}</span>
-                  </Show>
-                  <Show when={selectedType() === ''}>
-                    <span class='modal-card__row__detail'>-------------------</span>
-                  </Show>
-                </section>
-
-                <section class='modal-card__row'>
-                  <span class='modal-card__row__label'>Assessed By:</span>
-                  <Show when={selectedAssessor() !== ''}>
-                    <span class='modal-card__row__detail'>{selectedAssessor()}</span>
-                  </Show>
-                  <Show when={selectedAssessor() === ''}>
-                    <span class='modal-card__row__detail'>-------------------</span>
-                  </Show>
-                </section>
-
-                <section class='modal-card__row'>
-                  <span class='modal-card__row__label'>Date Assessed:</span>
-                  <Show when={selectedDate() !== ''}>
-                    <span class='modal-card__row__detail'>{selectedDate().toUpperCase()}</span>
-                  </Show>
-                  <Show when={selectedDate() === ''}>
-                    <span class='modal-card__row__detail'>-------------------</span>
-                  </Show>
-                </section>
-
-                <section class='modal-card__row'>
-                  <span class='modal-card__row__label'>Total Fee:</span>
-
-                  <Show when={selectedTotal() !== ''}>
-                    <span class='modal-card__row__detail__price'>
-                      {PESO} {selectedTotal()}
-                    </span>
-                  </Show>
-                  <Show when={selectedTotal() === ''}>
-                    <span class='modal-card__row__detail__price'>{PESO} --.--</span>
-                  </Show>
-                </section>
+                <div class='incomplete'>
+                  <Column>
+                    <span class='incomplete__text'>Some required information is missing from the application details</span>
+                    <span class='incomplete__text'>Please return to Assessment to complete the required fields</span>
+                  </Column>
+                </div>
               </Padding>
+              <Column padding='1rem 0 0 0'>
+                <Button wide label='Return to Assessment' edges='curved' design='bo-primary' onClick={() => returnAssessment('mechanical', item)} />
+                <span class='modal__cancel'>Click anywhere to cancel</span>
+              </Column>
+            </Padding>
+          </Show>
 
-              <Column padding='2rem 0 0 0'>
+          <Show when={!isIncomplete()}>
+            <Row content='center' gap={1}>
+              <Box curved thickness={1} color='rgba(244,244,244,0.1)' background='transparent' padding='1rem' width='100%'>
                 <Show when={selectedApplication() !== ''}>
-                  <Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' onClick={() => approveHandler(division(), selectedApplication())} />
-                  {/*<Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' />*/}
+                  <span class='modal-card__application-number'>{selectedApplication()}</span>
                 </Show>
                 <Show when={selectedApplication() === ''}>
-                  <span class='loading-data'>Loading data, please wait</span>
+                  <span class='modal-card__application-number'>----------</span>
                 </Show>
 
-                <span class='modal-card__cancel'>Click anywhere to cancel</span>
-              </Column>
-            </Box>
-          </Row>
+                <Padding top={1}>
+                  <section class='modal-card__row'>
+                    <span class='modal-card__row__label'>Name of Applicant:</span>
+                    <Show when={selectedName() !== ''}>
+                      <span class='modal-card__row__detail'>{selectedName()} </span>
+                    </Show>
+                    <Show when={selectedName() === ''}>
+                      <span class='modal-card__row__detail'>-------------------</span>
+                    </Show>
+                  </section>
+
+                  <section class='modal-card__row'>
+                    <span class='modal-card__row__label'>Location:</span>
+                    <Show when={selectedLocation() !== ''}>
+                      <span class='modal-card__row__detail'>{selectedLocation()}</span>
+                    </Show>
+                    <Show when={selectedLocation() === ''}>
+                      <span class='modal-card__row__detail'>-------------------</span>
+                    </Show>
+                  </section>
+
+                  <section class='modal-card__row'>
+                    <span class='modal-card__row__label'>Type:</span>
+                    <Show when={selectedType() !== ''}>
+                      <span class='modal-card__row__detail'>{selectedType().toUpperCase()}</span>
+                    </Show>
+                    <Show when={selectedType() === ''}>
+                      <span class='modal-card__row__detail'>-------------------</span>
+                    </Show>
+                  </section>
+
+                  <section class='modal-card__row'>
+                    <span class='modal-card__row__label'>Assessed By:</span>
+                    <Show when={selectedAssessor() !== ''}>
+                      <span class='modal-card__row__detail'>{selectedAssessor()}</span>
+                    </Show>
+                    <Show when={selectedAssessor() === ''}>
+                      <span class='modal-card__row__detail'>-------------------</span>
+                    </Show>
+                  </section>
+
+                  <section class='modal-card__row'>
+                    <span class='modal-card__row__label'>Date Assessed:</span>
+                    <Show when={selectedDate() !== ''}>
+                      <span class='modal-card__row__detail'>{selectedDate().toUpperCase()}</span>
+                    </Show>
+                    <Show when={selectedDate() === ''}>
+                      <span class='modal-card__row__detail'>-------------------</span>
+                    </Show>
+                  </section>
+
+                  <section class='modal-card__row'>
+                    <span class='modal-card__row__label'>Total Fee:</span>
+
+                    <Show when={selectedTotal() !== ''}>
+                      <span class='modal-card__row__detail__price'>
+                        {PESO} {selectedTotal()}
+                      </span>
+                    </Show>
+                    <Show when={selectedTotal() === ''}>
+                      <span class='modal-card__row__detail__price'>{PESO} --.--</span>
+                    </Show>
+                  </section>
+                </Padding>
+
+                <Column padding='2rem 0 0 0'>
+                  <Show when={selectedApplication() !== ''}>
+                    <Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' onClick={() => approveHandler(division(), selectedApplication())} />
+                    {/*<Button width='100%' label='Approve' corner='curved' design='bootstrap-primary' />*/}
+                  </Show>
+                  <Show when={selectedApplication() === ''}>
+                    <span class='loading-data'>Loading data, please wait</span>
+                  </Show>
+
+                  <span class='modal-card__cancel'>Click anywhere to cancel</span>
+                </Column>
+              </Box>
+            </Row>
+          </Show>
+        </Modal>
+      </div>
+
+      <div onClick={() => setPostError(false)}>
+        <Modal trigger={postError() === true} background='#562020cc' color='#ffebebe6' opacity={0.8} animation='appear-from-top'>
+          <Padding top={1} bottom={1} left={4} right={4}>
+            <Column>
+              <Row>
+                <Box curved thickness={3} color='#ffebebe6' padding='1rem'>
+                  <h2>Approval and Signing Error</h2>
+                </Box>
+              </Row>
+
+              <Row>
+                <h3>{errorMessage()}</h3>
+              </Row>
+
+              <Row>
+                <span class='close-text'>Click anywhere to close</span>
+              </Row>
+            </Column>
+          </Padding>
         </Modal>
       </div>
     </>

@@ -38,6 +38,7 @@ const init = async () => {
 }
 
 onSettled(() => {
+  // oxlint-disable-next-line typescript/no-floating-promises
   init()
 })
 

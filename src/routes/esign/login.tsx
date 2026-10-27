@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-floating-promises
+
 import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
@@ -5,6 +7,7 @@ import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable,
 import { getApi } from '@dasig/api'
 import { checkConnection, securePassword, checkPage, setPage } from 'services'
 import { _headName, _headPassword } from 'stores/head'
+import { _employeeName, _employeePassword } from 'stores/employee'
 import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
 import { $head, $head_id } from 'cache/head'
 import { $registered_list } from 'cache/list'
@@ -45,14 +48,19 @@ export default () => {
         dbpassword = dbpass.result
       }
     } else {
-      const [dbemployeeid] = await getApi('bd85b3fd3f45316eda64', name())
-      employeeid = dbemployeeid.result
+      const storepass = _employeePassword.get()
 
-      const [dbpass] = await getApi('49dd42b9454f27280be0', dbemployeeid.result)
-      dbpassword = dbpass.result
+      if (storepass.length > 0) {
+        dbpassword = storepass
+      } else {
+        const [dbemployeeid] = await getApi('bd85b3fd3f45316eda64', name())
+        employeeid = dbemployeeid.result
+
+        const [dbpass] = await getApi('49dd42b9454f27280be0', dbemployeeid.result)
+        dbpassword = dbpass.result
+      }
     }
     const hashPassword = await securePassword(password())
-    console.log(hashPassword)
 
     if (dbpassword === '0') {
       setErrorMessage('Not yet registered. Please proceed to Registration.')
@@ -82,19 +90,19 @@ export default () => {
     $login_id.set(id)
   }
 
-  const gotoApproval = () => {
-    setPage('/esign/approval')
+  const gotoApproval = async () => {
+    await setPage('/esign/approval')
     navigate('/esign/approval', { replace: true })
   }
 
-  const gotoPrinting = () => {
-    setPage('/esign/printing')
+  const gotoPrinting = async () => {
+    await setPage('/esign/printing')
     navigate('/esign/printing', { replace: true })
   }
 
-  const navigateToRolePage = () => {
-    if (role() === 'ASSESSOR') gotoPrinting()
-    else gotoApproval()
+  const navigateToRolePage = async () => {
+    if (role() === 'ASSESSOR') await gotoPrinting()
+    else await gotoApproval()
   }
 
   const setApprover = async () => {
@@ -106,6 +114,13 @@ export default () => {
     // const [applicationsE, namesE] = await getListForApproval('electrical')
     // _listElectricalApplications.set(applicationsE)
     // _listElectricalNames.set(namesE)
+  }
+
+  const setAssessorName = async (name: string) => {
+    setName(name)
+    const [dbemployeeid] = await getApi('bd85b3fd3f45316eda64', name)
+    const [dbpass] = await getApi('49dd42b9454f27280be0', dbemployeeid.result)
+    _employeePassword.set(dbpass.result)
   }
 
   const getHead = () => {
@@ -239,7 +254,7 @@ export default () => {
               <Column width='100%' content='center'>
                 <Padding top={4.5}>
                   <Padding bottom={1}>
-                    <Combobox options={registeredList()} placeholder="Assessor's Name" value={name()} onChange={setName} width='22.25rem' />
+                    <Combobox options={registeredList()} placeholder="Assessor's Name" value={name()} onChange={(e) => setAssessorName(e as string)} width='22.25rem' />
                   </Padding>
 
                   <Input

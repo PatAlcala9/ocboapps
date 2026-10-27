@@ -1,0 +1,132 @@
+@use 'sass:color'
+// @use '/design/fonts' as fonts
+
+.modal
+  font-weight: 500
+
+  &__application-number
+    padding: 1rem 0
+    border-radius: 8px
+    font-size: 1.75rem
+    font-weight: 800
+    display: flex
+    flex-direction: column
+    flex-wrap: wrap
+    align-items: center
+    background: #16212C
+    box-shadow: 8px 8px 28px #0d141b, -8px -8px 28px #1f2e3d
+
+  &__name
+    padding: 1rem 0 0 0
+    font-size: 1rem
+
+  &__row
+    display: flex
+    flex-direction: column
+    flex-wrap: wrap
+    justify-content: flex-start
+    align-items: flex-start
+    gap: 0.5rem
+    padding: 1.25rem 1rem
+    // box-shadow: 5px 5px 10px #10171f, -5px -5px 10px #1c2b39
+    // border: 1px solid white
+    // border-radius: 8px
+    // margin: 0.5rem
+
+    &__label
+      font-size: 0.75rem
+
+    &__detail
+      font-size: 1rem
+
+      &__price
+        font-size: 1.75rem
+        font-weight: 700
+
+  &__cancel
+    font-size: 0.75rem
+    padding: 0.5rem 0 0 0
+    font-weight: 400
+
+.approval
+  font-size: 1.75rem
+  font-weight: 700
+  padding: 0.5rem 1rem
+
+.config
+  display: flex
+  flex-direction: column
+  gap: 1rem
+
+  &__row
+    display: flex
+    flex-direction: column
+    gap: 0.5rem
+
+  &__edit
+    padding: 1rem 0 0 0
+    display: flex
+    flex-direction: column
+    gap: 0.5rem
+
+    &__title
+      font-weight: bold
+      font-size: 1.15rem
+
+    &__info
+      font-size: 0.75rem
+      opacity: 0.6
+
+  &__button
+    padding: 1rem 0 0 0
+
+.modal-card
+  font-weight: 500
+
+  &__application-number
+    padding: 1rem 0
+    border-radius: 8px
+    font-size: 1.75rem
+    font-weight: 800
+    display: flex
+    flex-direction: column
+    flex-wrap: wrap
+    align-items: center
+    background: #16212C
+    box-shadow: 8px 8px 28px #0d141b, -8px -8px 28px #1f2e3d
+
+  &__name
+    padding: 1rem 0 0 0
+    font-size: 1rem
+
+  &__row
+    display: flex
+    flex-direction: column
+    flex-wrap: wrap
+    justify-content: flex-start
+    align-items: flex-start
+    gap: 0.5rem
+    padding: 1rem 0.75rem
+
+    &__label
+      font-size: 0.75rem
+
+    &__detail
+      font-size: 1rem
+
+      &__price
+        font-size: 1.75rem
+        font-weight: 700
+
+  &__cancel
+    font-size: 0.75rem
+    padding: 0.5rem 0 0 0
+    font-weight: 400
+
+.loading-data
+  padding: 1rem
+  border-radius: 8px
+  background-color: color.adjust(#0D64E4, $blackness: 20%)
+  opacity: 0.6
+  width: 100%
+  text-align: center

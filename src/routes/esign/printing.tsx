@@ -31,14 +31,14 @@ import {
   _totalUnits,
   _type,
   _units,
-} from 'stores/pdfinfo.ts'
+} from 'stores/pdfinfo'
 import { checkConnection, createPdfElectrical, createPdfOccupancy, createPdfMechanical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage } from 'services'
 import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
 import { RiDocumentFileCloseFill } from 'solid-icons/ri'
-import EsignCard from 'components/EsignCard.tsx'
+import EsignCard from 'components/EsignCard'
 
-import { _headId } from 'stores/head.ts'
-import { $head, $head_id } from 'cache/head.ts'
+import { _headId } from 'stores/head'
+import { $head, $head_id } from 'cache/head'
 import { getApi, deleteApi, postApi } from '@dasig/api'
 import './printing.sass'
 import { $logged_in, $login_id, $login_name } from 'cache/login'

@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-floating-promises
+
 import { onSettled, createSignal, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
@@ -56,14 +58,14 @@ export default () => {
   }
 
   const gotoPage = async (page: string) => {
-    setPage(page)
+    await setPage(page)
     navigate(page)
   }
 
   const init = async () => {
     setConnected(await checkConnection())
     setLoading(false)
-    setPage('/esign')
+    await setPage('/esign')
   }
 
   const getData = () => {
@@ -193,30 +195,6 @@ export default () => {
               <h1>OCBO e-Sign</h1>
             </Row>
 
-            {/*<Show when={connected()}>
-              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#0f131d56'>
-                <Row content='left' gap={1}>
-                  <Button label='Login' corner='curved' design='bootstrap-link' onClick={() => gotoPage('/esign/login')} />
-                  <Button label='Register' corner='curved' design='bootstrap-primary' onClick={() => gotoPage('/esign/register')} />
-                </Row>
-              </Box>
-            </Show>
-            <Show when={!connected()}>
-              <Box curved thickness={0} padding='0.75rem 1.25rem' background='#b21f2d56'>
-                <Column alignment='center'>
-                  <Row content='left' gap={1}>
-                    <RiBusinessGlobalOffLine size={24} color='#e5585dba' />
-                    <span class={'offline-text'}>OFFLINE</span>
-                    <Button label='Login' corner='curved' design='bootstrap-dark' />
-                    <Button label='Register' corner='curved' design='bootstrap-danger' />
-                  </Row>
-                  <Row content='left'>
-                    <a class='offline-message'>Please check your server connection and reload the page</a>
-                  </Row>
-                </Column>
-              </Box>
-            </Show>*/}
-
             <Row gap={0.5}>
               <Show when={loading()}>
                 <Box curved thickness={0} padding='0.75rem 1.25rem' background='#090c1a57'>
@@ -291,7 +269,7 @@ export default () => {
 
               <Row gap={0.25}>
                 <span>Developed by:</span>
-                <Image name='patalcala' size={70} />
+                <Image name='pat-alcala' size={70} />
                 <span>Pat Alcala</span>
               </Row>
 
@@ -305,6 +283,8 @@ export default () => {
         </Display>
 
         <Display mobile>
+          <Background image='esign-mobile-background' />
+
           <Column content='center'>
             <Padding top={2}>
               <Image name='esign-mobile' size={160} />
@@ -319,6 +299,29 @@ export default () => {
               </Column>
             </Box>
           </Column>
+
+          <Footer margin={0.5}>
+            <Column content='split' gap={0.5}>
+              <Row gap={0.5}>
+                <Row gap={0.25}>
+                  <Copyright />
+                  <span>Davao City, Philippines</span>
+                </Row>
+              </Row>
+
+              <Row gap={0.25}>
+                <span>Developed by:</span>
+                <Image name='pat-alcala' size={70} />
+                <span>Pat Alcala</span>
+              </Row>
+
+              <Row gap={0.25}>
+                <span>Made with:</span>
+                <Image name='logo' size={10} />
+                <span>Dasig</span>
+              </Row>
+            </Column>
+          </Footer>
         </Display>
       </Page>
     </>
