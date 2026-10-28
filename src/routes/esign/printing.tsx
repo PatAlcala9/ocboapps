@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
-import { Tabs } from '@kobalte/core/tabs'
+// import { Tabs } from '@kobalte/core/tabs'
 import { FileField } from '@kobalte/core/file-field'
-import { createEffect, createSignal, onCleanup, onSettled, Show } from 'solid-js'
+import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
-import { Background, Box, Button, Clickable, Column, Combobox, Input, Image, Modal, Padding, Page, Row } from '@dasig'
+import { Background, Box, Button, Clickable, Column, Combobox, Input, Image, Modal, Padding, Page, Row, LoadingScreen } from '@dasig'
 import {
   _additional,
   _additionalAmountList,
@@ -32,7 +32,7 @@ import {
   _type,
   _units,
 } from 'stores/pdfinfo'
-import { checkConnection, createPdfElectrical, createPdfOccupancy, createPdfMechanical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage } from 'services'
+import { checkConnection, createPdfElectrical, createPdfOccupancy, createPdfMechanical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage, getPassword } from 'services'
 import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
 import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 import EsignCard from 'components/EsignCard'
@@ -89,8 +89,6 @@ export default () => {
   const [employeeId, setEmployeeId] = createSignal(0)
   const [employeeName, setEmployeeName] = createSignal('')
 
-  const [filter, setFilter] = createSignal('')
-
   const listType = ['Print', 'Reprint (No Change)', 'Void (Back to Approval)']
   const [selectedType, setSelectedType] = createSignal('Print')
 
@@ -110,9 +108,12 @@ export default () => {
   const [showDetails, setShowDetails] = createSignal(false)
 
   const [division, setDivision] = createSignal('')
+  const [filtered, setFiltered] = createSignal('')
 
   let pageLoaded = false
   let bldgadditional = false
+  let filter = ''
+  let loggedin = false
 
   const checkAccess = async (access: string) => {
     const [response] = await getApi('f54889f1a495bc025dbd', access, employeeId())
@@ -298,56 +299,6 @@ export default () => {
     setIsMechanical(mechanical)
   }
 
-  // const getopdetails = async (division: string, applicationNo: string) => {
-  //   // let op = []
-  //   // if (division === 'building') op = await getApi('get-opdetails-building', applicationNo)
-  //   // if (division === 'occupancy') op = await getApi('get-opdetails-occupancy', applicationNo)
-  //   // if (division === 'electrical') op = await getApi('get-opdetails-electrical', applicationNo)
-
-  //   if (division === 'occupancy') {
-  //     let additionalResult
-  //     if (selectedType() === 'Print') {
-  //       additionalResult = await getApi('3037a5adace94528ccf4', applicationNo)
-  //     } else additionalResult = await getApi('60067c5e12316eed92ab', applicationNo)
-
-  //     bldgadditional = additionalResult > 0
-  //   }
-
-  //   // const op = await getApi(`get-opdetails-${division}`, applicationNo)
-  //   let op
-  //   if (division === 'electrical') {
-  //     op = await getApi('533b63af79c27bb782f3', applicationNo)
-  //   } else if (division === 'mechanical') {
-  //     op = await getApi('ab0aec88a5615fd28f48', applicationNo)
-  //   } else if (division === 'occupancy') {
-  //     op = await getApi('185caa987eba4376ba0d', applicationNo)
-  //   }
-
-  //   setLocation(op.result[0])
-  //   setType(op.result2[0])
-  //   setAssessor(op.result3[0])
-  //   setTotalOp(calculateTotal(op.result4))
-  //   setDateOp(dayjs(op.result5[0]).format('MMMM DD, YYYY'))
-  //   setApplicationId(op.result6[0])
-
-  //   // setAssessorId(op.result12[0])
-  //   // setDescriptionList(op.result8)
-  //   // setAmountList(op.result9)
-  //   // setDateOpList(op.result10)
-  //   // calculateAmounts()
-
-  //   getPrintDetails(division, op.result6[0])
-  //   getPrintDetailsFees(division, op.result6[0])
-
-  //   getSignatureImage(employeeId())
-
-  //   const approversignId = await geteSignId(276)
-  //   getApprovedDate(approversignId, applicationNo)
-  //   // const assessorId = await getEmployeeId(op.result7[0])
-  //   // const assessorsignId = await geteSignId(assessorId)
-  //   getAssessedDate(division, op.result6[0])
-  // }
-
   const getopdetailsCard = async (division: string, applicationNo: string) => {
     setDivision(division)
 
@@ -401,10 +352,8 @@ export default () => {
   const getListForPrinting = async (division: string) => {
     try {
       setIsLoading(true)
-      setLoadingText('Getting List to Print')
+      setLoadingText('Getting List for Printing')
       let response: any
-      // if (selectedType() === 'Print') response = await getApi(`get-listopprinting-${division}`)
-      // else response = await getApi(`get-listopreprinting-${division}`)
 
       if (selectedType() === 'Print') {
         if (division === 'building') {
@@ -426,9 +375,9 @@ export default () => {
         }
       }
 
-      if (filter() !== '' && filter().trim().length !== 0) {
-        const filteredApplications = response.result.filter((item: string) => item.includes(filter()))
-        const filteredIndices = response.result.map((item: string, index: number) => (item.includes(filter()) ? index : -1)).filter((index: number) => index !== -1)
+      if (filter !== '' && filter.trim().length !== 0) {
+        const filteredApplications = response.result.filter((item: string) => item.includes(filter))
+        const filteredIndices = response.result.map((item: string, index: number) => (item.includes(filter) ? index : -1)).filter((index: number) => index !== -1)
         const filteredNames = filteredIndices.map((index: number) => response.result2[index])
 
         if (division === 'electrical') {
@@ -468,8 +417,9 @@ export default () => {
   }
 
   const removeEmployee = () => {
-    $head.delete()
-    $head_id.delete()
+    $logged_in.delete()
+    $login_name.delete()
+    $login_id.delete()
   }
 
   const checkLogged = async () => {
@@ -477,15 +427,16 @@ export default () => {
     const loginName = $login_name.get()
     const loginId = $login_id.get()
 
-    setEmployeeId(parseInt(loginId!, 10))
-    setEmployeeName(loginName!)
+    loggedin = logged === 'true' ? true : false
 
-    if (employeeId() === 0 || employeeId().toString() === 'NaN') {
+    if (!loggedin) {
       removeEmployee()
-      // navigate('/', { replace: true })
       return false
+    } else {
+      setEmployeeId(parseInt(loginId!, 10))
+      setEmployeeName(loginName!)
+      return true
     }
-    return true
   }
 
   const printHandler = async (division: string, application: string) => {
@@ -794,16 +745,28 @@ export default () => {
   //   }
   // }
 
-  const refresh = async () => {
-    if (isBuilding()) await getListForPrinting('building')
-    if (isOccupancy()) await getListForPrinting('occupancy')
-    if (isElectrical()) await getListForPrinting('electrical')
-    if (isMechanical()) await getListForPrinting('mechanical')
+  // const refresh = async () => {
+  //   if (isBuilding()) await getListForPrinting('building')
+  //   if (isOccupancy()) await getListForPrinting('occupancy')
+  //   if (isElectrical()) await getListForPrinting('electrical')
+  //   if (isMechanical()) await getListForPrinting('mechanical')
+  // }
+
+  const refresh = async (division: string) => {
+    if (division === 'electrical') {
+      await load('electrical')
+    } else if (division === 'occupancy') {
+      await load('occupancy')
+    } else if (division === 'mechanical') {
+      await load('mechanical')
+    } else {
+      await load('all')
+    }
   }
 
   const logout = () => {
     removeEmployee()
-    navigate('/')
+    navigate('/esign')
   }
 
   const voidPopsOp = async (application: string) => {
@@ -909,15 +872,25 @@ export default () => {
     setConfigNewEncPassword(encNewPassword)
   }
 
-  const getPassword = async () => {
-    const [response] = await getApi('49dd42b9454f27280be0', employeeId())
-    setConfigEncPassword(response.result)
-  }
-
   const updateDisplayName = async () => {
     const [response] = await getApi('13aa78de07dbcc7acc12', employeeId())
     sessionStorage.setItem('name', response.result)
     setEmployeeName(response.result)
+  }
+
+  const filterList = async (filter: string) => {
+    const items = applicationListElectrical()
+    const filteredApplications = items.filter((item: string) => item.includes(filter))
+
+    setFiltered(filter)
+
+    if (filter.length !== 0 && filteredApplications.length > 0) {
+      setApplicationListElectrical(filteredApplications)
+    } else if (filter.length !== 0 && filteredApplications.length === 0) {
+      setApplicationListElectrical([])
+    } else {
+      await load('electrical')
+    }
   }
 
   const closeConfig = async () => {
@@ -945,26 +918,45 @@ export default () => {
     setShowDetails(false)
   }
 
+  const load = async (division: string) => {
+    setIsLoading(true)
+    setConnected(await checkConnection())
+    if (connected() === false) {
+      setErrorMessage('Failed to fetch application list')
+      return
+    }
+
+    setLoadingText('Getting List for Printing')
+
+    const loggedid = $login_id.get()!
+    const password = await getPassword(loggedid)
+    setConfigEncPassword(password)
+
+    if (division === 'electrical') await getListForPrinting('electrical')
+    else if (division === 'occupancy') await getListForPrinting('occupancy')
+    else if (division === 'mechanical') await getListForPrinting('mechanical')
+    else await getListForPrinting('building')
+
+    setIsLoading(false)
+  }
+
   const init = async () => {
-    checkPage()
+    await checkPage()
     const logged = await checkLogged()
-    await getPassword()
 
     if (logged) {
       setSelectedType('Print')
 
       await checkDivision()
-      if (isBuilding()) await getListForPrinting('building')
-      if (isOccupancy()) await getListForPrinting('occupancy')
-      if (isElectrical()) await getListForPrinting('electrical')
-      if (isMechanical()) await getListForPrinting('mechanical')
-    }
-
-    // pageLoaded = true
+      if (isBuilding()) await load('building')
+      if (isOccupancy()) await load('occupancy')
+      if (isElectrical()) await load('electrical')
+      if (isMechanical()) await load('mechanical')
+    } else navigate('/esign', { replace: true })
   }
 
   onSettled(() => {
-    init()
+    void init()
   })
 
   // onCleanup(() => {
@@ -972,12 +964,12 @@ export default () => {
   // })
 
   // createEffect(async () => {
-  //   if (filter() !== '') {
+  //   if (filter !== '') {
   //     if (isBuilding()) await getListForPrinting('building')
   //     if (isOccupancy()) await getListForPrinting('occupancy')
   //     if (isElectrical()) await getListForPrinting('electrical')
   //     if (isMechanical()) await getListForPrinting('mechanical')
-  //   } else if (filter() === '' && pageLoaded === true) {
+  //   } else if (filter === '' && pageLoaded === true) {
   //     if (isBuilding()) await getListForPrinting('building')
   //     if (isOccupancy()) await getListForPrinting('occupancy')
   //     if (isElectrical()) await getListForPrinting('electrical')
@@ -1025,523 +1017,62 @@ export default () => {
           </Row>
         </Row>
 
-        <Row content='center'>
-          <Tabs aria-label='Main navigation' class='tabs'>
-            <Row>
-              <Tabs.List class='tabs__list'>
-                <Show when={isBuilding()}>
-                  <Tabs.Trigger class='tabs__trigger' value='building'>
-                    Building
-                  </Tabs.Trigger>
-                </Show>
-                <Show when={isOccupancy()}>
-                  <Tabs.Trigger class='tabs__trigger' value='occupancy'>
-                    Occupancy
-                  </Tabs.Trigger>
-                </Show>
-                <Show when={isElectrical()}>
-                  <Tabs.Trigger class='tabs__trigger' value='electrical'>
-                    Electrical
-                  </Tabs.Trigger>
-                </Show>
-                <Show when={isMechanical()}>
-                  <Tabs.Trigger class='tabs__trigger' value='mechanical'>
-                    Mechanical
-                  </Tabs.Trigger>
-                </Show>
-                <Tabs.Indicator class='tabs__indicator' />
-              </Tabs.List>
-            </Row>
+        <Row content='split' padding='2rem 1rem 0 1rem'>
+          <Row gap={0.5}>
+            <span class='application-counter'>{applicationListElectrical().length}</span>
+            <span class='application-counter__text'>{`${applicationListElectrical().length > 1 ? 'Electrical Applications' : 'Electrical Application'}`}</span>
+          </Row>
+          <Row gap={0.5}>
+            <Input value={filter} onChange={(app) => filterList(app as string)} placeholder='Filter Application' width='18rem' />
+            <Combobox options={listType} value={selectedType()} onChange={setSelectedType} placeholder='Select Type' width='250px' />
+            <Button corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={() => refresh('electrical')} noLabel />
+          </Row>
+        </Row>
 
-            <Tabs.Content class='tabs__content' value='building'>
-              {/*<Row>
-                  <h2>List of Ready to Approve and Sign Building Order of Payments</h2>
-                </Row>*/}
+        <Row>
+          <Show when={isLoading()}>
+            <Padding top={4} bottom={0} right={10} left={10}>
+              <Column gap={1}>
+                <LoadingScreen text={loadingText()} image='esign-boxonly-white' imageSize={96} animation='rotate' />
+              </Column>
+            </Padding>
+          </Show>
 
-              <Padding top={0} bottom={0} right={10} left={10}>
-                <Row content='split'>
-                  <Input value={filter()} onChange={setFilter} placeholder='Filter Application Number' />
-                  <Row>
-                    {/* <Combobox options={listType} value={selectedType()} onChange={setSelectedType} placeholder="Select Type" width='200px' /> */}
-                    <Button label='Refresh Data' corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={refresh}></Button>
-                  </Row>
+          <Show when={!isLoading()}>
+            <Show when={applicationListElectrical().length > 0}>
+              <Padding top={2} bottom={1} left={0} right={0}>
+                <Row gap={1}>
+                  {applicationListElectrical().map((item: string, index: number) => (
+                    <EsignCard
+                      division='Electrical'
+                      applicationNo={item}
+                      name={nameListElectrical()[index]}
+                      onClick={async () => {
+                        setShowDetails(true)
+                        await getopdetailsCard('electrical', item)
+                      }}
+                    ></EsignCard>
+                  ))}
                 </Row>
               </Padding>
+            </Show>
 
-              {/*<Row>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>Application Number</th>
-                        <th>Name</th>
-                        <th style="text-align: center">Show Details</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applicationListBuilding().map((item: string, index: number) => (
-                        <tr>
-                          <td>{item}</td>
-                          <td>{nameListBuilding()[index]}</td>
-
-                          <td>
-                            <ModalButton
-                              class="modal"
-                              label="Show Details"
-                              design="bo-link"
-                              background="#121e2acc"
-                              color="#ffffffec"
-                              function={async () => {
-                                await getopdetailsCard('building', item)
-                              }}
-                            >
-                              <Padding top={0} left={2} right={2} bottom={0}>
-                                <span class="modal__application-number">{item}</span>
-
-                                <Padding top={1} left={0} right={0} bottom={0}>
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Name of Applicant:</span>
-                                    <span class="modal__row__detail">{nameListBuilding()[index]}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Location:</span>
-                                    <span class="modal__row__detail">{location()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Type:</span>
-                                    <span class="modal__row__detail">{type().toUpperCase()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Assessed By:</span>
-                                    <span class="modal__row__detail">{assessor()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Date Assessed:</span>
-                                    <span class="modal__row__detail">{dateOp().toUpperCase()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Total Fee:</span>
-                                    <span class="modal__row__detail__price">
-                                      {PESO}{' '}
-                                      {totalOp().toLocaleString('en-US', {
-                                        minimumFractionDigits: 2,
-                                      })}
-                                    </span>
-                                  </section>
-                                </Padding>
-
-                                <Row padding="2rem 0 0 0">
-                                  <Button width='100%' label="Print" edges="curved" design="bo-primary" onClick={() => printHandler('building', item)}></Button>
-                                  <span class="modal__cancel">Click anywhere to cancel</span>
-                                </Row>
-                              </Padding>
-                            </ModalButton>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Row>*/}
-            </Tabs.Content>
-            <Tabs.Content class='tabs__content' value='occupancy'>
-              {/*<Row>
-                  <h2>List of Ready to Print in Occupancy Order of Payments</h2>
-                </Row>*/}
-
-              <Padding top={0} bottom={0} right={10} left={10}>
-                <Row content='split'>
-                  <Input value={filter()} onChange={setFilter} placeholder='Filter Application Number' />
-                  <Row>
-                    {/* <Combobox options={listType} value={selectedType()} onChange={setSelectedType} placeholder="Select Type" width='200px' /> */}
-                    <Button label='Refresh Data' corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={refresh}></Button>
-                  </Row>
-                </Row>
+            <Show when={applicationListElectrical().length === 0}>
+              <Padding top={2} bottom={0} left={0} right={0}>
+                <Box thickness={1} padding='4rem 2rem' curved color='rgba(250, 250, 250, 0.1)' background='rgba(68, 25, 25, 0.3)'>
+                  <Column gap={1}>
+                    <RiDocumentFileCloseFill size={50} />
+                    <Show when={filter.length !== 0}>
+                      <span>No electrical applications available for printing</span>
+                    </Show>
+                    <Show when={filter.length === 0}>
+                      <span>No electrical applications containing {filtered()}</span>
+                    </Show>
+                  </Column>
+                </Box>
               </Padding>
-
-              <Row>
-                <Show when={isLoading()}>
-                  <Padding top={4} bottom={0} right={10} left={10}>
-                    <Column gap={1}>
-                      <AiOutlineLoading3Quarters size={42} />
-                      <span>{loadingText()}</span>
-                    </Column>
-                  </Padding>
-                </Show>
-
-                <Show when={!isLoading()}>
-                  <Padding top={2} bottom={1} left={0} right={0}>
-                    <Row gap={1}>
-                      {applicationListOccupancy().map((item: string, index: number) => (
-                        <EsignCard
-                          division='Occupancy'
-                          applicationNo={item}
-                          name={nameListOccupancy()[index]}
-                          onClick={async () => {
-                            setShowDetails(true)
-                            await getopdetailsCard('occupancy', item)
-                          }}
-                        ></EsignCard>
-                      ))}
-                    </Row>
-                  </Padding>
-                </Show>
-
-                {/*<table class="table">
-                    <thead>
-                      <tr>
-                        <th>Application Number</th>
-                        <th>Name</th>
-                        <th style="text-align: center">Show Details</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applicationListOccupancy().map((item: string, index: number) => (
-                        <tr>
-                          <td>{item}</td>
-                          <td>{nameListOccupancy()[index]}</td>
-
-                          <td>
-                            <ModalButton
-                              class="modal"
-                              label="Show Details"
-                              design="bo-link"
-                              background="#121e2acc"
-                              color="#ffffffec"
-                              function={async () => {
-                                await getopdetails('occupancy', item)
-                              }}
-                            >
-                              <Padding top={0} left={2} right={2} bottom={0}>
-                                <span class="modal__application-number">{item}</span>
-
-                                <Padding top={1} left={0} right={0} bottom={0}>
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Name of Applicant:</span>
-                                    <span class="modal__row__detail">{nameListOccupancy()[index]}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Location:</span>
-                                    <span class="modal__row__detail">{location()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Type:</span>
-                                    <span class="modal__row__detail">{type().toUpperCase()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Assessed By:</span>
-                                    <span class="modal__row__detail">{assessor()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Date Assessed:</span>
-                                    <span class="modal__row__detail">{dateOp().toUpperCase()}</span>
-                                  </section>
-
-                                  <section class="modal__row">
-                                    <span class="modal__row__label">Total Fee:</span>
-                                    <span class="modal__row__detail__price">
-                                      {PESO}{' '}
-                                      {totalOp().toLocaleString('en-US', {
-                                        minimumFractionDigits: 2,
-                                      })}
-                                    </span>
-                                  </section>
-                                </Padding>
-
-                                <Row padding="2rem 0 0 0">
-                                  <Show when={selectedType() === 'Print'}>
-                                    <Button width='100%' label="Print" edges="curved" design="bo-primary" onClick={() => printHandler('occupancy', item)}></Button>
-                                  </Show>
-                                  <Show when={selectedType().includes('Reprint')}>
-                                    <Button width='100%' label="Reprint" edges="curved" design="bo-primary" onClick={() => rePrintHandler('occupancy', item)}></Button>
-                                  </Show>
-                                  <Show when={selectedType().includes('Void')}>
-                                    <Button width='100%' label="Void" edges="curved" design="bo-primary" onClick={() => rePrintHandler('occupancy', item)}></Button>
-                                  </Show>
-                                  <span class="modal__cancel">Click anywhere to cancel</span>
-                                </Row>
-                              </Padding>
-                            </ModalButton>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>*/}
-              </Row>
-            </Tabs.Content>
-            <Tabs.Content class='tabs__content' value='electrical'>
-              <Padding right={9} left={9}>
-                <Row content='right'>
-                  <Row gap={0.5}>
-                    <Input value={filter()} onChange={setFilter} placeholder='Filter Application Number' width='16rem' />
-                    <Combobox options={listType} value={selectedType()} onChange={setSelectedType} placeholder='Select Type' width='250px' />
-                    <Button label='Refresh Data' corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={refresh}></Button>
-                  </Row>
-                </Row>
-              </Padding>
-
-              <Row>
-                <Show when={isLoading()}>
-                  <Padding top={4} bottom={0} right={10} left={10}>
-                    <Column gap={1}>
-                      <AiOutlineLoading3Quarters size={42} />
-                      <span>{loadingText()}</span>
-                    </Column>
-                  </Padding>
-                </Show>
-
-                <Show when={!isLoading()}>
-                  <Show when={applicationListElectrical().length > 0}>
-                    <Padding top={2} bottom={1} left={0} right={0}>
-                      <Row gap={1}>
-                        {applicationListElectrical().map((item: string, index: number) => (
-                          <EsignCard
-                            division='Electrical'
-                            applicationNo={item}
-                            name={nameListElectrical()[index]}
-                            onClick={async () => {
-                              setShowDetails(true)
-                              await getopdetailsCard('electrical', item)
-                            }}
-                          ></EsignCard>
-                        ))}
-                      </Row>
-                    </Padding>
-                    {/*<table class="table">
-                        <thead>
-                          <tr>
-                            <th>Application Number</th>
-                            <th>Name</th>
-                            <th style="text-align: center">Show Details</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {applicationListElectrical().map((item: string, index: number) => (
-                            <tr>
-                              <td>{item}</td>
-                              <td>{nameListElectrical()[index]}</td>
-
-                              <td>
-                                <ModalButton
-                                  class="modal"
-                                  label="Show Details"
-                                  design="bo-link"
-                                  background="#121e2acc"
-                                  color="#ffffffec"
-                                  function={async () => {
-                                    await getopdetails('electrical', item)
-                                  }}
-                                >
-                                  <Padding top={0} left={2} right={2} bottom={0}>
-                                    <span class="modal__application-number">{item}</span>
-
-                                    <Padding top={1} left={0} right={0} bottom={0}>
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Name of Applicant:</span>
-                                        <span class="modal__row__detail">{nameListElectrical()[index]}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Location:</span>
-                                        <span class="modal__row__detail">{location()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Type:</span>
-                                        <span class="modal__row__detail">{type().toUpperCase()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Assessed By:</span>
-                                        <span class="modal__row__detail">{assessor()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Date Assessed:</span>
-                                        <span class="modal__row__detail">{dateOp().toUpperCase()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Total Fee:</span>
-                                        <span class="modal__row__detail__price">
-                                          {PESO}{' '}
-                                          {totalOp().toLocaleString('en-US', {
-                                            minimumFractionDigits: 2,
-                                          })}
-                                        </span>
-                                      </section>
-                                    </Padding>
-
-                                    <Row padding="2rem 0 0 0">
-                                      <Show when={selectedType() === 'Print'}>
-                                        <Button width='100%' label="Print" edges="curved" design="bo-primary" onClick={() => printHandler('electrical', item)}></Button>
-                                      </Show>
-                                      <Show when={selectedType().includes('Reprint')}>
-                                        <Button width='100%' label="Reprint" edges="curved" design="bo-primary" onClick={() => rePrintHandler('electrical', item)}></Button>
-                                      </Show>
-                                      <Show when={selectedType().includes('Void')}>
-                                        <Button width='100%' label="Void" edges="curved" design="bo-primary" onClick={() => rePrintHandler('electrical', item)}></Button>
-                                      </Show>
-                                      <span class="modal__cancel">Click anywhere to cancel</span>
-                                    </Row>
-                                  </Padding>
-                                </ModalButton>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>*/}
-                  </Show>
-
-                  <Show when={applicationListElectrical().length === 0}>
-                    <Padding top={2} bottom={0} left={0} right={0}>
-                      <Box thickness={1} padding='4rem 2rem' curved color='rgba(250, 250, 250, 0.3)'>
-                        <Column gap={1}>
-                          <RiDocumentFileCloseFill size={50} />
-                          <span>No electrical applications available for printing</span>
-                        </Column>
-                      </Box>
-                    </Padding>
-                  </Show>
-                </Show>
-              </Row>
-            </Tabs.Content>
-            <Tabs.Content class='tabs__content' value='mechanical'>
-              {/*<Row>
-                  <Padding top={2} bottom={2} right={0} left={0}>
-                    <h3>Ready for Signing and Printing Mechanical Order of Payments</h3>
-                  </Padding>
-                </Row>*/}
-
-              <Padding top={0} bottom={0} right={9} left={9}>
-                <Row content='split'>
-                  <Input value={filter()} onChange={setFilter} placeholder='Filter Application Number' />
-                  <Row gap={0.5}>
-                    <Combobox options={listType} value={selectedType()} onChange={setSelectedType} placeholder='Select Type' width='250px' />
-                    <Button label='Refresh Data' corner='curved' design='bootstrap-primary' icon={VsRefresh} onClick={refresh}></Button>
-                  </Row>
-                </Row>
-              </Padding>
-
-              <Row>
-                <Show when={isLoading()}>
-                  <Padding top={4} bottom={0} right={10} left={10}>
-                    <Column gap={1}>
-                      <AiOutlineLoading3Quarters size={42} />
-                      <span>{loadingText()}</span>
-                    </Column>
-                  </Padding>
-                </Show>
-
-                <Show when={!isLoading()}>
-                  {/*<Show when={applicationListMechanical().length > 0}>
-                     <table class="table">
-                        <thead>
-                          <tr>
-                            <th>Application Number</th>
-                            <th>Name</th>
-                            <th style="text-align: center">Show Details</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {applicationListMechanical().map((item: string, index: number) => (
-                            <tr>
-                              <td>{item}</td>
-                              <td>{nameListMechanical()[index]}</td>
-
-                              <td>
-                                <ModalButton
-                                  class="modal"
-                                  label="Show Details"
-                                  design="bo-link"
-                                  background="#121e2acc"
-                                  color="#ffffffec"
-                                  function={async () => {
-                                    await getopdetailsCard('mechanical', item)
-                                  }}
-                                >
-                                  <Padding top={0} left={2} right={2} bottom={0}>
-                                    <span class="modal__application-number">{item}</span>
-
-                                    <Padding top={1} left={0} right={0} bottom={0}>
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Name of Applicant:</span>
-                                        <span class="modal__row__detail">{nameListMechanical()[index]}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Location:</span>
-                                        <span class="modal__row__detail">{location()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Type:</span>
-                                        <span class="modal__row__detail">{type().toUpperCase()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Assessed By:</span>
-                                        <span class="modal__row__detail">{assessor()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Date Assessed:</span>
-                                        <span class="modal__row__detail">{dateOp().toUpperCase()}</span>
-                                      </section>
-
-                                      <section class="modal__row">
-                                        <span class="modal__row__label">Total Fee:</span>
-                                        <span class="modal__row__detail__price">
-                                          {PESO}{' '}
-                                          {totalOp().toLocaleString('en-US', {
-                                            minimumFractionDigits: 2,
-                                          })}
-                                        </span>
-                                      </section>
-                                    </Padding>
-
-                                    <Row padding="2rem 0 0 0">
-                                      <Show when={selectedType() === 'Print'}>
-                                        <Button width='100%' label="Print" edges="curved" design="bo-primary" onClick={() => printHandler('mechanical', item)}></Button>
-                                      </Show>
-                                      <Show when={selectedType().includes('Reprint')}>
-                                        <Button width='100%' label="Reprint" edges="curved" design="bo-primary" onClick={() => rePrintHandler('mechanical', item)}></Button>
-                                      </Show>
-                                      <Show when={selectedType().includes('Void')}>
-                                        <Button width='100%' label="Void" edges="curved" design="bo-primary" onClick={() => rePrintHandler('mechanical', item)}></Button>
-                                      </Show>
-                                      <span class="modal__cancel">Click anywhere to cancel</span>
-                                    </Row>
-                                  </Padding>
-                                </ModalButton>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </Show>*/}
-
-                  <Show when={applicationListMechanical().length === 0}>
-                    <Padding top={2} bottom={0} left={0} right={0}>
-                      <Box thickness={1} padding='4rem 2rem' curved color='rgba(250, 250, 250, 0.3)'>
-                        <Column gap={1}>
-                          <RiDocumentFileCloseFill size={50} />
-                          <span>No mechanical applications available for printing</span>
-                        </Column>
-                      </Box>
-                    </Padding>
-                  </Show>
-                </Show>
-              </Row>
-            </Tabs.Content>
-          </Tabs>
+            </Show>
+          </Show>
         </Row>
       </Page>
 
@@ -1715,99 +1246,97 @@ export default () => {
       </div>
 
       <div onClick={closeInfo}>
-        <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='350px'>
+        <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='appear-from-top'>
           <Row content='center' gap={1}>
             <Box curved thickness={1} color='rgba(244,244,244,0.1)' background='transparent' padding='1rem' width='100%'>
-              <Padding top={0} left={2} right={2} bottom={0}>
+              <Show when={selectedApplication() !== ''}>
+                <span class='modal-card__application-number'>{selectedApplication()}</span>
+              </Show>
+              <Show when={selectedApplication() === ''}>
+                <span class='modal-card__application-number'>----------</span>
+              </Show>
+
+              <Padding top={1} left={0} right={0} bottom={0}>
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Name of Applicant:</span>
+                  <Show when={selectedName() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedName()} </span>
+                  </Show>
+                  <Show when={selectedName() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Location:</span>
+                  <Show when={selectedLocation() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedLocation()}</span>
+                  </Show>
+                  <Show when={selectedLocation() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Type:</span>
+                  <Show when={selectedTypes() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedTypes().toUpperCase()}</span>
+                  </Show>
+                  <Show when={selectedTypes() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Assessed By:</span>
+                  <Show when={selectedAssessor() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedAssessor()}</span>
+                  </Show>
+                  <Show when={selectedAssessor() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Date Assessed:</span>
+                  <Show when={selectedDate() !== ''}>
+                    <span class='modal-card__row__detail'>{selectedDate().toUpperCase()}</span>
+                  </Show>
+                  <Show when={selectedDate() === ''}>
+                    <span class='modal-card__row__detail'>-------------------</span>
+                  </Show>
+                </section>
+
+                <section class='modal-card__row'>
+                  <span class='modal-card__row__label'>Total Fee:</span>
+                  <Show when={selectedTotal() !== ''}>
+                    <span class='modal-card__row__detail__price'>
+                      {PESO} {selectedTotal()}
+                    </span>
+                  </Show>
+                  <Show when={selectedTotal() === ''}>
+                    <span class='modal-card__row__detail__price'>{PESO} --.--</span>
+                  </Show>
+                </section>
+              </Padding>
+
+              <Column padding='2rem 0 0 0'>
                 <Show when={selectedApplication() !== ''}>
-                  <span class='modal-card__application-number'>{selectedApplication()}</span>
+                  <Show when={selectedType() === 'Print'}>
+                    <Button width='100%' label='Print' corner='curved' design='bootstrap-primary' onClick={() => printHandler('electrical', selectedApplication())}></Button>
+                  </Show>
+                  <Show when={selectedType().includes('Reprint')}>
+                    <Button width='100%' label='Reprint' corner='curved' design='bootstrap-primary' onClick={() => rePrintHandler('electrical', selectedApplication())}></Button>
+                  </Show>
+                  <Show when={selectedType().includes('Void')}>
+                    <Button width='100%' label='Void' corner='curved' design='bootstrap-primary' onClick={() => rePrintHandler('electrical', selectedApplication())}></Button>
+                  </Show>
                 </Show>
                 <Show when={selectedApplication() === ''}>
-                  <span class='modal-card__application-number'>----------</span>
+                  <span class='loading-data'>Loading data, please wait</span>
                 </Show>
-
-                <Padding top={1} left={0} right={0} bottom={0}>
-                  <section class='modal-card__row'>
-                    <span class='modal-card__row__label'>Name of Applicant:</span>
-                    <Show when={selectedName() !== ''}>
-                      <span class='modal-card__row__detail'>{selectedName()} </span>
-                    </Show>
-                    <Show when={selectedName() === ''}>
-                      <span class='modal-card__row__detail'>-------------------</span>
-                    </Show>
-                  </section>
-
-                  <section class='modal-card__row'>
-                    <span class='modal-card__row__label'>Location:</span>
-                    <Show when={selectedLocation() !== ''}>
-                      <span class='modal-card__row__detail'>{selectedLocation()}</span>
-                    </Show>
-                    <Show when={selectedLocation() === ''}>
-                      <span class='modal-card__row__detail'>-------------------</span>
-                    </Show>
-                  </section>
-
-                  <section class='modal-card__row'>
-                    <span class='modal-card__row__label'>Type:</span>
-                    <Show when={selectedTypes() !== ''}>
-                      <span class='modal-card__row__detail'>{selectedTypes().toUpperCase()}</span>
-                    </Show>
-                    <Show when={selectedTypes() === ''}>
-                      <span class='modal-card__row__detail'>-------------------</span>
-                    </Show>
-                  </section>
-
-                  <section class='modal-card__row'>
-                    <span class='modal-card__row__label'>Assessed By:</span>
-                    <Show when={selectedAssessor() !== ''}>
-                      <span class='modal-card__row__detail'>{selectedAssessor()}</span>
-                    </Show>
-                    <Show when={selectedAssessor() === ''}>
-                      <span class='modal-card__row__detail'>-------------------</span>
-                    </Show>
-                  </section>
-
-                  <section class='modal-card__row'>
-                    <span class='modal-card__row__label'>Date Assessed:</span>
-                    <Show when={selectedDate() !== ''}>
-                      <span class='modal-card__row__detail'>{selectedDate().toUpperCase()}</span>
-                    </Show>
-                    <Show when={selectedDate() === ''}>
-                      <span class='modal-card__row__detail'>-------------------</span>
-                    </Show>
-                  </section>
-
-                  <section class='modal-card__row'>
-                    <span class='modal-card__row__label'>Total Fee:</span>
-                    <Show when={selectedTotal() !== ''}>
-                      <span class='modal-card__row__detail__price'>
-                        {PESO} {selectedTotal()}
-                      </span>
-                    </Show>
-                    <Show when={selectedTotal() === ''}>
-                      <span class='modal-card__row__detail__price'>{PESO} --.--</span>
-                    </Show>
-                  </section>
-                </Padding>
-
-                <Column padding='2rem 0 0 0'>
-                  <Show when={selectedApplication() !== ''}>
-                    <Show when={selectedType() === 'Print'}>
-                      <Button width='100%' label='Print' corner='curved' design='bootstrap-primary' onClick={() => printHandler('electrical', selectedApplication())}></Button>
-                    </Show>
-                    <Show when={selectedType().includes('Reprint')}>
-                      <Button width='100%' label='Reprint' corner='curved' design='bootstrap-primary' onClick={() => rePrintHandler('electrical', selectedApplication())}></Button>
-                    </Show>
-                    <Show when={selectedType().includes('Void')}>
-                      <Button width='100%' label='Void' corner='curved' design='bootstrap-primary' onClick={() => rePrintHandler('electrical', selectedApplication())}></Button>
-                    </Show>
-                  </Show>
-                  <Show when={selectedApplication() === ''}>
-                    <span class='loading-data'>Loading data, please wait</span>
-                  </Show>
-                  <span class='modal-card__cancel'>Click anywhere to cancel</span>
-                </Column>
-              </Padding>
+                <span class='modal-card__cancel'>Click anywhere to cancel</span>
+              </Column>
             </Box>
           </Row>
         </Modal>

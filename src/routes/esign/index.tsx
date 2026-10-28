@@ -1,5 +1,3 @@
-// oxlint-disable typescript/no-floating-promises
-
 import { onSettled, createSignal, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
@@ -68,18 +66,15 @@ export default () => {
     await setPage('/esign')
   }
 
-  const getData = () => {
-    getAssessors()
-    getRegistered()
-    getHead()
-    getHeadId()
+  const getData = async () => {
+    await Promise.all([getAssessors(), getRegistered(), getHead(), getHeadId()])
   }
 
   onSettled(() => {
-    init()
+    void init()
 
     if (connected()) {
-      getData()
+      void getData()
     }
   })
 

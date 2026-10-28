@@ -1,5 +1,3 @@
-// oxlint-disable typescript/no-floating-promises
-
 import dayjs from 'dayjs'
 import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
@@ -16,6 +14,7 @@ import './approval.sass'
 
 import EsignCard from 'components/EsignCard'
 import api from 'configs/api.config.json'
+import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 
 export default () => {
   const PESO = import.meta.env.VITE_PESO
@@ -89,6 +88,7 @@ export default () => {
   const [selectedTotal, setSelectedTotal] = createSignal<string>('')
   const [showDetails, setShowDetails] = createSignal(false)
   const [division, setDivision] = createSignal('')
+  const [filtered, setFiltered] = createSignal('')
 
   let bldgadditional = false
   let loggedin = false
@@ -147,7 +147,7 @@ export default () => {
       return
     }
 
-    setLoadingText('Getting List to Approve')
+    setLoadingText('Getting List for Approval')
 
     const loggedid = $login_id.get()!
     const password = await getPassword(loggedid)
@@ -706,6 +706,8 @@ export default () => {
     const items = applicationListElectrical()
     const filteredApplications = items.filter((item: string) => item.includes(filter))
 
+    setFiltered(filter)
+
     if (filter.length !== 0 && filteredApplications.length > 0) {
       setApplicationListElectrical(filteredApplications)
     } else if (filter.length !== 0 && filteredApplications.length === 0) {
@@ -773,7 +775,7 @@ export default () => {
   }
 
   onSettled(() => {
-    init()
+    void init()
   })
 
   // createEffect(() => {
@@ -855,6 +857,22 @@ export default () => {
                   ></EsignCard>
                 ))}
               </Row>
+            </Show>
+
+            <Show when={applicationListElectrical().length === 0}>
+              <Padding top={2} bottom={0} left={0} right={0}>
+                <Box thickness={1} padding='4rem 2rem' curved color='rgba(250, 250, 250, 0.3)'>
+                  <Column gap={1}>
+                    <RiDocumentFileCloseFill size={50} />
+                    <Show when={filter.length !== 0}>
+                      <span>No electrical applications available for approval</span>
+                    </Show>
+                    <Show when={filter.length === 0}>
+                      <span>No electrical applications containing {filtered()}</span>
+                    </Show>
+                  </Column>
+                </Box>
+              </Padding>
             </Show>
           </Show>
         </Row>
@@ -974,7 +992,7 @@ export default () => {
         <Modal trigger={showDetails() === true} background='#121e2acc' color='#ffffffec' width='360px' animation='appear-from-top'>
           <Show when={isIncomplete()}>
             <Padding top={0} left={2} right={2} bottom={0}>
-              <span class='modal__application-number'>{item}</span>
+              <span class='modal__application-number'>{selectedApplication()}</span>
 
               <Padding top={1} left={0} right={0} bottom={0}>
                 <Column padding='0 0 1rem 0'>
@@ -992,7 +1010,7 @@ export default () => {
                 </div>
               </Padding>
               <Column padding='1rem 0 0 0'>
-                <Button wide label='Return to Assessment' edges='curved' design='bo-primary' onClick={() => returnAssessment('mechanical', item)} />
+                <Button width='100%' label='Return to Assessment' corner='curved' design='bootstrap-primary' onClick={() => console.log("returnAssessment('electrical item)")} />
                 <span class='modal__cancel'>Click anywhere to cancel</span>
               </Column>
             </Padding>

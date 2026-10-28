@@ -1,5 +1,3 @@
-// oxlint-disable typescript/no-floating-promises
-
 import { createSignal, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { IoChevronBack } from 'solid-icons/io'
@@ -7,7 +5,7 @@ import { Box, Button, Column, Link, Padding, Page, Row, Image, Modal, Clickable,
 import { getApi } from '@dasig/api'
 import { checkConnection, securePassword, checkPage, setPage } from 'services'
 import { _headName, _headPassword } from 'stores/head'
-import { _employeeName, _employeePassword } from 'stores/employee'
+import { _employeeId, _employeeName, _employeePassword } from 'stores/employee'
 import { _listElectricalApplications, _listElectricalNames } from 'stores/prefetch'
 import { $head, $head_id } from 'cache/head'
 import { $registered_list } from 'cache/list'
@@ -52,6 +50,7 @@ export default () => {
 
       if (storepass.length > 0) {
         dbpassword = storepass
+        employeeid = _employeeId.get()
       } else {
         const [dbemployeeid] = await getApi('bd85b3fd3f45316eda64', name())
         employeeid = dbemployeeid.result
@@ -77,7 +76,7 @@ export default () => {
       $head.delete()
       $head_id.delete()
 
-      navigateToRolePage()
+      await navigateToRolePage()
     } else {
       setLoggedin(1)
     }
@@ -110,10 +109,6 @@ export default () => {
 
     const [dbpass] = await getApi('49dd42b9454f27280be0', headId())
     _headPassword.set(dbpass.result)
-
-    // const [applicationsE, namesE] = await getListForApproval('electrical')
-    // _listElectricalApplications.set(applicationsE)
-    // _listElectricalNames.set(namesE)
   }
 
   const setAssessorName = async (name: string) => {
@@ -121,6 +116,7 @@ export default () => {
     const [dbemployeeid] = await getApi('bd85b3fd3f45316eda64', name)
     const [dbpass] = await getApi('49dd42b9454f27280be0', dbemployeeid.result)
     _employeePassword.set(dbpass.result)
+    _employeeId.set(dbemployeeid.result)
   }
 
   const getHead = () => {
@@ -133,14 +129,14 @@ export default () => {
     setRegisteredList(list)
   }
 
-  const init = () => {
-    checkPage()
+  const init = async () => {
+    await checkPage()
     getHead()
     getList()
   }
 
   onSettled(() => {
-    init()
+    void init()
   })
 
   return (
@@ -193,8 +189,8 @@ export default () => {
 
               <Show when={role() !== 'APPROVER'}>
                 <Clickable
-                  onClick={() => {
-                    setApprover()
+                  onClick={async () => {
+                    await setApprover()
                   }}
                 >
                   <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>
@@ -229,8 +225,8 @@ export default () => {
                     placeholder='Password'
                     width='63%'
                     size={1}
-                    onKeyDown={(event: KeyboardEvent) => {
-                      if (event.key === 'Enter') login()
+                    onKeyDown={async (event: KeyboardEvent) => {
+                      if (event.key === 'Enter') await login()
                     }}
                     corner='curved'
                   />
@@ -265,8 +261,8 @@ export default () => {
                     placeholder='Password'
                     width='63%'
                     size={1}
-                    onKeyDown={(event: KeyboardEvent) => {
-                      if (event.key === 'Enter') login()
+                    onKeyDown={async (event: KeyboardEvent) => {
+                      if (event.key === 'Enter') await login()
                     }}
                   />
 

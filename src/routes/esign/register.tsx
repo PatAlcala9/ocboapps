@@ -39,19 +39,19 @@ export default () => {
     await checkRegistered(val)
   }
 
-  const generateSignature = () => {
+  const generateSignature = async () => {
     if (role() === 'APPROVER') {
       globalId = 276
       setName(approver())
     }
-    const hash = sha384(globalId.toString())
-    const secondHash = md5(hash.toString().substring(9))
+    const hash = await sha384(globalId.toString())
+    const secondHash = await md5(hash.toString().substring(9))
     setSignature(`Use OCBO e-Sign Validator - scanid=${secondHash.toString().substring(24)}`)
 
     try {
-      register()
+      await register()
       setSaved(true)
-      updateRegistered()
+      await updateRegistered()
     } catch {
       setSaved(false)
     }
@@ -117,9 +117,9 @@ export default () => {
     await checkRegistered(head)
   }
 
-  const setApproverRole = () => {
+  const setApproverRole = async () => {
     setRole('APPROVER')
-    checkRegistered($head.get()!)
+    await checkRegistered($head.get()!)
   }
 
   const updateRegistered = async () => {
@@ -132,13 +132,15 @@ export default () => {
   }
 
   const init = async () => {
-    checkPage()
-    getAssessors()
-    getApprover()
+    await checkPage()
+
+    const assessor = Promise.resolve(getAssessors())
+    const approver = Promise.resolve(getApprover())
+    await Promise.all([assessor, approver]).then(() => {})
   }
 
   onSettled(() => {
-    init()
+    void init()
   })
 
   return (
