@@ -61,7 +61,7 @@ class CacheInstance {
 
   set(value: string): CacheInstance {
     if (site.cache.enabled) {
-      if (security.cache.encrypt) {
+      if (security.cache_security.encrypt) {
         const cipherValue = encryptXCP(value)
         const cipherValueHex = bytesToHex(cipherValue)
         const cipherName = encryptXCP(this._name)
@@ -78,7 +78,7 @@ class CacheInstance {
 
   get(): string | null {
     if (site.cache.enabled) {
-      if (security.cache.encrypt) {
+      if (security.cache_security.encrypt) {
         let item
         const cipherName = encryptXCP(this._name)
         const cipherNameHex = bytesToHex(cipherName).toString()
