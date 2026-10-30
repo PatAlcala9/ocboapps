@@ -27,7 +27,8 @@ const checkSpecialHolidays = () => {
 }
 
 const init = async () => {
-  setConnected(await checkConnection())
+  const connection = await checkConnection()
+  setConnected(connection)
 
   if (connected()) {
     await getDate()
@@ -38,8 +39,7 @@ const init = async () => {
 }
 
 onSettled(() => {
-  // oxlint-disable-next-line typescript/no-floating-promises
-  init()
+  void init()
 })
 
 export default () => {

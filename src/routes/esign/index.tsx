@@ -3,7 +3,7 @@ import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
 import { BiRegularQr } from 'solid-icons/bi'
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable, Padding } from '@dasig'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable, Padding, Link } from '@dasig'
 import { getApi } from '@dasig/api'
 import { checkConnection, setPage } from 'services'
 import { _page } from 'stores/page'
@@ -61,9 +61,20 @@ export default () => {
   }
 
   const init = async () => {
-    setConnected(await checkConnection())
-    setLoading(false)
     await setPage('/esign')
+
+    const connection = await checkConnection()
+    setConnected(connection)
+    setLoading(false)
+
+    if (connected()) {
+      await getData()
+    }
+  }
+
+  const gotoValidation = async () => {
+    await setPage('/esign/validate')
+    navigate('/esign/validate', { replace: true })
   }
 
   const getData = async () => {
@@ -72,10 +83,6 @@ export default () => {
 
   onSettled(() => {
     void init()
-
-    if (connected()) {
-      void getData()
-    }
   })
 
   return (
@@ -287,12 +294,14 @@ export default () => {
             <h1>OCBO e-Sign</h1>
             <span class='mobile--subtitle'>Mobile</span>
 
-            <Box thickness={1} margin='10rem 0 0 0' padding='1rem 2rem' curved color='rgba(41, 60, 78, 0.914)' background='rgba(16, 22, 28, 0.58)'>
-              <Column content='center' gap={0.5}>
-                <BiRegularQr size={50} />
-                <span>Validate</span>
-              </Column>
-            </Box>
+            <Clickable onClick={gotoValidation}>
+              <Box thickness={1} margin='10rem 0 0 0' padding='1rem 2rem' curved color='rgba(41, 60, 78, 0.914)' background='rgba(16, 22, 28, 0.58)'>
+                <Column content='center' gap={0.5}>
+                  <BiRegularQr size={50} />
+                  <span>Validate</span>
+                </Column>
+              </Box>
+            </Clickable>
           </Column>
 
           <Footer margin={0.5}>

@@ -1,12 +1,15 @@
-import dayjs from 'dayjs'
-// import { Tabs } from '@kobalte/core/tabs'
-import { FileField } from '@kobalte/core/file-field'
-import { createSignal, onSettled, Show } from 'solid-js'
-import { useNavigate } from '@solidjs/router'
+import { createSignal, flush, onSettled, Show } from 'solid-js'
 import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
-import { Background, Box, Button, Clickable, Column, Combobox, Input, Image, Modal, Padding, Page, Row, LoadingScreen } from '@dasig'
+import { RiDocumentFileCloseFill } from 'solid-icons/ri'
+import { getApi, deleteApi, postApi } from '@dasig/api'
+import { Background, Box, Button, Clickable, Column, Combobox, Input, Image, Modal, Padding, Page, Row, LoadingScreen, File } from '@dasig'
+import dayjs from 'dayjs'
+import { useNavigate } from '@solidjs/router'
+import { checkConnection, createPdfElectrical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage, getPassword } from 'services'
+import EsignCard from 'components/EsignCard'
+import { _headId } from 'stores/head'
 import {
   _additional,
   _additionalAmountList,
@@ -32,16 +35,8 @@ import {
   _type,
   _units,
 } from 'stores/pdfinfo'
-import { checkConnection, createPdfElectrical, createPdfOccupancy, createPdfMechanical, getDateTime, saveNewName, saveNewPassword, saveNewSignature, securePassword, statusPopsApi, voidPopsApi, checkPage, getPassword } from 'services'
-import { AiOutlineLoading3Quarters } from 'solid-icons/ai'
-import { RiDocumentFileCloseFill } from 'solid-icons/ri'
-import EsignCard from 'components/EsignCard'
-
-import { _headId } from 'stores/head'
-import { $head, $head_id } from 'cache/head'
-import { getApi, deleteApi, postApi } from '@dasig/api'
-import './printing.sass'
 import { $logged_in, $login_id, $login_name } from 'cache/login'
+import './printing.sass'
 
 const PESO = import.meta.env.VITE_PESO
 const BACKEND = import.meta.env.VITE_BACKEND
@@ -59,10 +54,10 @@ export default () => {
 
   const [applicationListElectrical, setApplicationListElectrical] = createSignal<string[]>([])
   const [nameListElectrical, setNameListElectrical] = createSignal<string[]>([])
-  const [applicationListOccupancy, setApplicationListOccupancy] = createSignal<string[]>([])
-  const [nameListOccupancy, setNameListOccupancy] = createSignal<string[]>([])
-  const [applicationListBuilding, setApplicationListBuilding] = createSignal<string[]>([])
-  const [nameListBuilding, setNameListBuilding] = createSignal<string[]>([])
+  // const [applicationListOccupancy, setApplicationListOccupancy] = createSignal<string[]>([])
+  // const [nameListOccupancy, setNameListOccupancy] = createSignal<string[]>([])
+  // const [applicationListBuilding, setApplicationListBuilding] = createSignal<string[]>([])
+  // const [nameListBuilding, setNameListBuilding] = createSignal<string[]>([])
   const [applicationListMechanical, setApplicationListMechanical] = createSignal<string[]>([])
   const [nameListMechanical, setNameListMechanical] = createSignal<string[]>([])
 
@@ -110,7 +105,7 @@ export default () => {
   const [division, setDivision] = createSignal('')
   const [filtered, setFiltered] = createSignal('')
 
-  let pageLoaded = false
+  // let pageLoaded = false
   let bldgadditional = false
   let filter = ''
   let loggedin = false
@@ -248,10 +243,10 @@ export default () => {
     if (!selectedType().includes('Reprint')) {
       await checkDivision()
 
-      if (isBuilding()) reloadExcept('building', application)
-      if (isOccupancy()) reloadExcept('occupancy', application)
-      if (isElectrical()) reloadExcept('electrical', application)
-      if (isMechanical()) reloadExcept('mechanical', application)
+      if (isBuilding()) await reloadExcept('building', application)
+      if (isOccupancy()) await reloadExcept('occupancy', application)
+      if (isElectrical()) await reloadExcept('electrical', application)
+      if (isMechanical()) await reloadExcept('mechanical', application)
     }
   }
 
@@ -334,14 +329,14 @@ export default () => {
     setSelectedDate(dayjs(op.result5[0]).format('MMMM DD, YYYY'))
     setApplicationId(op.result6[0])
 
-    getPrintDetails(division, op.result6[0])
-    getPrintDetailsFees(division, op.result6[0])
+    await getPrintDetails(division, op.result6[0])
+    await getPrintDetailsFees(division, op.result6[0])
 
-    getSignatureImage(employeeId())
+    await getSignatureImage(employeeId())
 
     const approversignId = await geteSignId(276)
-    getApprovedDate(approversignId, applicationNo)
-    getAssessedDate(division, op.result6[0])
+    await getApprovedDate(approversignId, applicationNo)
+    await getAssessedDate(division, op.result6[0])
   }
 
   const calculateTotal = (list: number[]) => {
@@ -384,14 +379,14 @@ export default () => {
           setApplicationListElectrical(filteredApplications)
           setNameListElectrical(filteredNames)
         } else if (division === 'occupancy') {
-          setApplicationListOccupancy(filteredApplications)
-          setNameListOccupancy(filteredNames)
+          // setApplicationListOccupancy(filteredApplications)
+          // setNameListOccupancy(filteredNames)
         } else if (division === 'building') {
-          setApplicationListBuilding(filteredApplications)
-          setNameListBuilding(filteredNames)
+          // setApplicationListBuilding(filteredApplications)
+          // setNameListBuilding(filteredNames)
         } else {
-          setApplicationListMechanical(filteredApplications)
-          setNameListMechanical(filteredNames)
+          // setApplicationListMechanical(filteredApplications)
+          // setNameListMechanical(filteredNames)
         }
         setIsLoading(false)
         return
@@ -401,14 +396,14 @@ export default () => {
         setApplicationListElectrical(response.result)
         setNameListElectrical(response.result2)
       } else if (division === 'occupancy') {
-        setApplicationListOccupancy(response.result)
-        setNameListOccupancy(response.result2)
+        // setApplicationListOccupancy(response.result)
+        // setNameListOccupancy(response.result2)
       } else if (division === 'building') {
-        setApplicationListBuilding(response.result)
-        setNameListBuilding(response.result2)
+        // setApplicationListBuilding(response.result)
+        // setNameListBuilding(response.result2)
       } else {
-        setApplicationListMechanical(response.result)
-        setNameListMechanical(response.result2)
+        // setApplicationListMechanical(response.result)
+        // setNameListMechanical(response.result2)
       }
       setIsLoading(false)
     } catch (error) {
@@ -477,11 +472,11 @@ export default () => {
 
       setLoadingText('Generating PDF')
       if (division === 'electrical') {
-        createPdfElectrical()
+        await createPdfElectrical()
       } else if (division === 'occupancy') {
-        createPdfOccupancy()
+        // await createPdfOccupancy()
       } else if (division === 'mechanical') {
-        createPdfMechanical()
+        // await createPdfMechanical()
       } else console.log('building')
     }
     setIsLoading(false)
@@ -584,11 +579,11 @@ export default () => {
       setPrinted(true)
 
       if (division === 'electrical') {
-        createPdfElectrical()
+        await createPdfElectrical()
       } else if (division === 'occupancy') {
-        createPdfOccupancy()
+        // createPdfOccupancy()
       } else if (division === 'mechanical') {
-        createPdfMechanical()
+        // createPdfMechanical()
       } else console.log('building')
     }
     setIsLoading(false)
@@ -920,13 +915,16 @@ export default () => {
 
   const load = async (division: string) => {
     setIsLoading(true)
-    setConnected(await checkConnection())
+
+    const connection = await checkConnection()
+    setConnected(connection)
+    flush()
     if (connected() === false) {
-      setErrorMessage('Failed to fetch application list')
+      setIsLoading(false)
       return
     }
 
-    setLoadingText('Getting List for Printing')
+    setLoadingText('Downloading list for printing from the server')
 
     const loggedid = $login_id.get()!
     const password = await getPassword(loggedid)
@@ -958,10 +956,6 @@ export default () => {
   onSettled(() => {
     void init()
   })
-
-  // onCleanup(() => {
-  //   pageLoaded = false
-  // })
 
   // createEffect(async () => {
   //   if (filter !== '') {
@@ -1078,23 +1072,23 @@ export default () => {
 
       <div onClick={() => closeNotification(printedApplication())}>
         <Modal trigger={printed()} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
-          <Padding top={1} bottom={1} left={2} right={2}>
-            <Column>
-              <Row gap={4}>
-                <FaSolidThumbsUp size={75} />
-                <Box curved thickness={3} color='#cdfbe1f0' padding='1rem'>
-                  <span class='approval'>Printed</span>
-                </Box>
-              </Row>
-              <Row padding='2rem 0 0 0'>
-                <h2>{printedApplication()}</h2>
-              </Row>
+          {/*<Padding top={1} bottom={1} left={2} right={2}>*/}
+          <Column padding='1rem 2rem'>
+            <Row gap={4}>
+              <FaSolidThumbsUp size={75} />
+              <Box curved thickness={3} color='#cdfbe1f0' padding='1rem'>
+                <span class='approval'>Printed</span>
+              </Box>
+            </Row>
+            <Row padding='2rem 0 0 0'>
+              <h2>{printedApplication()}</h2>
+            </Row>
 
-              <Row>
-                <span class='close-text'>Click anywhere to proceed</span>
-              </Row>
-            </Column>
-          </Padding>
+            <Row>
+              <span class='close-text'>Click anywhere to proceed</span>
+            </Row>
+          </Column>
+          {/*</Padding>*/}
         </Modal>
       </div>
 
@@ -1172,22 +1166,7 @@ export default () => {
 
             <div class='config__edit'>
               <span class='config__edit__title'>Change Signature</span>
-              <FileField class='filefield' maxFiles={1} onFileAccept={(data) => setFile(data)} accept='.jpg, .jpeg, .png, .webp, .avif'>
-                <FileField.Dropzone class='filefield__dropzone'>Drag and drop or click to upload file</FileField.Dropzone>
-                <FileField.HiddenInput />
-                <FileField.ItemList class='filefield__itemList'>
-                  {() => (
-                    <FileField.Item class='filefield__item'>
-                      <FileField.ItemPreviewImage class='filefield__itemPreviewImage' />
-                      <FileField.ItemName class='filefield__itemName' />
-                      <FileField.ItemSize class='filefield__itemSize' />
-                      <FileField.ItemDeleteTrigger class='filefield__itemDeleteTrigger' onClick={() => setFile()}>
-                        Delete
-                      </FileField.ItemDeleteTrigger>
-                    </FileField.Item>
-                  )}
-                </FileField.ItemList>
-              </FileField>
+              <File maxFiles={1} onFileAccept={(data) => setFile(data)} accept='.jpg, .jpeg, .png, .webp, .avif' onClick={setFile} label='Drag and drop or click to upload file' buttonText='Delete' />
             </div>
 
             <Show when={configError() !== ''}>

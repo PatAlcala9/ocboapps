@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { createSignal, onSettled, Show } from 'solid-js'
+import { createSignal, flush, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
@@ -24,22 +24,7 @@ export default () => {
 
   const navigate = useNavigate()
   const [file, setFile] = createSignal<File[]>()
-
-  const [totalOp, setTotalOp] = createSignal('')
-  const [assessor, setAssessor] = createSignal('')
-  const [dateOp, setDateOp] = createSignal('')
-  const [location, setLocation] = createSignal('')
-  const [type, setType] = createSignal('')
   const [applicationId, setApplicationId] = createSignal(0)
-
-  // const [gflgu, setGflgu] = createSignal<number[]>([])
-  // const [gfdpwh, setGfdpwh] = createSignal<number[]>([])
-  // const [tfbo, setTfbo] = createSignal<number[]>([])
-
-  // const [descriptionList, setDescriptionList] = createSignal<string[]>([])
-  // const [amountList, setAmountList] = createSignal<string[]>([])
-  // const [dateOpList, setDateOpList] = createSignal<string[]>([])
-
   const [applicationListElectrical, setApplicationListElectrical] = createSignal<string[]>([])
   const [applicationListElectricalFiltered, setApplicationListElectricalFiltered] = createSignal<string[]>([])
   const [nameListElectrical, setNameListElectrical] = createSignal<string[]>([])
@@ -49,14 +34,13 @@ export default () => {
   const [nameListMechanical, setNameListMechanical] = createSignal<string[]>([])
 
   const [errorMessage, setErrorMessage] = createSignal('')
-  const [connected, setConnected] = createSignal(true)
+  const [connected, setConnected] = createSignal(false)
   const [approved, setApproved] = createSignal(false)
   const [approvedApplication, setApprovedApplication] = createSignal('')
 
   const [employeeId, setEmployeeId] = createSignal(0)
   const [employeeName, setEmployeeName] = createSignal('')
 
-  // const [apology, setApology] = createSignal(false)
   const [openConfig, setOpenConfig] = createSignal(false)
   const [configEncPassword, setConfigEncPassword] = createSignal('')
   const [configNewName, setConfigNewName] = createSignal('')
@@ -71,14 +55,6 @@ export default () => {
   const [isLoading, setIsLoading] = createSignal(false)
   const [loadingText, setLoadingText] = createSignal('')
 
-  // const [multipleSelect, setMultitpleSelect] = createSignal(false)
-  // const [selectedApplications, setSelectedApplications] = createSignal<string[]>([])
-  // const [selectedNames, setSelectedNames] = createSignal<string[]>([])
-  // const [selectedLocations, setSelectedLocations] = createSignal<string[]>([])
-  // const [selectedTypes, setSelectedTypes] = createSignal<string[]>([])
-  // const [selectedAssessors, setSelectedAssessors] = createSignal<string[]>([])
-  // const [selectedDates, setSelectedDates] = createSignal<string[]>([])
-  // const [selectedTotals, setSelectedTotals] = createSignal<string[]>([])
   const [selectedApplication, setSelectedApplication] = createSignal<string>('')
   const [selectedName, setSelectedName] = createSignal<string>('')
   const [selectedLocation, setSelectedLocation] = createSignal<string>('')
@@ -141,13 +117,16 @@ export default () => {
 
   const load = async (division: string) => {
     setIsLoading(true)
-    setConnected(await checkConnection())
+
+    const connection = await checkConnection()
+    setConnected(connection)
+    flush()
     if (connected() === false) {
-      setErrorMessage('Failed to fetch application list')
+      setIsLoading(false)
       return
     }
 
-    setLoadingText('Getting List for Approval')
+    setLoadingText('Downloading list for approval from the server')
 
     const loggedid = $login_id.get()!
     const password = await getPassword(loggedid)
@@ -310,7 +289,7 @@ export default () => {
       if (division === 'electrical') {
         setLoadingText(`Pushing ${application} for printing`)
         signed = await setNewStatus(division, 'ELECTRICAL ORDER OF PAYMENT APPROVED AND SIGNED', '170', 'ELECOPAPPROVEDSIGNED', 1)
-        updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
+        await updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
         if (!signed) return
 
         forprinting = await setNewStatus(division, 'FOR ELECTRICAL ORDER OF PAYMENT PRINTING', '95', 'ELECOPPRINT', 0)
@@ -330,10 +309,10 @@ export default () => {
         bldgadditional = additionalResult.result > 0
 
         signed = await setNewStatus(division, 'OCCUPANCY ORDER OF PAYMENT APPROVED AND SIGNED', '172', 'OCCOPAPPROVEDSIGNED', 1)
-        updateDocflow(division, application, 'FOR OCCUPANCY RECOMMENDING APPROVAL')
+        await updateDocflow(division, application, 'FOR OCCUPANCY RECOMMENDING APPROVAL')
         if (bldgadditional) {
           const neededToUpdate = await checkIfApprovalOccupancy(application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
-          if (!neededToUpdate) updateDocflow(division, application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
+          if (!neededToUpdate) await updateDocflow(division, application, 'FOR ADDITIONAL ORDER OF PAYMENT RECOMMENDING APPROVAL')
         }
         if (!signed) return
 
@@ -352,7 +331,7 @@ export default () => {
         setLoadingText(`Pushing ${application} for printing`)
         signed = await setNewStatus(division, 'MECHANICAL ORDER OF PAYMENT APPROVED AND SIGNED', '175', 'MECHCOPAPPROVEDSIGNED', 1)
 
-        updateDocflow(division, application, 'FOR MECHANICAL ORDER OF PAYMENT APPROVAL')
+        await updateDocflow(division, application, 'FOR MECHANICAL ORDER OF PAYMENT APPROVAL')
         if (!signed) return
 
         forprinting = await setNewStatus(division, 'FOR MECHANICAL ORDER OF PAYMENT PRINTING', '112', 'MECHOPPRINT', 0)
@@ -362,7 +341,7 @@ export default () => {
 
         if (updateOrderofpayment) {
           setLoadingText('Adding new transaction record')
-          postTransaction()
+          await postTransaction()
           setApprovedApplication(application)
           setApproved(true)
         }
@@ -393,7 +372,7 @@ export default () => {
 
   //   if (popsResult && lockResult) {
   //     signed = await setNewStatus(division, 'ELECTRICAL ORDER OF PAYMENT APPROVED AND SIGNED', '170', 'ELECOPAPPROVEDSIGNED', 1)
-  //     updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
+  //     await updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
   //     if (!signed) return
 
   //     forprinting = await setNewStatus(division, 'FOR ELECTRICAL ORDER OF PAYMENT PRINTING', '95', 'ELECOPPRINT', 0)
@@ -463,11 +442,11 @@ export default () => {
   //   if (!forassessment) return
 
   //   if (division === 'electrical') {
-  //     updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
+  //     await updateDocflow(division, application, 'FOR ELECTRICAL ORDER OF PAYMENT APPROVAL')
   //   } else if (division === 'occupancy') {
-  //     updateDocflow(division, application, 'FOR OCCUPANCY RECOMMENDING APPROVAL')
+  //     await updateDocflow(division, application, 'FOR OCCUPANCY RECOMMENDING APPROVAL')
   //   } else if (division === 'mechanical') {
-  //     updateDocflow(division, application, 'FOR MECHANICAL ORDER OF PAYMENT APPROVAL')
+  //     await updateDocflow(division, application, 'FOR MECHANICAL ORDER OF PAYMENT APPROVAL')
   //   }
 
   //   await deleteOrderofPayment(division, id)
@@ -568,7 +547,7 @@ export default () => {
           data5: location,
           data6: codeList[i],
           data7: amountList[i],
-          data8: assessor(),
+          data8: selectedAssessor(),
           data9: formattedDatewithTime,
           data10: lguList[i],
           data11: dpwhList[i],
@@ -586,7 +565,7 @@ export default () => {
           data5: location,
           data6: codeList[i],
           data7: amountList[i],
-          data8: assessor(),
+          data8: selectedAssessor(),
           data9: formattedDatewithTime,
           data10: lguList[i],
           data11: dpwhList[i],
@@ -681,7 +660,7 @@ export default () => {
         setConfigNewEncPassword('')
       } else {
         setConfigError('')
-        encryptNewPassword()
+        await encryptNewPassword()
       }
     } else {
       setConfigError('Invalid Password')
@@ -708,13 +687,25 @@ export default () => {
 
     setFiltered(filter)
 
-    if (filter.length !== 0 && filteredApplications.length > 0) {
+    if (filter.length !== 0 && filteredApplications.length !== 0) {
       setApplicationListElectrical(filteredApplications)
     } else if (filter.length !== 0 && filteredApplications.length === 0) {
       setApplicationListElectrical([])
     } else {
-      await load('electrical')
+      void load('electrical')
     }
+
+    // TODO: Fix and use the code below
+
+    // if (filter.length !== 0 && filteredApplications.length !== 0) {
+    //   setApplicationListElectrical(filteredApplications)
+    //   setApplicationListElectricalFiltered(filteredApplications)
+    // } else if (filter.length !== 0 && filteredApplications.length === 0) {
+    //   setApplicationListElectrical([])
+    //   setApplicationListElectricalFiltered([])
+    // } else {
+    //   void load('electrical')
+    // }
   }
 
   const saveConfig = async () => {
@@ -843,9 +834,24 @@ export default () => {
           </Show>
 
           <Show when={!isLoading()}>
-            <Show when={applicationListElectrical().length > 0}>
+            <Show when={applicationListElectrical().length > 0 && applicationListElectricalFiltered().length === 0}>
               <Row gap={1} padding='2rem 0 0 0'>
                 {applicationListElectrical().map((item: string, index: number) => (
+                  <EsignCard
+                    division='Electrical'
+                    applicationNo={item}
+                    name={nameListElectrical()[index]}
+                    onClick={async () => {
+                      setShowDetails(true)
+                      await getopdetailsCard('electrical', item)
+                    }}
+                  ></EsignCard>
+                ))}
+              </Row>
+            </Show>
+            <Show when={applicationListElectricalFiltered().length > 0}>
+              <Row gap={1} padding='2rem 0 0 0'>
+                {applicationListElectricalFiltered().map((item: string, index: number) => (
                   <EsignCard
                     division='Electrical'
                     applicationNo={item}
@@ -861,14 +867,17 @@ export default () => {
 
             <Show when={applicationListElectrical().length === 0}>
               <Padding top={2} bottom={0} left={0} right={0}>
-                <Box thickness={1} padding='4rem 2rem' curved color='rgba(250, 250, 250, 0.3)'>
+                <Box thickness={1} padding='4rem 2rem' curved color='rgba(250, 250, 250, 0.3)' background='rgba(68, 25, 25, 0.3)'>
                   <Column gap={1}>
                     <RiDocumentFileCloseFill size={50} />
-                    <Show when={filter.length !== 0}>
+                    <Show when={connected() && filter.length !== 0}>
                       <span>No electrical applications available for approval</span>
                     </Show>
-                    <Show when={filter.length === 0}>
+                    <Show when={connected() && filter.length === 0}>
                       <span>No electrical applications containing {filtered()}</span>
+                    </Show>
+                    <Show when={!connected()}>
+                      <span>No connection on server</span>
                     </Show>
                   </Column>
                 </Box>
@@ -879,7 +888,7 @@ export default () => {
       </Page>
 
       <div onClick={() => closeNotification(approvedApplication())}>
-        <Modal trigger={approved()} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+        <Modal trigger={approved()} background='#123220ff' color='#cdfbe1f0' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={2} right={2}>
             <Column>
               <Row gap={4}>
@@ -949,7 +958,7 @@ export default () => {
       </Modal>
 
       <div onClick={closeConfig}>
-        <Modal trigger={configNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+        <Modal trigger={configNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row gap={4}>
