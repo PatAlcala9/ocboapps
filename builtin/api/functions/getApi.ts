@@ -35,6 +35,8 @@ export default async (api: string, value?: string | number, value2?: string | nu
     const result = fetch
     return [result, null]
   } catch (error) {
+    const err = error instanceof Error ? error.message : String(error)
+    if (err.includes('NetworkError')) return [[], err]
     return [[], error]
   }
 }

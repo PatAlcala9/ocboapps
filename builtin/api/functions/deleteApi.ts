@@ -14,9 +14,9 @@ export default async (api: string, body: { [key: string]: unknown }) => {
   const today = new Date()
   const todayUnix = dayjs(today).unix()
   const expiration = todayUnix + TOKEN_EXPIRATION
-  const aes = await encrypt(`${api.toString()}-${todayUnix.toString()}-${expiration.toString()}`)
+  const rsa = await encrypt(`${api.toString()}-${todayUnix.toString()}-${expiration.toString()}`)
 
-  const hash = `${TOKEN_NAME}=${aes}token`
+  const hash = `${TOKEN_NAME}=${rsa}token`
   try {
     await ofetch(URL + api, {
       headers: {
