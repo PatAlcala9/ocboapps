@@ -5,7 +5,7 @@
     "expiration": 9
   },
 
-  "cache": {
+  "cache_security": {
     "encrypt": true
   }
 }
