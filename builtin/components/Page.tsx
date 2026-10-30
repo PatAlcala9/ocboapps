@@ -6,7 +6,7 @@ interface Props {
   children?: Element
   alignment?: 'row' | 'column'
   title: string
-  font: 'roboto' | 'inter' | 'montserrat' | 'open-sans' | 'public-sans' | string
+  font: 'roboto' | 'inter' | 'montserrat' | 'open-sans' | 'public-sans'
 }
 
 export default (props: Props) => {

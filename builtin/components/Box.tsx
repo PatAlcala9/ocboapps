@@ -19,7 +19,7 @@ export default (props: Props) => {
 
   return (
     <section
-      class={props.class ? `dasig-${boxClass()} ${props.class}` : `dasig-${boxClass()}`}
+      class={props.class ? `dasig-${boxClass()} ${props.class as string}` : `dasig-${boxClass()}`}
       style={`border: ${props.thickness}px solid ${props.color || 'white'}; padding: ${props.padding || 0}; background-color: ${props.background || 'none'}; width: ${props.width || 'inherit'}; cursor: ${props.pointer ? 'pointer' : 'inherit'}; margin: ${props.margin || 0};`}
     >
       {props.children}
