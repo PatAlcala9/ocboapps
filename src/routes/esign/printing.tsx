@@ -102,7 +102,7 @@ export default () => {
   const [selectedTotal, setSelectedTotal] = createSignal<string>('')
   const [showDetails, setShowDetails] = createSignal(false)
 
-  const [division, setDivision] = createSignal('')
+  // const [division, setDivision] = createSignal('')
   const [filtered, setFiltered] = createSignal('')
 
   // let pageLoaded = false
@@ -295,7 +295,7 @@ export default () => {
   }
 
   const getopdetailsCard = async (division: string, applicationNo: string) => {
-    setDivision(division)
+    // setDivision(division)
 
     if (division === 'occupancy') {
       let additionalResult
@@ -347,10 +347,12 @@ export default () => {
   const getListForPrinting = async (division: string) => {
     try {
       setIsLoading(true)
-      setLoadingText('Getting List for Printing')
+
       let response: any
 
       if (selectedType() === 'Print') {
+        setLoadingText('Downloading list for printing from the server')
+
         if (division === 'building') {
           ;[response] = await getApi('fd07a63e41d623e9eeac')
         } else if (division === 'electrical') {
@@ -361,6 +363,9 @@ export default () => {
           ;[response] = await getApi('e1a16fbc5401bbd10a5f')
         }
       } else {
+        if (selectedType().includes('Void')) setLoadingText('Downloading list available for void from the server')
+        else setLoadingText('Downloading list for re-printing from the server')
+
         if (division === 'electrical') {
           ;[response] = await getApi('d3a1370fc767ed2a63f9')
         } else if (division === 'mechanical') {
@@ -483,6 +488,7 @@ export default () => {
   }
 
   const rePrintHandler = async (division: string, application: string) => {
+    console.log('reprint')
     let popsExist: boolean = false
     let popsPaid: boolean = false
 
@@ -503,7 +509,7 @@ export default () => {
         if (status.result > 0) popsExist = true
         if (status.result2 > 0) popsPaid = true
       } else {
-        const status = await await statusPopsOp(application)
+        const status = await statusPopsOp(application)
         if (status.message === 'Success') popsExist = true
         if (status.pops_paid === true) popsPaid = true
       }
@@ -1071,7 +1077,7 @@ export default () => {
       </Page>
 
       <div onClick={() => closeNotification(printedApplication())}>
-        <Modal trigger={printed()} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+        <Modal trigger={printed()} background='#123220ff' color='#cdfbe1f0' opacity={0.8} animation='appear-from-top'>
           {/*<Padding top={1} bottom={1} left={2} right={2}>*/}
           <Column padding='1rem 2rem'>
             <Row gap={4}>
@@ -1093,7 +1099,7 @@ export default () => {
       </div>
 
       <div onClick={() => setConnected(true)}>
-        <Modal trigger={connected() === false} background='#562020ff' color='#ffebebe6' opacity={0.8}>
+        <Modal trigger={connected() === false} background='#562020ff' color='#ffebebe6' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row>
@@ -1115,7 +1121,7 @@ export default () => {
       </div>
 
       <div onClick={() => setVoidError(false)}>
-        <Modal trigger={voidError()} background='#562020ff' color='#ffebebe6' opacity={0.8}>
+        <Modal trigger={voidError()} background='#562020ff' color='#ffebebe6' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row>
@@ -1136,7 +1142,7 @@ export default () => {
         </Modal>
       </div>
 
-      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={0.8} width='40rem'>
+      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={0.8} width='40rem' animation='appear-from-top'>
         <Padding top={1} bottom={1} left={4} right={4}>
           <section class='config'>
             <div class='config__row'>
@@ -1185,7 +1191,7 @@ export default () => {
       </Modal>
 
       <div onClick={closeConfig}>
-        <Modal trigger={configNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+        <Modal trigger={configNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={4} right={4}>
             <Column>
               <Row gap={4}>
@@ -1203,7 +1209,7 @@ export default () => {
       </div>
 
       <div onClick={() => closeNotification(printedApplication())}>
-        <Modal trigger={voidNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8}>
+        <Modal trigger={voidNotification() === true} background='#123220ff' color='#cdfbe1f0' opacity={0.8} animation='appear-from-top'>
           <Padding top={1} bottom={1} left={2} right={2}>
             <Column>
               <Row gap={4}>

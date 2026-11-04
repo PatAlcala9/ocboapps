@@ -3,7 +3,7 @@ import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
 import { BiRegularQr } from 'solid-icons/bi'
-import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable, Padding, Link } from '@dasig'
+import { Box, Button, Column, Copyright, Display, Footer, Image, Page, Row, Background, Clickable, Padding } from '@dasig'
 import { getApi } from '@dasig/api'
 import { checkConnection, setPage } from 'services'
 import { _page } from 'stores/page'
@@ -259,7 +259,7 @@ export default () => {
             </Column>
           </Row>
 
-          <Footer>
+          <Footer margin={0.5}>
             <Row content='split'>
               <Row gap={0.5}>
                 <Image name='ocbologo' size={20} />
@@ -269,16 +269,18 @@ export default () => {
                 </Row>
               </Row>
 
-              <Row gap={0.25}>
-                <span>Developed by:</span>
-                <Image name='pat-alcala' size={70} />
-                <span>Pat Alcala</span>
-              </Row>
+              <Row gap={1}>
+                <Row gap={0.25}>
+                  <span>Developed by:</span>
+                  <Image name='pat-alcala' size={70} />
+                  <span>Pat Alcala</span>
+                </Row>
 
-              <Row gap={0.25}>
-                <span>Made with:</span>
-                <Image name='logo' size={10} />
-                <span>Dasig</span>
+                <Row gap={0.25}>
+                  <span>Made with:</span>
+                  <Image name='logo' size={10} />
+                  <span>Dasig</span>
+                </Row>
               </Row>
             </Row>
           </Footer>

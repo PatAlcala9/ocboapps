@@ -1,7 +1,6 @@
 import { onCleanup, createSignal, onSettled } from 'solid-js'
 import { Background, Page } from '@dasig'
 import { BrowserQRCodeReader, type IScannerControls } from '@zxing/browser'
-// import { Webcam } from 'solid-webcam'
 
 export default () => {
   let video!: HTMLVideoElement

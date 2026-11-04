@@ -1,4 +1,4 @@
-import { createSignal, onSettled } from 'solid-js'
+import { createSignal, flush, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { Page, Background, Footer, Image, Row, Copyright, Padding, Input, Clickable, Box, Modal, Column } from '@dasig'
 import { setPage } from 'services'
@@ -20,16 +20,19 @@ export default () => {
     if (/^\d{2}-\d{6}$/.test(inquire())) {
       setInquireType('application-search')
       setDivision('building')
+      flush()
     } else if (/^\d{2}-\d{5}$/.test(inquire())) {
       setInquireType('application-search')
       setDivision('occupancy')
+      flush()
     } else if (/^\d{2}-\d{7}$/.test(inquire())) {
       setInquireType('application-search')
       setDivision('electrical')
+      flush()
     }
   }
 
-  const checkExist = async (application: string, division: string) => {
+  const checkExist = async (application: string, division: string): Promise<boolean> => {
     let exist
     if (division === 'building') {
       ;[exist] = await getApi('64c865b30db7f100e693', application)
@@ -37,30 +40,40 @@ export default () => {
       ;[exist] = await getApi('b5ed34d7d9b827dbd966', application)
     }
 
-    if (exist.result === '1') setResult(true)
-    else {
-      setError(true)
-      setErrorMessage('No Application found')
-    }
+    return exist.result === '1'
   }
 
-  const startInquire = () => {
+  const startInquire = async () => {
     checkInquireType()
-    if (inquireType() === 'application-search') checkExist(inquire(), division())
-    else console.log('yeah')
+
+    if (inquireType() === 'application-search') {
+      setApplication(inquire())
+      flush()
+
+      const existing = await checkExist(inquire(), division())
+      if (existing) {
+        setResult(true)
+        flush()
+      } else {
+        setErrorMessage('Application number does not exist')
+        setError(true)
+        setResult(true)
+        flush()
+      }
+    } else console.log('yeah')
   }
 
   const gotoPage = async (page: string) => {
-    setPage(page)
+    await setPage(page)
     navigate(page)
   }
 
   const init = async () => {
-    setPage('/inquiry')
+    await setPage('/inquiry')
   }
 
   onSettled(() => {
-    init()
+    void init()
   })
 
   return (
@@ -81,7 +94,9 @@ export default () => {
             <Image name='inquiry' size={140} />
           </Clickable>
           <h1 class='title'>OCBO Inquiry</h1>
-          <Input placeholder='Enter application to inquire' value={inquire()} onChange={setInquire} size={1.25} width='460px' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
+          <Row padding='1rem 0 0 0'>
+            <Input placeholder='Enter application to inquire' value={inquire()} onChange={setInquire} size={1.25} width='460px' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
+          </Row>
         </Column>
 
         <Footer margin={1}>
@@ -113,8 +128,20 @@ export default () => {
       </Page>
 
       <div onClick={() => setResult(false)}>
-        <Modal trigger={result()} background='black' animation='slide-from-right'>
-          <h1>Hello</h1>
+        <Modal trigger={result()} background='rgba(6, 7, 9, 0.49)' animation='slide-from-right' width='95vw'>
+          <Row content='left' padding='1rem 0'>
+            <span class='results__inquire'>{application()}</span>
+          </Row>
+          <Show when={!error()}>
+            <Row content='center' padding='2rem 0'>
+              <span class='results__error'>Yeah</span>
+            </Row>
+          </Show>
+          <Show when={error()}>
+            <Row content='center' padding='2rem 0'>
+              <span class='results__error'>{errorMessage()}</span>
+            </Row>
+          </Show>
         </Modal>
       </div>
     </>

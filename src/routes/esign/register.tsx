@@ -193,8 +193,8 @@ export default () => {
 
               <Show when={role() !== 'APPROVER'}>
                 <Clickable
-                  onClick={() => {
-                    setApproverRole()
+                  onClick={async () => {
+                    await setApproverRole()
                   }}
                 >
                   <Box curved thickness={2} padding='1.25rem 0' color='#253849be' background='#57575c39' pointer width='12rem'>

@@ -592,7 +592,6 @@ export default () => {
     const logged = $logged_in.get()
     const loginName = $login_name.get()
     const loginId = $login_id.get()
-    // const loginRole = $login_role.get()
 
     setEmployeeId(parseInt(loginId!))
     setEmployeeName(loginName!)
@@ -652,6 +651,8 @@ export default () => {
   }
 
   const checkCurrentPassword = async () => {
+    flush()
+    console.log(configPassword())
     const encCurrentPassword = await securePassword(configPassword())
 
     if (encCurrentPassword === configEncPassword()) {
@@ -909,7 +910,7 @@ export default () => {
         </Modal>
       </div>
 
-      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={0.8} width='32rem' animation='appear-from-top'>
+      <Modal trigger={openConfig()} background='#16212c' color='#ffffffed' opacity={1} width='32rem' animation='appear-from-top'>
         <Padding top={1} bottom={1} left={0.1}>
           <section class='config'>
             <div class='config__row'>
