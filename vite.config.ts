@@ -30,7 +30,7 @@ export default defineConfig({
   plugins: lazyPlugins(() => [
     // `extensions` makes @solidjs/vite-plugin also compile the `?pick=` route
     // modules the fileRoutes plugin emits (their ids end in a query string).
-    solid({ start: { node: true }, ssr: true, extensions: ['.jsx', '.tsx'], diagnostics: false }),
+    solid({ start: { nodeServer: true }, ssr: true, extensions: ['.jsx', '.tsx'], diagnostics: false }),
     fileRoutes({ types: true }),
     compression({
       algorithms: ['brotliCompress'],
