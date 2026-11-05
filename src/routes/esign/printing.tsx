@@ -765,6 +765,18 @@ export default () => {
     }
   }
 
+  const updateConfigPassword = async (password: string) => {
+    setConfigPassword(password)
+    flush()
+    await checkCurrentPassword()
+  }
+
+  const updateConfigNewPassword = async (password: string) => {
+    setConfigNewPassword(password)
+    flush()
+    await checkCurrentPassword()
+  }
+
   const logout = () => {
     removeEmployee()
     navigate('/esign')
@@ -828,7 +840,7 @@ export default () => {
   }
 
   const convertBase64 = (blob: Blob) => {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       const reader = new FileReader()
       reader.onloadend = () => resolve(reader.result)
       reader.readAsDataURL(blob)
@@ -860,7 +872,7 @@ export default () => {
         setConfigNewEncPassword('')
       } else {
         setConfigError('')
-        encryptNewPassword()
+        await encryptNewPassword()
       }
     } else {
       setConfigError('Invalid Password')
@@ -1158,8 +1170,8 @@ export default () => {
 
             <div class='config__edit'>
               <span class='config__edit__title'>Change Password</span>
-              <Input type='password' value={configPassword()} onChange={setConfigPassword} placeholder='Enter current password' />
-              <Input type='password' value={configNewPassword()} onChange={setConfigNewPassword} placeholder='Enter new password' />
+              <Input type='password' value={configPassword()} onChange={async (p) => await updateConfigPassword(p as string)} placeholder='Enter current password' width='30.5rem' />
+              <Input type='password' value={configNewPassword()} onChange={async (p) => await updateConfigNewPassword(p as string)} placeholder='Enter new password' width='30.5rem' />
 
               <Show when={configNewPassword().length !== 0}>
                 <span style='padding: 1.75rem 0 0 0'>Current Encrypted Password:</span>

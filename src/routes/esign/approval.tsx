@@ -1,8 +1,8 @@
-import dayjs from 'dayjs'
 import { createSignal, flush, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { FiLogOut } from 'solid-icons/fi'
 import { VsRefresh } from 'solid-icons/vs'
+import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 import { FaSolidThumbsUp, FaSolidUserGear } from 'solid-icons/fa'
 import { Box, Button, Clickable, Column, Input, Modal, Padding, Page, Row, Image, Background, File, LoadingScreen } from '@dasig'
 import { getApi, postApi, deleteApi } from '@dasig/api'
@@ -10,11 +10,11 @@ import { checkConnection, getDateTime, lockData, securePassword, saveNewSignatur
 import { $logged_in, $login_role, $login_name, $login_id } from 'cache/login'
 import { $head_id } from 'cache/head'
 import { _listElectricalApplications, _listElectricalNames, _listMechanicalApplications, _listMechanicalNames, _listOccupancyApplications, _listOccupancyNames } from 'stores/prefetch'
+import dayjs from 'dayjs'
 import './approval.sass'
 
 import EsignCard from 'components/EsignCard'
 import api from 'configs/api.config.json'
-import { RiDocumentFileCloseFill } from 'solid-icons/ri'
 
 export default () => {
   const PESO = import.meta.env.VITE_PESO
@@ -26,7 +26,7 @@ export default () => {
   const [file, setFile] = createSignal<File[]>()
   const [applicationId, setApplicationId] = createSignal(0)
   const [applicationListElectrical, setApplicationListElectrical] = createSignal<string[]>([])
-  const [applicationListElectricalFiltered, setApplicationListElectricalFiltered] = createSignal<string[]>([])
+  const [applicationListElectricalFiltered] = createSignal<string[]>([])
   const [nameListElectrical, setNameListElectrical] = createSignal<string[]>([])
   const [applicationListOccupancy, setApplicationListOccupancy] = createSignal<string[]>([])
   const [nameListOccupancy, setNameListOccupancy] = createSignal<string[]>([])
@@ -651,8 +651,6 @@ export default () => {
   }
 
   const checkCurrentPassword = async () => {
-    flush()
-    console.log(configPassword())
     const encCurrentPassword = await securePassword(configPassword())
 
     if (encCurrentPassword === configEncPassword()) {
@@ -675,7 +673,7 @@ export default () => {
   }
 
   const convertBase64 = (blob: Blob) => {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       const reader = new FileReader()
       reader.onloadend = () => resolve(reader.result)
       reader.readAsDataURL(blob)
@@ -734,6 +732,18 @@ export default () => {
     setEmployeeName(response.result)
   }
 
+  const updateConfigPassword = async (password: string) => {
+    setConfigPassword(password)
+    flush()
+    await checkCurrentPassword()
+  }
+
+  const updateConfigNewPassword = async (password: string) => {
+    setConfigNewPassword(password)
+    flush()
+    await checkCurrentPassword()
+  }
+
   const closeConfig = async () => {
     await updateHeadName()
     setConfigNotification(false)
@@ -769,20 +779,6 @@ export default () => {
   onSettled(() => {
     void init()
   })
-
-  // createEffect(() => {
-  //   if (configPassword() !== '') {
-  //     checkCurrentPassword()
-  //   } else {
-  //     checkCurrentPassword()
-  //   }
-
-  //   if (configNewPassword() !== '') {
-  //     encryptNewPassword()
-  //   } else {
-  //     encryptNewPassword()
-  //   }
-  // })
 
   return (
     <>
@@ -926,8 +922,8 @@ export default () => {
 
             <div class='config__edit'>
               <span class='config__edit__title'>Change Password</span>
-              <Input type='password' value={configPassword()} onChange={setConfigPassword} placeholder='Enter current password' width='30.5rem' />
-              <Input type='password' value={configNewPassword()} onChange={setConfigNewPassword} placeholder='Enter new password' width='30.5rem' />
+              <Input type='password' value={configPassword()} onChange={async (p) => await updateConfigPassword(p as string)} placeholder='Enter current password' width='30.5rem' />
+              <Input type='password' value={configNewPassword()} onChange={async (p) => await updateConfigNewPassword(p as string)} placeholder='Enter new password' width='30.5rem' />
 
               <Show when={configNewPassword().length !== 0}>
                 <span style='padding: 1.75rem 0 0 0'>Current Encrypted Password:</span>

@@ -1,10 +1,12 @@
 import { createSignal, flush, onSettled, Show } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
-import { Page, Background, Footer, Image, Row, Copyright, Padding, Input, Clickable, Box, Modal, Column } from '@dasig'
+import { Page, Background, Footer, Image, Row, Copyright, Input, Clickable, Box, Modal, Column } from '@dasig'
 import { setPage } from 'services'
 import { _page } from 'stores/page'
 import './index.sass'
 import { getApi } from '@dasig/api'
+import { FaRegularQuestionCircle } from 'solid-icons/fa'
+import { checkConnection } from 'services'
 
 export default () => {
   const navigate = useNavigate()
@@ -15,6 +17,7 @@ export default () => {
   const [errorMessage, setErrorMessage] = createSignal('')
   const [application, setApplication] = createSignal('')
   const [division, setDivision] = createSignal('')
+  const [connected, setConnected] = createSignal(true)
 
   const checkInquireType = () => {
     if (/^\d{2}-\d{6}$/.test(inquire())) {
@@ -44,23 +47,34 @@ export default () => {
   }
 
   const startInquire = async () => {
-    checkInquireType()
+    const connection = await checkConnection()
+    setConnected(connection)
+    flush()
 
-    if (inquireType() === 'application-search') {
-      setApplication(inquire())
+    if (connected()) {
+      checkInquireType()
+
+      if (inquireType() === 'application-search') {
+        setApplication(inquire())
+        flush()
+
+        const existing = await checkExist(inquire(), division())
+        if (existing) {
+          setResult(true)
+          flush()
+        } else {
+          setErrorMessage('Application number does not exist')
+          setError(true)
+          setResult(true)
+          flush()
+        }
+      } else console.log('yeah')
+    } else {
+      setErrorMessage('No connection on server')
+      setError(true)
+      setResult(true)
       flush()
-
-      const existing = await checkExist(inquire(), division())
-      if (existing) {
-        setResult(true)
-        flush()
-      } else {
-        setErrorMessage('Application number does not exist')
-        setError(true)
-        setResult(true)
-        flush()
-      }
-    } else console.log('yeah')
+    }
   }
 
   const gotoPage = async (page: string) => {
@@ -95,7 +109,12 @@ export default () => {
           </Clickable>
           <h1 class='title'>OCBO Inquiry</h1>
           <Row padding='1rem 0 0 0'>
-            <Input placeholder='Enter application to inquire' value={inquire()} onChange={setInquire} size={1.25} width='460px' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
+            <Input placeholder='Type anything to inquire' value={inquire()} onChange={setInquire} size={1.5} width='26rem' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
+          </Row>
+
+          <Row gap={0.5} padding='2rem 0 0 0'>
+            <FaRegularQuestionCircle />
+            <span>How to use</span>
           </Row>
         </Column>
 
@@ -128,7 +147,7 @@ export default () => {
       </Page>
 
       <div onClick={() => setResult(false)}>
-        <Modal trigger={result()} background='rgba(6, 7, 9, 0.49)' animation='slide-from-right' width='95vw'>
+        <Modal trigger={result() && inquireType() === 'application-search'} background='rgba(6, 7, 9, 0.49)' animation='slide-from-right' width='95vw'>
           <Row content='left' padding='1rem 0'>
             <span class='results__inquire'>{application()}</span>
           </Row>

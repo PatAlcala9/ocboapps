@@ -1,4 +1,4 @@
-import { onSettled, createSignal, Show } from 'solid-js'
+import { onSettled, createSignal, Show, flush } from 'solid-js'
 import { useNavigate } from '@solidjs/router'
 import { RiBusinessGlobalOffLine } from 'solid-icons/ri'
 import { ImConnection } from 'solid-icons/im'
@@ -66,6 +66,7 @@ export default () => {
     const connection = await checkConnection()
     setConnected(connection)
     setLoading(false)
+    flush()
 
     if (connected()) {
       await getData()

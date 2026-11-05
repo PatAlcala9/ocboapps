@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { createSignal, Switch, Match, onSettled } from 'solid-js'
+import { createSignal, Switch, Match, onSettled, flush } from 'solid-js'
 import { Column, Display, Image, Padding, Page, Row, Background, Footer, Copyright } from '@dasig'
 import { checkConnection, getDateTime } from 'services'
 import Card from 'components/Card'
@@ -29,6 +29,7 @@ const checkSpecialHolidays = () => {
 const init = async () => {
   const connection = await checkConnection()
   setConnected(connection)
+  flush()
 
   if (connected()) {
     await getDate()
