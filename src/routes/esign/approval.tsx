@@ -18,7 +18,6 @@ import api from 'configs/api.config.json'
 
 export default () => {
   const PESO = import.meta.env.VITE_PESO
-  const ID = $head_id.get()!
   const PUBLICIP = import.meta.env.VITE_PUBLICIP
   const BACKEND = api.backend.url
 
@@ -69,6 +68,7 @@ export default () => {
   let bldgadditional = false
   let loggedin = false
   let filter = ''
+  let ID = ''
 
   const getListForApprovalElectrical = async () => {
     const prefetchedElectricalApplications = _listElectricalApplications.get()
@@ -769,11 +769,17 @@ export default () => {
     setShowDetails(false)
   }
 
+  const getHeadId = () => {
+    return $head_id.get()!
+  }
+
   const init = async () => {
     await checkPage()
     const logged = await checkLogged()
-    if (logged) await load('all')
-    else navigate('/esign', { replace: true })
+    if (logged) {
+      ID = getHeadId()
+      await load('all')
+    } else navigate('/esign', { replace: true })
   }
 
   onSettled(() => {

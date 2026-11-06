@@ -77,6 +77,7 @@ export default () => {
     }
   }
 
+
   const gotoPage = async (page: string) => {
     await setPage(page)
     navigate(page)
@@ -112,10 +113,12 @@ export default () => {
             <Input placeholder='Type anything to inquire' value={inquire()} onChange={setInquire} size={1.5} width='26rem' corner='rounded' fontWeight={400} center onKeyDown={(event) => event.key === 'Enter' && startInquire()} />
           </Row>
 
-          <Row gap={0.5} padding='2rem 0 0 0'>
-            <FaRegularQuestionCircle />
-            <span>How to use</span>
-          </Row>
+          <Clickable onClick={() => gotoPage('inquiry/help')}>
+            <Row gap={0.5} padding='2rem 0 0 0'>
+              <FaRegularQuestionCircle />
+              <span>How to use</span>
+            </Row>
+          </Clickable>
         </Column>
 
         <Footer margin={1}>

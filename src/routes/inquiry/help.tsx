@@ -1,13 +1,10 @@
-import { createSignal, flush, onSettled } from 'solid-js'
-import { useNavigate } from '@solidjs/router'
+import { onSettled } from 'solid-js'
 import { Page, Background } from '@dasig'
 import { setPage } from 'services'
 import { _page } from 'stores/page'
 import './help.sass'
 
 export default () => {
-  const navigate = useNavigate()
-
   const init = async () => {
     await setPage('/inquiry')
   }

@@ -73,9 +73,6 @@ export default () => {
 
       setLoggedin(2)
 
-      $head.delete()
-      $head_id.delete()
-
       await navigateToRolePage()
     } else {
       setLoggedin(1)
